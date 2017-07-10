@@ -1,5 +1,5 @@
 package rpg;
 
-public class Mobile {
+abstract public class Mobile {
 
 }
