@@ -1,7 +1,4 @@
 package rpg.value;
-
-import java.math.BigDecimal;
-
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -32,21 +29,24 @@ public class Weight implements Comparable<Weight> {
 	 * 		  | new.getNumeral() == numeral
 	 * @post The unit for this new weight is the same as the given unit.
 	 * 		 | new.getUnit() == unit
-	 * @throws IllegalArgumentException
-	 *   	   The given numeral is not effective.
-	 *   	   | numeral == null
-	 * @throws IllegalArgumentException
-	 *    	   The given unit is not a valid unit for any weight.
-	 *         | ! isValidUnit()
+	 * @post if the given numeral is not valid or the given
+	 * 		 unit is not valid then a standard weight is initialized with
+	 * 	     a numeral of 0 and a unit kg.
+	 * 		 | if (!isValidNumeral(numeral) || ! isValidUnit(unit))
+	 *       | 		this.getNumeral() == 0d
+			 |		this.getUnit().equals(Unit.kg)
 	 */
 	@Raw
 	public Weight(double numeral,Unit unit){
-		if (numeral < 0.0)
-			throw new IllegalArgumentException("Non-effective numeral");
-		if (! isValidUnit(unit))
-			throw new IllegalArgumentException("Invalid unit");
-		this.numeral = numeral;
-		this.unit = unit;
+		if (!isValidNumeral(numeral) || ! isValidUnit(unit)){
+			this.numeral = 0d;
+			this.unit = Unit.kg;
+		}
+		else {
+			this.numeral = numeral;
+			this.unit = unit;
+		}
+		
 	}
 	
 	/**
@@ -60,7 +60,6 @@ public class Weight implements Comparable<Weight> {
 	 */
 	@Raw
 	public Weight(double numeral)
-			throws IllegalArgumentException
 	{
 		this(numeral,Unit.kg);
 	}
@@ -68,12 +67,12 @@ public class Weight implements Comparable<Weight> {
 	/**
 	 * Initialize a new weight with numeral zero and unit kg
 	 * 
-	 * @effect The new weight is initialized with the 0.0 as numeral
+	 * @effect The new weight is initialized with the 1.0 as numeral
 	 *         and the unit "kg". 
-	 *         | this(0.0, Unit.kg)
+	 *         | this(1.0, Unit.kg)
 	 */
 	public Weight(){
-		this(0.0, Unit.kg);
+		this(1.0, Unit.kg);
 	}
 	
 	/************************************************
@@ -106,6 +105,7 @@ public class Weight implements Comparable<Weight> {
 		return (numeral >= 0.0); 
 	}
 	
+
 	/**
 	 * A variable that references the numeral of this weight.
 	 */
@@ -150,15 +150,12 @@ public class Weight implements Comparable<Weight> {
 	 *         | let conversionRate = this.getUnit().toUnit(unit)
 	 *         |     numeralInCurreny = this.getNumeral()*(conversionRate)
 	 *         | in result.getNumeral() == numeralInCurreny
-	 * @throws IllegalArgumentException
-	 * 		   The given unit is not effective
-	 *  	   | unit == null
 	 */       
 	public Weight toUnit(Unit unit)
 		throws IllegalArgumentException
 	{
 		if (unit == null)
-			throw new IllegalArgumentException("Non-effective unit");
+			return null;
 		if (this.getUnit() == unit)
 			return this;
 		double conversionRate = this.getUnit().toUnit(unit);
@@ -204,15 +201,192 @@ public class Weight implements Comparable<Weight> {
 	 * Logic
 	 ************************************************/
 	
+	/**
+	 * Compare this capacity amount with another weight.
+	 * 
+	 * @param other
+	 *        The other weight to compare with this one.
+	 * @return The result is equal to the comparison between this numeral
+	 * 		   and the other numeral if they have the same unit
+	 *         | if getUnit().equals(other.getUnit())
+	 *         |	then result == Double.compare(this.getNumeral(), other.getNumeral())
+	 * @return If they have a different unit the other unit is converted in this unit and
+	 * 	       they are their numerals are compared.
+	 * 		   | if getUnit() != other.getUnit()
+	 * 	       |	then let converted = other.toUnit(this.getUnit())
+	 * 		   |		result == Double.compare(this.getNumeral(), converted.getNumeral())
+	 * @throws  ClassCastException
+	 *         the other weight is not effective.
+	 *		   | (other == null) 
+	 */		
 	@Override
-	public int compareTo(Weight arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int compareTo(Weight other)
+		throws ClassCastException
+	{
+		if (other == null)
+			throw new ClassCastException("Non-effective weight");
+		if (getUnit() != other.getUnit()){
+			Weight converted = other.toUnit(this.getUnit());
+			return Double.compare(this.getNumeral(), converted.getNumeral());
+		}
+		return Double.compare(this.getNumeral(), other.getNumeral());
+	}
+	
+	/**
+	 * Checks whether this weight has the same value as the other one.
+	 * 
+	 * @param other
+	 * 		  The other weight to compare this with.
+	 * @return True iff this weight is equal to the other one
+	 *         expressed in the unit of this weight.
+	 *        | result == this.equals(other.toUnit(getUnit()) 
+	 * @throws IllegalArgumentException
+	 * 		   The other capacity amount is not effective.
+	 * 		   | other == null
+	 */
+	public boolean hasSameValue(Weight other)
+		throws IllegalArgumentException
+	{
+		if (other == null)
+			throw new IllegalArgumentException("Non-effective weight");
+		return this.equals(other.toUnit(this.getUnit()));
+	}
+	
+	/**
+	 * Checks whether this weight is equal to the given object.
+	 * 
+	 * @return True iff the given object is effective, if this weight
+	 * 		   and the given object belong to the same class. and if this 
+	 * 		   weight and the other object interpreted as a 
+	 * 		   weight have equal numerals and equal units.
+	 * 		   | if other == null
+	 * 		   | 	result == false
+	 * 		   | if (this.getClass() != other.getClass())
+	 * 		   | 	result == false
+	 * 		   | let otheramount = other
+	 * 		   | 	result == (this.getNumeral() == otherAmount.getNumeral() &&
+	 * 		   |				this.getUnit().equals(otherAmount.getUnit()))
+	 */
+	@Override
+	public boolean equals(Object other){
+		if (other == null)
+			return false;
+		if (this.getClass() != other.getClass())
+			return false;
+		Weight otherAmount = (Weight) other;
+		return (this.getNumeral() == otherAmount.getNumeral() &&
+				this.getUnit().equals(otherAmount.getUnit()));
 	}
 	
 	/************************************************
 	 * Arithmetic
 	 ************************************************/
 
-
+	/**
+	 * Compute the sum of this weight and the given weight. 
+	 * 
+	 * @param other
+	 * 	      the other weight that should be added to this weight.
+	 * @return A new weight that has a numeral which is the sum of the 2 weights,
+	 * 		   the new unit is set to this.getUnit()
+	 * 		  | let newNumeral =  this.getNumeral()+other.toUnit(this.getUnit()).getNumeral()
+	 * 		  | (result.getNumeral() == (newNumeral) &&
+	 * 		  | 	result.getUnit().equals(this.getUnit()))
+	 * @return this weight if the given weight is not effective.
+	 * 		  | if (other==null)
+	 * 		  |		return this
+	 * 
+	 */
+	public Weight add(Weight other){
+		if (other==null)
+				return this;
+		double newNumeral = this.getNumeral()+other.toUnit(this.getUnit()).getNumeral();
+		return new Weight(newNumeral,this.getUnit());
+	}
+	
+	/**
+	 * Compute the difference of this weight and the given weight. 
+	 * 
+	 * @param other
+	 * 	      the other weight that should be subtracted  to this weight.
+	 * @return A new weight that has a numeral which is the difference of the 2 weights,
+	 * 		   the new unit is set to this.getUnit()
+	 * 		  | let newNumeral =  this.getNumeral()-other.toUnit(this.getUnit()).getNumeral()
+	 * 		  | (result.getNumeral() == (newNumeral) &&
+	 * 		  | 	result.getUnit().equals(this.getUnit()))
+	 * @return this weight if the given weight is not effective.
+	 * 		  | if (other==null)
+	 *		  |		return this
+	 * 
+	 */
+	public Weight substract(Weight other){
+		if (other==null)
+			return this;
+		double newNumeral = this.getNumeral()-other.toUnit(this.getUnit()).getNumeral();
+		return new Weight(newNumeral,this.getUnit());
+	}
+	
+	/**
+	 * Compute the product of this weight and the given weight. 
+	 * 
+	 * @param other
+	 * 	      the other weight that should be multiplied  to this weight.
+	 * @return A new weight that has a numeral which is the multiple of the 2 weights,
+	 * 		   the new unit is set to this.getUnit()
+	 * 		  | let newNumeral =  this.getNumeral()*other.toUnit(this.getUnit()).getNumeral()
+	 * 		  | (result.getNumeral() == (newNumeral) &&
+	 * 		  | 	result.getUnit().equals(this.getUnit()))
+	 * @return this weight if the given weight is not effective.
+	 * 		  | if (other==null)
+	 *		  |		return this
+	 * 
+	 */
+	public Weight times(Weight other){
+		if (other==null)
+			return this;
+		double newNumeral = this.getNumeral()*other.toUnit(this.getUnit()).getNumeral();
+		return new Weight(newNumeral,this.getUnit());
+	}
+	
+	/**
+	 * Compute the product of this weight and a given double. 
+	 * 
+	 * @param factor
+	 * 	      the  factor that should be multiplied  to this weight.
+	 * @return A new weight that has a numeral which is the product of the weight and the factor,
+	 * 		   the new unit is set to this.getUnit()
+	 * 		  | let newNumeral =  this.getNumeral()*factor
+	 * 		  | (result.getNumeral() == (newNumeral) &&
+	 * 		  | 	result.getUnit().equals(this.getUnit()))
+	 * @return this weight if the given weight is not effective.
+	 * 		  | if (other==null)
+	 *		  |		return this
+	 * 
+	 */
+	public Weight times(double factor){
+		double newNumeral = this.getNumeral()*factor;
+		return new Weight(newNumeral,this.getUnit());
+	}
+	
+	/**
+	 * Compute the quotient  of this weight and the given weight. 
+	 * 
+	 * @param other
+	 * 	      the other weight that should be multiplied  to this weight.
+	 * @return A new weight that has a numeral which is the multiple of the 2 weights,
+	 * 		   the new unit is set to this.getUnit()
+	 * 		  | let newNumeral =  this.getNumeral()/other.toUnit(this.getUnit()).getNumeral()
+	 * 		  | (result.getNumeral() == (newNumeral) &&
+	 * 		  | 	result.getUnit().equals(this.getUnit()))
+	 * @return this weight if the given weight is not effective.
+	 * 		  | if (other==null)
+	 *		  |		return this
+	 * 
+	 */
+	public Weight divide(Weight other){
+		if (other==null)
+			return this;
+		double newNumeral = this.getNumeral()/other.toUnit(this.getUnit()).getNumeral();
+		return new Weight(newNumeral,this.getUnit());
+	}
 }
