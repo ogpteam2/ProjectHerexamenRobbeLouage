@@ -132,7 +132,7 @@ public class Weight implements Comparable<Weight> {
 	 * @return True if the given unit is effective.
 	 *         | result == (! unit == null)
 	 */
-	private boolean isValidUnit(Unit unit) {
+	public static boolean isValidUnit(Unit unit) {
 		return (unit!=null);
 	}
 	
@@ -154,8 +154,8 @@ public class Weight implements Comparable<Weight> {
 	public Weight toUnit(Unit unit)
 		throws IllegalArgumentException
 	{
-		if (unit == null)
-			return null;
+		if (!isValidUnit(unit))
+			throw new IllegalArgumentException("non effective unit");
 		if (this.getUnit() == unit)
 			return this;
 		double conversionRate = this.getUnit().toUnit(unit);

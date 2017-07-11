@@ -8,7 +8,7 @@ import rpg.value.Weight;
 
 public class WeightTest {
 
-	private static final double DELTA = 1E-15;
+	private static final double DELTA = 1E-5;
 	static Unit kilogram, gram, pound;
 	static double zero,one,two,three,four,five;
 	static double number1,number2,number3,number4,number5,number6;
@@ -74,13 +74,122 @@ public class WeightTest {
 		assertTrue(Weight.isValidNumeral(0.0));
 		assertTrue(Weight.isValidNumeral(1.0));
 	}
+	
+	@Test
+	public void isValidUnitTest(){
+		Unit unit = null;
+		Unit unit2 = Unit.kg;
+		assertFalse(Weight.isValidUnit(unit));
+		assertTrue(Weight.isValidUnit(unit2));
+	}	
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void toUnitFailTest(){
+		weight7.toUnit(null);
+	}
+	
+	@Test 
+	public void toUnitSameTest(){
+		Weight newWeight = weight7.toUnit(Unit.lbs);
+		assertEquals(newWeight,weight7);
+	}
+	
+	@Test 
+	public void toUnitOtherTest(){
+		Weight newWeight = weight2.toUnit(Unit.g);
+		assertEquals(newWeight,new Weight(1000,Unit.g));
+		Weight newWeight2 = weight2.toUnit(Unit.lbs);
+		assertEquals(newWeight2.getNumeral(),new Weight(2.20462262,Unit.lbs).getNumeral(),DELTA);
+		Weight newWeight3 = weight8.toUnit(Unit.lbs);
+		assertEquals(newWeight3,new Weight(18.839499736965912,Unit.lbs));
+	}
+	
+	@Test
+	public void compareTest(){
+		assertEquals(weight1.compareTo(weight2),0);
+		assertEquals(weight1.compareTo(weight3),1);
+		assertEquals(weight1.compareTo(weight4),-1);
+		assertEquals(weight1.compareTo(weight5),1);
+		assertEquals(weight6.compareTo(weight7),-1);
+		assertEquals(weight6.compareTo(weight8),-1);
+		assertEquals(weight6.compareTo(weight9),-1);
+	}
+	
+	@Test
+	public void equalsTest(){
+		assertTrue(weight1.equals(weight2));
+		assertFalse(weight1.equals(new Weight(1000,Unit.g)));
+		assertFalse(weight1.equals(weight3));
+		assertFalse(weight1.equals(weight4));
+	}
+	
+	
+	@Test
+	public void hasSameValueTest1(){
+		assertTrue(weight1.hasSameValue(weight2));
+		assertTrue(weight1.hasSameValue(new Weight(1000,Unit.g)));
+		assertTrue(weight1.hasSameValue(new Weight(2.20462262185 ,Unit.lbs)));
+	}	
+	
+	@Test
+	public void addTest1(){
+		Weight newWeight1 = weight1.add(weight2);
+		assertEquals(newWeight1,new Weight(2,Unit.kg));
+		Weight newWeight2 = weight1.add(weight3);
+		assertEquals(newWeight2,new Weight(1.002,Unit.kg));
+		Weight newWeight3 = weight7.add(weight8);
+		assertEquals(newWeight3,new Weight(21.71949973696591,Unit.lbs));
+	}
+	
+	@Test
+	public void substractTest1(){
+		Weight newWeight1 = weight1.substract(weight2);
+		assertEquals(newWeight1,new Weight(0,Unit.kg));
+		Weight newWeight2 = weight1.substract(weight3);
+		assertEquals(newWeight2,new Weight(0.998,Unit.kg));
+		Weight newWeight3 = weight8.substract(weight7);
+		assertEquals(newWeight3,new Weight(7.239107309700725,Unit.kg));
+	}
+	
+	@Test
+	public void substractTest2(){
+		Weight newWeight1 = weight3.substract(weight9); // should be less than 0
+		assertEquals(newWeight1,new Weight(0.0,Unit.kg)); // catches it
+	}
 
+	@Test 
+	public void timesTest1(){
+		Weight newWeight1 = weight1.times(weight2);
+		assertEquals(newWeight1,weight1);
+		Weight newWeight2 = weight1.times(weight3);
+		assertEquals(newWeight2,new Weight(0.002,Unit.kg));
+		Weight newWeight3 = weight1.times(weight5);
+		assertEquals(newWeight3,new Weight(0.5,Unit.kg));
+		Weight newWeight4 = weight1.times(Weight.kg_0);
+		assertEquals(newWeight4,new Weight(0.0,Unit.kg));
+		Weight newWeight5 = weight3.times(weight8);
+		assertEquals(newWeight5,new Weight(17090.906670599998,Unit.g));		
+	}
+	
+	@Test 
+	public void timesTest2(){
+		Weight newWeight1 = weight1.times(1000);
+		assertEquals(newWeight1,new Weight(1000,Unit.kg));
+		Weight newWeight2 = weight3.times(500);
+		assertEquals(newWeight2,(new Weight(1,Unit.kg)).toUnit(Unit.g));
+		Weight newWeight3 = weight9.times(0);
+		assertEquals(newWeight3,new Weight(00,Unit.kg));
+	}
+	
+	@Test 
+	public void devideTest(){
+		Weight newWeight1 = weight1.divide(weight1);
+		assertEquals(newWeight1,new Weight(1,Unit.kg));
+		Weight newWeight2 = weight1.divide(weight3);
+		assertEquals(newWeight2,new Weight(500,Unit.kg));
+		Weight newWeight3 = weight7.divide(weight8);
+		assertEquals(newWeight3,new Weight(0.1528703012399533,Unit.lbs));
 
+	}
 	
-	
-	
-	
-	
-	
-
 }
