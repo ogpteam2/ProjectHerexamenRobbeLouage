@@ -40,13 +40,7 @@ public enum Unit {
 		return this.unit;
 	}
 	
-	/**
-	 * Return the precision for units.
-	 */
-	@Basic @Raw @Immutable
-	public int getPrecision(){
-		return precision;
-	}
+
 	
 	/**
 	 * Return the value of 1 unit to the other unit.
@@ -81,10 +75,8 @@ public enum Unit {
 			conversionRates[this.ordinal()][other.ordinal()] =
 					1/(conversionRates[other.ordinal()][this.ordinal()]);
 		}
-		return Math.round(conversionRates[this.ordinal()][other.ordinal()]*100.0)/100.0;
+		return (conversionRates[this.ordinal()][other.ordinal()]);
 	}
-	
-
 
 	/**
 	 * Variable referencing a two-dimensional array registering
@@ -113,10 +105,6 @@ public enum Unit {
 				1d;
 	}
 	
-	/**
-	 * A variable that stores the precision of the units.
-	 */
-	private static final int precision = 2;
 	
 	/**
 	 * A variable storing the unit of this unit.

@@ -10,7 +10,7 @@ import rpg.value.Unit;
 
 public class UnitTest {
 	
-	private static final double DELTA = 0.01;
+	private static final double DELTA = 0.0000001;
 	static Unit kilogram, gram, pound;
 	static double kgTokg, kgTog, kgTolbs, gTog, gTolbs, lbsTolbs,gTokg,lbsTokg,lbsTog;
 	
@@ -58,8 +58,5 @@ public class UnitTest {
 		assertEquals(pound.toUnit(kilogram),lbsTokg,DELTA);
 		assertEquals(pound.toUnit(gram),lbsTog,DELTA);
 	}
-	
-
-	
 	
 }
