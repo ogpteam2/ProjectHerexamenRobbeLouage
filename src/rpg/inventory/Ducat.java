@@ -7,7 +7,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Robbe
  * @version 1.0
  */
-public class Ducat{
+public class Ducat extends Item{
 
 
 }
