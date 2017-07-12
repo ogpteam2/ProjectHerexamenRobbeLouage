@@ -264,14 +264,29 @@ public abstract class Mobile {
 	 * Strength: total
 	 ************************************************/
 	
+	/**
+	 * Return the raw strength of a mobile.
+	 */
+	public double getRawStrength(){
+		return this.rawStrength;
+	}
+	
+	/**
+	 * 
+	 * @param amount
+	 * 	      The new raw strength of the mobile.
+	 */
+	private void setRawStrength(double amount){
+		this.rawStrength = amount;
+	}
 	
 	/**
 	 * A variable referencing the raw strength of a Mobile.
 	 */
 	private double rawStrength;
 	
-	
-	
-	
-	
+	/**
+	 * A variable referencing the precision of the raw strength.
+	 */
+	private static final int precision = 2;
 }
