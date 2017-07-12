@@ -28,5 +28,14 @@ public class AnchorpointTypeTest {
 		assertEquals(left.getAnchorpointType(),"LEFT");
 		assertEquals(body.getAnchorpointType(),"BODY");
 	}
+	
+	@Test
+	public void ordinalTest() {
+		assertEquals(back.ordinal(),1);
+		assertEquals(belt.ordinal(),2);
+		assertEquals(right.ordinal(),3);
+		assertEquals(left.ordinal(),4);
+		assertEquals(body.ordinal(),0);
+	}
 
 }

@@ -3,4 +3,9 @@ import be.kuleuven.cs.som.annotate.*;
 
 public class Weapon extends Item {
 
+	public Weapon(long id) {
+		super(id);
+	}
+
+	
 }
