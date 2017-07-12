@@ -378,13 +378,14 @@ public class Weight implements Comparable<Weight> {
 	 * 		  | let newNumeral =  this.getNumeral()/other.toUnit(this.getUnit()).getNumeral()
 	 * 		  | (result.getNumeral() == (newNumeral) &&
 	 * 		  | 	result.getUnit().equals(this.getUnit()))
-	 * @return this weight if the given weight is not effective.
-	 * 		  | if (other==null)
+	 * @return this weight if the given weight is not effective or the other weight has a very small 
+	 * 		   numeral.
+	 * 		  | if (other==null || other.getNumeral()<=10E-10)
 	 *		  |		return this
 	 * 
 	 */
 	public Weight divide(Weight other){
-		if (other==null)
+		if (other==null || other.getNumeral()<=10E-10) // protection against division by zero
 			return this;
 		double newNumeral = this.getNumeral()/other.toUnit(this.getUnit()).getNumeral();
 		return new Weight(newNumeral,this.getUnit());

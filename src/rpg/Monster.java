@@ -21,9 +21,12 @@ public class Monster extends Mobile {
 	 * 
 	 * @param name
 	 *        The name of the monster.
+	 * @param hitpoints
+	 * 		  The hitpoints of the monster.
 	 */
-	public Monster(String name) {
-		super(name);
+	@Raw
+	public Monster(String name, long hitpoints) {
+		super(name,hitpoints);
 
 	}
 

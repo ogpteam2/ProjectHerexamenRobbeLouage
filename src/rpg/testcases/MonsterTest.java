@@ -1,6 +1,6 @@
 package rpg.testcases;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,27 +19,30 @@ public class MonsterTest {
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName1() {
-		invalidName1 = new Monster(null);
+		invalidName1 = new Monster(null,0);
 	}
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName2() {
-		invalidName2 = new Monster("bob");
+		invalidName2 = new Monster("bob",0);
 	}
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName3() {
-		invalidName3 = new Monster("b*b");
+		invalidName3 = new Monster("b*b",0);
 	}
 	@Test 
 	public void isValidName4() {
-		validName1 = new Monster("James");
+		validName1 = new Monster("James",0);
+		assertEquals(validName1.getName(),"James");
 	}
 	@Test 
 	public void isValidName5() {
-		validName2 = new Monster("H'erld");
+		validName2 = new Monster("H'erld",0);
+		assertEquals(validName2.getName(),"H'erld");
 	}
 	@Test 
 	public void isValidName6() {
-		validName3 = new Monster("Blub");
+		validName3 = new Monster("Blub",0);
+		assertEquals(validName3.getName(),"Blub");
 	}
 
 }

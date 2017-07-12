@@ -15,11 +15,16 @@ public class Hero extends Mobile {
 	 ************************************************/
 	
 	/**
-	 * Initializes a new Hero with given name.
+	 * Initializes a new Hero with given name and hitpoints.
 	 * 
+	 * @param name
+	 *        The name of the hero.
+	 * @param hitpoints
+	 * 		  The hitpoints of the Hero.
 	 */
-	public Hero(String name) throws IllegalArgumentException {
-		super(name);
+	@Raw
+	public Hero(String name, long hitpoints) throws IllegalArgumentException {
+		super(name,hitpoints);
 	}
 	
 	/************************************************
@@ -104,8 +109,10 @@ public class Hero extends Mobile {
 	 */
 	@Model
 	private static final Pattern patternColonSpace = Pattern.compile(":(?!\\s)");
+
+
 	
-	
+
 	
 	
 	

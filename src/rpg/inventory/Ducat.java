@@ -9,5 +9,10 @@ import be.kuleuven.cs.som.annotate.*;
  */
 public class Ducat extends Item{
 
+	protected Ducat(long id) {
+		super(id);
+		// TODO Auto-generated constructor stub
+	}
+
 
 }

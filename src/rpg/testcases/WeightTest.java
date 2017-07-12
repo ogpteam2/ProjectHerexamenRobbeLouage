@@ -189,7 +189,12 @@ public class WeightTest {
 		assertEquals(newWeight2,new Weight(500,Unit.kg));
 		Weight newWeight3 = weight7.divide(weight8);
 		assertEquals(newWeight3,new Weight(0.1528703012399533,Unit.lbs));
-
+	}
+	
+	@Test 
+	public void devideByZeroTest(){
+		Weight newWeight0 = weight1.divide(new Weight(0.0,Unit.kg));
+		assertEquals(newWeight0,weight1);
 	}
 	
 }
