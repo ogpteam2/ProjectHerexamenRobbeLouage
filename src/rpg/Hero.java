@@ -1,5 +1,8 @@
 package rpg;
 import be.kuleuven.cs.som.annotate.*;
+import rpg.value.Unit;
+import rpg.value.Weight;
+
 import java.util.regex.*;
 
 /**
@@ -119,12 +122,74 @@ public class Hero extends Mobile {
 	public  double getTotalDamage(){
 		return 0;
 	}
+
+
+
+	/************************************************
+	 * Capcity: total
+	 ************************************************/
 	
+	/**
+	 * Calculates the capacity based on the raw strength in a given unit.
+	 * 
+	 * @param unit
+	 * 		  The unit in which the capacity is expresssed.
+	 * @return weight with numeral zero and given unit if the raw strength is less than 1.
+	 * 		   | if (getRawStrength() < 1)
+	 * 		   |	then result.equals(Weight.kg_0.toUnit(unit))
+	 * @return 
+	 */
+	@Override
+	public Weight calculateCapacity(double strength,Unit unit) {
+		double capacity = 0.0;
+		if (unit==null){
+			return Weight.kg_0;
+		}
+		else if (strength < 1){
+			capacity = 0;
+		}
+		else if (strength>=1 && strength<=10){
+			capacity = strength*10;
+		}
+		else if (strength>10 && strength<=20){
+			capacity = capacityStrengthBetween1020(strength);
+		}
+		else if (strength>20){
+			capacity = calculateCapacity(strength-10,unit).getNumeral();
+			capacity *= 4;
+		}
+		return (new Weight(capacity,Unit.kg)).toUnit(unit);
+	}
 	
+	/**
+	 * Calculates the capacity if the strength lays between 10 and 20.
+	 * 
+	 * @pre   The strength must lay between 10 and 20.
+	 * 		  | strength >10 && strength<= 20
+	 * @param strength
+	 * 		  the strength to calculate the capacity of
+	 * @return 115,130,150,175,200,230,260,300,350 or 400 based 
+	 * 		   on the strength, 115 is returned if the strength lays between
+	 * 		   10.01 and 11 etc.
+	 * 	       |  if (strength>10 && strength<=11)
+	 * 		   | 	then result == 115
+	 * 		   |  etc...
+	 */
+	private double capacityStrengthBetween1020(double strength){
+		if (strength>10 && strength<=11){return 115;}
+		else if (strength>11 && strength<=12){return 130;}
+		else if (strength>12 && strength<=13){return 150;}
+		else if (strength>13 && strength<=14){return 175;}
+		else if (strength>14 && strength<=15){return 200;}
+		else if (strength>15 && strength<=16){return 230;}
+		else if (strength>16 && strength<=17){return 260;}
+		else if (strength>17 && strength<=18){return 300;}
+		else if (strength>18 && strength<=19){return 350;}
+		else if (strength>19 && strength<=20){return 400;}
+		return 0;
+	}
 	
-	
-	
-	
+
 	
 	
 	

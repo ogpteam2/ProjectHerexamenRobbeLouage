@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import be.kuleuven.cs.som.annotate.*;
+import rpg.value.Unit;
+import rpg.value.Weight;
 
 /**
  * An abstract class of movable objects in the rpg.
@@ -360,6 +362,7 @@ public abstract class Mobile {
 	@Model
 	private void setRawStrength(double amount){
 		this.rawStrength = round(amount,getpPrecisionOfStrength());
+		setCapacity(calculateCapacity(getRawStrength(),Unit.kg));
 	}
 	
 	/**
@@ -378,11 +381,58 @@ public abstract class Mobile {
 	 ************************************************/
 	
 	
+	/**
+	 * Return the capacity of this mobile expressed in a given unit.
+	 * 
+	 * @return the capacity expresssed in a given unit.
+	 * 		   | getCapacity().equals(this.capacity.toUnit(unit))
+	 * @throws IllegalArgumentException
+	 * 	       The unit is not effective.
+	 * 		   | unit == null
+	 */
+	@Raw @Basic
+	public Weight getCapacity(Unit unit) throws IllegalArgumentException{
+		if (unit==null){
+			throw new IllegalArgumentException("not effective unit.");
+		}
+		return this.capacity.toUnit(unit);
+	}
 	
+	/**
+	 * Calculates the capacity based on the given strength strength.
+	 * 
+	 * @pre  the unit must be effective
+	 * 		 | unit != null
+	 * @param unit
+	 * 		  The capacity is expressed in this unit.
+	 * @param strength
+	 * 		  the strength the capacity is based on.
+	 * @return the capacity of the current Mobile in a given unit
+	 * @throws IllegalArgumentException
+	 * 		   Unit not effective
+	 * 		   | unit == null
+	 */
+	public abstract Weight calculateCapacity(double strength,Unit unit) throws IllegalArgumentException;
 	
+	/**
+	 * Sets the capacity of the mobile to the given Weight.
+	 * @param weight
+	 * 		  The new weight of the Mobile.
+	 * @post the capacity is set to the given weight.
+	 * 		 | new.getCapacity(unit).equals(weight.toUnit(unit))
+	 */
+	private void setCapacity(Weight weight){
+		this.capacity = weight;
+	}
 	
+	/**
+	 * A variable expressing the capacity of a Mobile.
+	 */
+	private Weight capacity;
 	
-	
+	/************************************************
+	 * Protection: total
+	 ************************************************/
 	
 	
 	

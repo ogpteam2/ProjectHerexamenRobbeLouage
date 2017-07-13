@@ -3,6 +3,8 @@ package rpg;
 import java.util.regex.Pattern;
 
 import be.kuleuven.cs.som.annotate.*;
+import rpg.value.Unit;
+import rpg.value.Weight;
 
 /**
  * A class of monsters.
@@ -77,5 +79,17 @@ public class Monster extends Mobile {
 	public double getTotalDamage(){
 		return 0;
 	}
+
+
+	/************************************************
+	 * Capacity: total
+	 ************************************************/
 	
+	@Override
+	public Weight calculateCapacity(double strength,Unit unit) {
+		if (strength>0){
+			return new Weight(strength*10,Unit.kg);
+		}
+		return Weight.kg_0.toUnit(unit);
+	}
 }

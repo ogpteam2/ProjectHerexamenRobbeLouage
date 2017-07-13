@@ -75,15 +75,29 @@ public class Weight implements Comparable<Weight> {
 		this(1.0, Unit.kg);
 	}
 	
-	/************************************************
-	 * Numeral
-	 ************************************************/
-	
 	/**
 	 * Variable referencing a weight of 0.0 kg
 	 */
 	public final static Weight kg_0 = 
 			new Weight(0.0,Unit.kg);
+	
+	/**
+	 * Variable referencing a weight of 0.0 g
+	 */
+	public final static Weight g_0 = 
+			new Weight(0.0,Unit.kg);
+	
+	/**
+	 * Variable referencing a weight of 0.0 lbs
+	 */
+	public final static Weight lbs_0 = 
+			new Weight(0.0,Unit.kg);
+	
+	
+	/************************************************
+	 * Numeral
+	 ************************************************/
+	
 	/**
 	 * Return the numeral of this capacity amount.
 	 */
