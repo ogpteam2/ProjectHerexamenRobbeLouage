@@ -23,10 +23,12 @@ public class Monster extends Mobile {
 	 *        The name of the monster.
 	 * @param hitpoints
 	 * 		  The hitpoints of the monster.
+	 * @param strength
+	 * 		  The raw strength of the monster.
 	 */
 	@Raw
-	public Monster(String name, long hitpoints) {
-		super(name,hitpoints);
+	public Monster(String name, long hitpoints,double strength) {
+		super(name,hitpoints, strength);
 
 	}
 
@@ -68,8 +70,12 @@ public class Monster extends Mobile {
 	@Model
 	private static final Pattern firstPattern = Pattern.compile("[A-Z]['A-Za-z\\s]+");
 	
+	/************************************************
+	 * Damage: total
+	 ************************************************/
 	
-	
-	
+	public double getTotalDamage(){
+		return 0;
+	}
 	
 }

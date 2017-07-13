@@ -1,5 +1,8 @@
 package rpg;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -11,7 +14,6 @@ import be.kuleuven.cs.som.annotate.*;
  * 		  | isValidMaximumHitpoints(getMaximumHitpoints())
  * @invar Each mobile must have a valid currentHitpoints.
  * 	      | canHaveAsValid(getCurrentHitpoints())
- * 
  * @author Robbe
  *
  */
@@ -22,19 +24,24 @@ public abstract class Mobile {
 	 ************************************************/
 	
 	/**
-	 * Initialize a new Mobile with given name.
+	 * Initialize a new Mobile with given name, hitpoints and strength.
 	 * 
 	 * @param name
 	 * 		  The name of the mobile.
+	 * @param hitpoints
+	 * 		  The hitpoints of the Mobile
+	 * @param strength
+	 * 	      The raw strength of the mobile.
 	 * @effect The name of the mobile is set to the given name.
 	 * 		   | setName(name)
 	 * 
 	 */
 	@Raw
-	protected Mobile(String name, long hitpoints) throws IllegalArgumentException{
+	protected Mobile(String name, long hitpoints, double strength) throws IllegalArgumentException{
 		setName(name);
 		setCurrentHitpoints(hitpoints);
 		setMaximumHitpoints(hitpoints);
+		setRawStrength(strength);
 	}
 	
 	
@@ -261,23 +268,98 @@ public abstract class Mobile {
 	private long maximumHitpoints;
 	
 	/************************************************
-	 * Strength: total
+	 * Strength and Damage: total
 	 ************************************************/
 	
 	/**
 	 * Return the raw strength of a mobile.
 	 */
+	@Raw @Basic
 	public double getRawStrength(){
 		return this.rawStrength;
 	}
 	
 	/**
+	 * Return the precision of the strength.
+	 */
+	@Raw @Basic @Immutable
+	private static int getpPrecisionOfStrength() {
+		return precisionOfStrength;
+	}
+	
+	/**
+	 * Multiplies the raw strength with a given integer.
+	 * 
+	 * @param integer
+	 * 		  the integer that the raw strength will be multiplied with.
+	 * @effect The raw strength is multiplied with an integer.
+	 * 		   | setRawStrength(getRawStrength()*integer)
+	 * @post If the new raw strength is more than or equal to Double.MAX_VALUE or 
+	 * 		 less than or equal to Double.MIN_VALUE then the raw strength stays untouched
+	 * 		 | if ((getRawStrength()*integer) >= Double.MAX_VALUE ||
+	 * 		 |		(getRawStrength()*integer) <= Double.MIN_VALUE)
+	 * 		 |			then (new).getRawStrength() == this.getRawStrength()
+	 */
+	public void multiplyRawStrength(int integer){
+		if ((getRawStrength()*integer) >= Double.MAX_VALUE ||
+			(getRawStrength()*integer) <= -Double.MAX_VALUE){}
+		else {
+			setRawStrength(getRawStrength()*integer);
+		}
+	}
+	
+	/**
+	 * Returns the total damage of the mobile
+	 * 
+	 * @return The total damage of the Mobile.
+	 * @return The totalDamage is greater or equal to zero.
+	 * 		   | getTotalDamage() >= 0
+	 * @return The total damage of the Mobile is the raw Strength plus a number,
+	 * 		   the number is calculated in the subclasses.
+	 * 		   | getTotalDamage()+number >= getRawStrength()  
+	 * @note the implementation is given at the level of the subclasses.
+	 */
+	@Raw 
+	public abstract double getTotalDamage();
+	
+	
+	/**
+	 * Rounds a double up to a given number of decimals, can handle numbers up to
+	 * 		  Double.MAX_VALUE
+	 * 
+	 * @param value
+	 * 		  The value that will be rounded.
+	 * @param places
+	 * 		  The total number of decimals that will remain.
+	 * @return value if the given places is less than zero.
+	 * 		  | if (places<0)
+	 * 		  |		then result == value
+	 * @return a double that is rounded to the given decimal places
+	 * 		  | let bd = BigDecimal(value)
+	 * 		  |	bd = bd.setScale(places,roundingMode.HALF_DOWN)
+	 * 		  | result == bd.doubleValue()
+	 */
+	public static double round(double value, int places){
+		if (places < 0){ return value;}
+		BigDecimal bd = new BigDecimal(value);
+		bd = bd.setScale(places,RoundingMode.HALF_UP);
+		return bd.doubleValue();	
+	}
+	
+	/**
+	 * Sets the raw strength to the given amount rounded 
+	 * to the precision of the strength.
 	 * 
 	 * @param amount
 	 * 	      The new raw strength of the mobile.
+	 * @effect The given value is rounded down to the strength precision.
+	 * 		  | newAmount = round(amount,getpPrecisionOfStrength())
+	 * @post The raw strength is set to the given amount rounded down to the strength precision.
+	 * 		 | (new).getRawStrength() == newAmount
 	 */
+	@Model
 	private void setRawStrength(double amount){
-		this.rawStrength = amount;
+		this.rawStrength = round(amount,getpPrecisionOfStrength());
 	}
 	
 	/**
@@ -288,5 +370,20 @@ public abstract class Mobile {
 	/**
 	 * A variable referencing the precision of the raw strength.
 	 */
-	private static final int precision = 2;
+	private static final int precisionOfStrength = 2;
+	
+	
+	/************************************************
+	 * Capacity: defensive
+	 ************************************************/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

@@ -21,10 +21,12 @@ public class Hero extends Mobile {
 	 *        The name of the hero.
 	 * @param hitpoints
 	 * 		  The hitpoints of the Hero.
+	 * @param strength
+	 * 		  The raw strength of the Hero.
 	 */
 	@Raw
-	public Hero(String name, long hitpoints) throws IllegalArgumentException {
-		super(name,hitpoints);
+	public Hero(String name, long hitpoints, double strength) throws IllegalArgumentException {
+		super(name,hitpoints,strength);
 	}
 	
 	/************************************************
@@ -110,9 +112,13 @@ public class Hero extends Mobile {
 	@Model
 	private static final Pattern patternColonSpace = Pattern.compile(":(?!\\s)");
 
-
+	/************************************************
+	 * Damage: total
+	 ************************************************/
 	
-
+	public  double getTotalDamage(){
+		return 0;
+	}
 	
 	
 	
