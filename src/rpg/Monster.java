@@ -82,13 +82,30 @@ public class Monster extends Mobile {
 
 
 	/************************************************
-	 * Capacity: total
+	 * Capacity
 	 ************************************************/
 	
+	/**
+	 * Calculates the damage for a monster based on a given strength, in a given unit.
+	 * 
+	 * @param strength
+	 * 		  The capacity is calculated on this strength.
+	 * @param unit
+	 * 		  The unit in which the capacity is expressed.
+	 * @return Weight.kg_0 if the unit is not effective
+	 * 		   | if (unit == null)
+	 * 		   |	then result.equals(Weight.kg_0)
+	 * @return a weight with 9 times the strength as numeral and the given unit as unit.
+	 * 		   | if (strength>0)
+	 * 	       |	then result.equals((new Weight(strength*10,Unit.kg).toUnit(unit))
+	 */
 	@Override
 	public Weight calculateCapacity(double strength,Unit unit) {
+		if (unit == null){
+			return Weight.kg_0;
+		}
 		if (strength>0){
-			return new Weight(strength*10,Unit.kg);
+			return (new Weight(strength*9,Unit.kg)).toUnit(unit);
 		}
 		return Weight.kg_0.toUnit(unit);
 	}

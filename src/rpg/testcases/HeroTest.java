@@ -6,6 +6,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import java.util.ArrayList;
 import rpg.*;
+import rpg.value.Unit;
+import rpg.value.Weight;
 
 public class HeroTest {
 
@@ -15,7 +17,7 @@ public class HeroTest {
 	private long[] nonprime1000;
 	private Hero strength1,strength2,strength3,strength4,strength5,strength6,strength7,strength8;
 	private static final double DELTA = 10E-10;
-	
+	private Hero capacity1,capacity2,capacity3,capacity4,capacity5,capacity6,capacity7,capacity8,capacity9,capacity10,capacity11,capacity12,capacity13,capacity14,capacity15;
 	
 	@Before
 	public void setup(){
@@ -33,9 +35,21 @@ public class HeroTest {
 		strength6 = new Hero("James",0,123456789123456789123456789.65165546);
 		strength7 = new Hero("James",0,Double.MAX_VALUE);
 		strength8 = new Hero("James",0,Double.MIN_VALUE);
-	
-	
-	
+		capacity1 = new Hero("James",0,-1);
+		capacity2 = new Hero("James",0,0);
+		capacity3 = new Hero("James",0,1);
+		capacity4 = new Hero("James",0,1.01);
+		capacity5 = new Hero("James",0,5);
+		capacity6 = new Hero("James",0,10);
+		capacity7 = new Hero("James",0,10.01);
+		capacity8 = new Hero("James",0,18.5);
+		capacity9 = new Hero("James",0,20);
+		capacity10 = new Hero("James",0,25);
+		capacity11 = new Hero("James",0,35);
+		capacity12 = new Hero("James",0,45);
+		capacity13 = new Hero("James",0,100);
+		capacity14 = new Hero("James",0,1000);
+		capacity15 = new Hero("James",0,5097);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
@@ -200,6 +214,63 @@ public class HeroTest {
 		assertEquals(strength8.getRawStrength(),previous,DELTA);
 	}
 	
+	@Test (expected = IllegalArgumentException.class)
+	public void getCapacityUnitFailTest(){
+		capacity1.getCapacity(null);
+	}
 	
+	@Test 
+	public void getCapacityUnitFailTest2(){
+		assertEquals(capacity1.calculateCapacity(1000, null),Weight.kg_0);
+
+	}
 	
+	@Test
+	public void getCapacityUnitTest(){
+		assertEquals(capacity1.getCapacity(Unit.kg),Weight.kg_0);
+		assertEquals(capacity1.getCapacity(Unit.g),Weight.g_0);
+		assertEquals(capacity1.getCapacity(Unit.lbs),Weight.lbs_0);
+	}
+	
+	@Test
+	public void getCapacityTest2(){
+		assertEquals(capacity2.getCapacity(Unit.kg),Weight.kg_0);
+		assertEquals(capacity2.getCapacity(Unit.g),Weight.g_0);
+		assertEquals(capacity2.getCapacity(Unit.lbs),Weight.lbs_0);
+	}
+	@Test
+	public void getCapacityTest3(){
+		assertEquals(capacity3.getCapacity(Unit.kg),new Weight(10,Unit.kg));
+		assertEquals(capacity3.getCapacity(Unit.g),new Weight(10000,Unit.g));
+		assertEquals(capacity3.getCapacity(Unit.lbs),new Weight(22.0462262185,Unit.lbs));
+	}
+	
+	@Test
+	public void calculateCapacityTest(){
+		assertEquals(capacity1.getCapacity(Unit.kg),Weight.kg_0);
+		assertEquals(capacity2.getCapacity(Unit.kg),Weight.kg_0);
+		assertEquals(capacity3.getCapacity(Unit.kg),new Weight(10,Unit.kg));
+		assertEquals(capacity4.getCapacity(Unit.kg),new Weight(10.1,Unit.kg));
+		assertEquals(capacity5.getCapacity(Unit.kg),new Weight(50.0,Unit.kg));
+		assertEquals(capacity6.getCapacity(Unit.kg),new Weight(100,Unit.kg));
+		assertEquals(capacity7.getCapacity(Unit.kg),new Weight(115,Unit.kg));
+		assertEquals(capacity8.getCapacity(Unit.kg),new Weight(350,Unit.kg));
+		assertEquals(capacity9.getCapacity(Unit.kg),new Weight(400,Unit.kg));
+	}
+	@Test
+	public void calculateCapacityTest2(){
+		assertEquals(capacity10.getCapacity(Unit.kg),new Weight(800,Unit.kg));
+		assertEquals(capacity11.getCapacity(Unit.kg),new Weight(3200,Unit.kg));
+		assertEquals(capacity12.getCapacity(Unit.kg),new Weight(12800,Unit.kg));
+	}
+	@Test
+	public void calculateCapacityTest3(){
+		assertEquals(capacity13.getCapacity(Unit.kg),new Weight(26214400,Unit.kg));
+		assertEquals(capacity14.getCapacity(Unit.kg),new Weight(4.0173451106474757E61,Unit.kg));
+	}
+	@Test
+	public void calculateCapacityTest4(){
+		assertEquals(capacity15.getCapacity(Unit.kg),new Weight(Double.POSITIVE_INFINITY,Unit.kg));
+		// method gives infinity if strength >= 5097
+	}
 }

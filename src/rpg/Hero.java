@@ -126,18 +126,30 @@ public class Hero extends Mobile {
 
 
 	/************************************************
-	 * Capcity: total
+	 * Capcity
 	 ************************************************/
 	
 	/**
 	 * Calculates the capacity based on the raw strength in a given unit.
 	 * 
+	 * @param strength
+	 * 		  The capacity is calculated on this strength.
 	 * @param unit
-	 * 		  The unit in which the capacity is expresssed.
-	 * @return weight with numeral zero and given unit if the raw strength is less than 1.
+	 * 		  The unit in which the capacity is expressed.
+	 * @return Weight.kg_0 if the unit is not effective
+	 * 		   | if (unit == null)
+	 * 		   |	then result.equals(Weight.kg_0)
+	 * @return Weight with numeral zero and given unit if the raw strength is less than 1.
 	 * 		   | if (getRawStrength() < 1)
 	 * 		   |	then result.equals(Weight.kg_0.toUnit(unit))
-	 * @return 
+	 * @return Weight with numeral ten times the strength and given unit 
+	 * 		   if the raw strength is lays between 1 and 10.
+	 * 		   | if (strength>10 && strength<=20)
+	 * 	       |	result.equals((new Weight(capacityStrengthBetween1020(strength),Unit.kg).toUnit(unit))
+	 * @return Weight with numeral four times what it would be if the strength was ten 
+	 * 	      units lower.
+	 * 		  | let capacity =  capacityStrengthHigherThan20(strength)
+	 * 		  | result.equals((new Weight(capacity,Unit.kg).toUnit(unit)) 
 	 */
 	@Override
 	public Weight calculateCapacity(double strength,Unit unit) {
@@ -155,8 +167,7 @@ public class Hero extends Mobile {
 			capacity = capacityStrengthBetween1020(strength);
 		}
 		else if (strength>20){
-			capacity = calculateCapacity(strength-10,unit).getNumeral();
-			capacity *= 4;
+				capacity = capacityStrengthHigherThan20(strength);
 		}
 		return (new Weight(capacity,Unit.kg)).toUnit(unit);
 	}
@@ -175,6 +186,7 @@ public class Hero extends Mobile {
 	 * 		   | 	then result == 115
 	 * 		   |  etc...
 	 */
+	@Model
 	private double capacityStrengthBetween1020(double strength){
 		if (strength>10 && strength<=11){return 115;}
 		else if (strength>11 && strength<=12){return 130;}
@@ -189,7 +201,37 @@ public class Hero extends Mobile {
 		return 0;
 	}
 	
-
+	/**
+	 * Calculates the capacity if the strength is higher than 20.
+	 * 
+	 * @param strength
+	 * 		  The strength to calculate the capacity.
+	 * @pre The strength must be higher than 20.
+	 * 	 	| strength > 20
+	 * @return The capacity 4 times of the strength 10 units lower.
+	 * 	       | let calc = strength-10
+	 * 	       | let powerOf4 =  calc/10
+	 * 		   | let strengthModTen = strength%10+10
+	 * 	       | let baseResult = capacityStrengthBetween1020(strengthModTen)
+	 * 		   | result == baseResult*(Math.pow(powerOf4, 4))
+	 * @return Infinity if strength >=5097
+	 * 		   | if (strength>=5097)
+	 * 		   |	then result == Double.POSITIVE_INFINITY
+	 */
+	@Model
+	private double capacityStrengthHigherThan20(double strength){
+		double calc = strength-10;
+		int powerOf4 = (int) calc/10;
+		double strengthModTen = strength%10+10;
+		double baseResult;
+		if (strengthModTen == 10){
+			baseResult = 100;
+		}
+		else{
+			baseResult = capacityStrengthBetween1020(strengthModTen);
+		}
+		return baseResult*(Math.pow(4, powerOf4));
+	}
 	
 	
 	

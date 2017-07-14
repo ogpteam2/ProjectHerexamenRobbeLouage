@@ -16,6 +16,8 @@ import rpg.value.Weight;
  * 		  | isValidMaximumHitpoints(getMaximumHitpoints())
  * @invar Each mobile must have a valid currentHitpoints.
  * 	      | canHaveAsValid(getCurrentHitpoints())
+ * @invar Each Mobile must have a valid protection.
+ * 	      | isValidProtection(getProtection())
  * @author Robbe
  *
  */
@@ -377,7 +379,7 @@ public abstract class Mobile {
 	
 	
 	/************************************************
-	 * Capacity: defensive
+	 * Capacity
 	 ************************************************/
 	
 	
@@ -434,6 +436,33 @@ public abstract class Mobile {
 	 * Protection: total
 	 ************************************************/
 	
+	/**
+	 * Return the protection factor inherent to all mobiles.
+	 */
+	public static int getProtection(){
+		return protection;
+	}
+	
+	/**
+	 * Check whether a given protection is valid as the protection
+	 * 
+	 * @param protection
+	 * 		  the protection to check.
+	 * @return True if protection is strictly positive/
+	 * 	       | result == protection>0
+	 */
+	public static boolean isValidProtection(int protection){
+		return protection>0;
+	}
+	
+	/**
+	 * A variable referencing the protection inherent to mobiles.
+	 */
+	private static final int protection = 10;
+	
+	/************************************************
+	 * Anchors
+	 ************************************************/
 	
 	
 }

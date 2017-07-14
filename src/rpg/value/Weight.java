@@ -85,13 +85,13 @@ public class Weight implements Comparable<Weight> {
 	 * Variable referencing a weight of 0.0 g
 	 */
 	public final static Weight g_0 = 
-			new Weight(0.0,Unit.kg);
+			new Weight(0.0,Unit.g);
 	
 	/**
 	 * Variable referencing a weight of 0.0 lbs
 	 */
 	public final static Weight lbs_0 = 
-			new Weight(0.0,Unit.kg);
+			new Weight(0.0,Unit.lbs);
 	
 	
 	/************************************************
