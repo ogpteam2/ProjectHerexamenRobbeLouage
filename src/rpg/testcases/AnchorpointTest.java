@@ -18,7 +18,7 @@ public class AnchorpointTest {
 	
 	@Before
 	public void setup(){
-		item1 = new Weapon(100);
+		item1 = new Weapon();
 		back = AnchorpointType.BACK;
 		belt = AnchorpointType.BELT;
 		right = AnchorpointType.RIGHT;

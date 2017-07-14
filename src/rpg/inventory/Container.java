@@ -3,8 +3,7 @@ import be.kuleuven.cs.som.annotate.*;
 
 abstract public class Container extends Item {
 
-	protected Container(long id) {
-		super(id);
+	protected Container() {
 		// TODO Auto-generated constructor stub
 	}
 
