@@ -10,7 +10,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 	      | isValidPostion(getPosition())
  * 
  * @author Robbe
- * @version 1.0
+ * @version  1.0
  */
 public class BackpackIDGenerator implements IDGenerator {
 
