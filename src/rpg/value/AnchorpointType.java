@@ -35,7 +35,17 @@ public enum AnchorpointType {
 	public String getAnchorpointType(){
 		return this.anchorpointType;
 	}
-
+	
+	/**
+	 * Return the number of different types.
+	 * 
+	 * @return the number of different types.
+	 * 		   | result ==  AnchorpointType.values().length
+	 * 		  
+	 */
+	public static int NbOfAnchorpointTypes(){
+		return AnchorpointType.values().length;
+	}
 	
 	/**
 	 * A variable referencing the type of this anchorpoint.

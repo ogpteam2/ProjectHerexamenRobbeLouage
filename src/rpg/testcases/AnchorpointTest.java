@@ -9,16 +9,20 @@ import rpg.inventory.Anchorpoint;
 import rpg.inventory.Item;
 import rpg.inventory.Weapon;
 import rpg.value.AnchorpointType;
+import rpg.value.Unit;
+import rpg.value.Weight;
 
 public class AnchorpointTest {
 
-	private Weapon item1;
+	private Weapon item1,item2;
 	private static AnchorpointType back,belt,right,left,body;
 	private Anchorpoint point1,point2,point3,point4,point5,point6,point7,point8;
 	
+	
 	@Before
 	public void setup(){
-		item1 = new Weapon();
+		item1 = new Weapon(null,0);
+		item2 = new Weapon(new Weight(10,Unit.kg),100);
 		back = AnchorpointType.BACK;
 		belt = AnchorpointType.BELT;
 		right = AnchorpointType.RIGHT;
@@ -57,5 +61,12 @@ public class AnchorpointTest {
 	public void contructor3Test() {
 		assertEquals(point8.getItem(),null);
 		assertEquals(point8.getAnchorpointType(),null);
+	}
+	@Test
+	public void setItemTest() {
+		assertEquals(point1.getItem(),item1);
+		point1.setItem(item2);
+		assertEquals(point1.getItem(),item2);
+		
 	}
 }

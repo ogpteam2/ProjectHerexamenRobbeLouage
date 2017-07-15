@@ -84,6 +84,18 @@ public class Anchorpoint {
 	}
 	
 	/**
+	 * Sets the given item as new item.
+	 * 
+	 * @param item
+	 * 		 the new item.
+	 * @post the given item is set as the new item.
+	 * 		 | new.getItem().equals(item)
+	 */
+	public void setItem(Item item){
+		this.item = item;
+	}
+	
+	/**
 	 * A variable referencing the item in the anchorpoint.
 	 */
 	private Item item; 

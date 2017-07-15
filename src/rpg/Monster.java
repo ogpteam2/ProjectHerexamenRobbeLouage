@@ -1,8 +1,11 @@
 package rpg;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 import be.kuleuven.cs.som.annotate.*;
+import rpg.inventory.Anchorpoint;
+import rpg.value.AnchorpointType;
 import rpg.value.Unit;
 import rpg.value.Weight;
 
@@ -19,7 +22,7 @@ public class Monster extends Mobile {
 	 ************************************************/
 
 	/**
-	 * Initializes a new monster with given name.
+	 * Initializes a new monster with given namen hitpoints and strength.
 	 * 
 	 * @param name
 	 *        The name of the monster.
@@ -109,4 +112,67 @@ public class Monster extends Mobile {
 		}
 		return Weight.kg_0.toUnit(unit);
 	}
+
+	/************************************************
+	 * Anchors
+	 ************************************************/
+	
+	/**
+	 * Return the number of anchor points this monster can use.
+	 */
+	@Raw @Basic
+	public int getNbOfAnchorpoints(){
+		return nbOfAnchorpoints;
+	}
+	
+	/**
+	 * Checks whether a monster can have the given nb items.
+	 * 
+	 * @return true if the nb is less or equal to the NbOfAnchorpoints
+	 * 		   | result == nb<=getNbOfAnchorpoints()
+	 */
+	@Override
+	public boolean canHaveAsNbItems(int nb){
+		return nb<=getNbOfAnchorpoints();
+	}
+	
+	@Override
+	public boolean isValidAnchorpointList(Anchorpoint[] anchors) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+	/**
+	 * Generates the number of availabe anchor point types for a monster.
+	 * 
+	 * @return a number between zero and to amount of different types.
+	 * 		   | ThreadLocalRandom.current().nextInt(0, AnchorpointType.NbOfAnchorpointTypes()+1)
+	 */
+	private int generateNbOfAnchorpoints(){
+		return ThreadLocalRandom.current().nextInt(0, AnchorpointType.NbOfAnchorpointTypes()+1);
+	}
+	
+	private Anchorpoint[] generateAvailableAnchorpoints(){
+		Anchorpoint[] anchors  = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
+		int available = generateNbOfAnchorpoints();
+		int ordinals[] = new int[available];
+		
+		
+		
+		
+		return anchors;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * A variable referencing how many anchorpoints are available for this monster.
+	 */
+	private final int nbOfAnchorpoints;
 }
