@@ -1,8 +1,11 @@
 package rpg;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
@@ -52,7 +55,7 @@ public class Monster extends Mobile {
 	@Raw
 	public Monster(String name, long hitpoints,double strength) {
 		super(name,hitpoints, strength);
-		
+		this.nbOfAnchorpoints = decideNbOfAnchorpoint(getAnchors());
 
 	}
 
@@ -179,19 +182,57 @@ public class Monster extends Mobile {
 	
 	/**
 	 * Generates the available anchorpoints for the monster if no valid anchorpoint list is given.
+	 * 
 	 * @return
 	 */
 	@Override
 	public Anchorpoint[] generateAnchorpoints(){
 		int differentTypes = AnchorpointType.NbOfAnchorpointTypes();
 		Anchorpoint[] anchors  = new Anchorpoint[differentTypes];
-		int available = getNbOfAnchorpoints();
-		int[] ints = new Random().ints(0,differentTypes).distinct().limit(available).toArray();
-		for (int i:ints){
-			Anchorpoint point= new Anchorpoint(AnchorpointType.getTypeFromOrdinal(i),null);
-			anchors[i] = point;
+		int available = generateNbOfAnchorpoints();
+		ArrayList<Integer> randomList = random(0,differentTypes,available);
+		for (Integer i=0;i<differentTypes;i++){
+			if (randomList.contains(i)){
+				anchors[i] = new Anchorpoint(AnchorpointType.getTypeFromOrdinal(i));
+			}
+			else{
+				anchors[i] = new Anchorpoint();
+			}
 		}
 		return anchors;
+	}
+	
+	/**
+	 * Generates unique random integers between min and max.
+	 * 
+	 * @param min
+	 * 		  The min boundary
+	 * @param max
+	 * 		  the max boundary
+	 * @param number
+	 * 		  the number of unique numbers
+	 * @pre the number must be  lay between (max-min) and 0.
+	 * 		| number>=0 && number<(max-min)
+	 * @return a arraylist of unique random integers.
+	 * 		  | let  list = new ArrayList<Integer>()
+	 * 		  |	for I in min...max
+	 * 		  |		list.add(I)
+	 * 		  | Collections.shuffle(list)
+	 * 		  |	for I in 0...number
+	 * 		  |		numbers.add(list.get(i))
+	 * 		  | result.equals(numbers)
+	 */
+	private static ArrayList<Integer> random(int min,int max,int number){
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		for (int i=min;i<max+1;i++){
+			list.add(new Integer(i));
+		}
+		Collections.shuffle(list);
+		ArrayList<Integer> numbers = new ArrayList<Integer>();
+		for (int i=0;i<number;i++){
+			numbers.add(list.get(i));
+		}
+		return numbers;
 	}
 	
 	/**
@@ -219,5 +260,5 @@ public class Monster extends Mobile {
 	/**
 	 * A variable referencing how many anchorpoints are available for this monster.
 	 */
-	private int nbOfAnchorpoints = generateNbOfAnchorpoints();
+	private int nbOfAnchorpoints;
 }

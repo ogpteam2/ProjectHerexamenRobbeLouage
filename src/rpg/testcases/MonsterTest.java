@@ -39,8 +39,6 @@ public class MonsterTest {
 		initializeInvalid1();
 		invalid2 = new Anchorpoint[5];
 		initializeInvalid2();
-		invalid3 = new Anchorpoint[5];
-		initializeInvalid2();
 	}
 	
 	private void initializeValid(){
@@ -116,11 +114,31 @@ public class MonsterTest {
 		}
 	}
 	@Test
-	public void constructor1Test(){
+	public void constructor2Test(){
 		monster1 = new Monster("Jared", 50L, 100);
-		for (Anchorpoint anchor:monster1.getAnchors()){
-			System.out.println(anchor);
-			
+		assertTrue(monster1.getFreeAnchorpoints().size()>=0);
+		assertTrue(monster1.getFreeAnchorpoints().size()<=5);
+		assertEquals(monster1.getFreeAnchorpoints().size(),monster1.getNbOfAnchorpoints());
+	}
+	@Test
+	public void isValidListTest(){
+		monster1 = new Monster("Jared", 50L, 100);
+		assertTrue(monster1.isValidAnchorpointList(valid));
+		assertFalse(monster1.isValidAnchorpointList(invalid1));
+		assertFalse(monster1.isValidAnchorpointList(invalid2));
+	}
+	
+	@Test
+	public void addTest(){
+		monster1 = new Monster("Jared", 50L, 100);
+		monster1.addItemAt(AnchorpointType.BACK, weapon1);
+		if (monster1.getNbItems() == 1){
+			assertEquals(monster1.getItemAt(AnchorpointType.BACK),weapon1);
+			assertEquals(monster1.getItemAt(AnchorpointType.BACK).getHolder(),monster1);
+		}
+		else {
+			assertEquals(monster1.getNbItems(),0);
+			assertEquals(monster1.getAnchors()[AnchorpointType.BACK.ordinal()].getAnchorpointType(),null);
 		}
 	}
 	

@@ -3,6 +3,7 @@ package rpg;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
@@ -908,15 +909,37 @@ public abstract class Mobile {
 	 * @effect sets the item at the given type at null, and removes the reference the 
 	 * 		   item makes to this mobile, if the type is effective.
 	 * 		   | if type != null
-	 * 		   | 	then anchors[type.ordinal()].getItem().setHolder(null)
-	 * 		   | 		 anchors[type.ordinal()].setItem(null)
+	 * 	       |	if (anchors[type.ordinal()].getAnchorpointType()!=null)
+	 * 		   | 		then anchors[type.ordinal()].getItem().setHolder(null)
+	 * 		   | 		 	anchors[type.ordinal()].setItem(null)
 	 *
 	 */
 	public void removeItemAt(AnchorpointType type) {
 		if (type != null){
-			anchors[type.ordinal()].getItem().setHolder(null);
-			anchors[type.ordinal()].setItem(null);
+			if (anchors[type.ordinal()].getAnchorpointType()!=null){
+				anchors[type.ordinal()].getItem().setHolder(null);
+				anchors[type.ordinal()].setItem(null);
+			}
 		}
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @param newHolder
+	 */
+	public void transfersItem(AnchorpointType type,Mobile reciever){
+		if (type == null || reciever == null){}
+		else if (reciever.getFreeAnchorpoints().size()>0){
+			int random = ThreadLocalRandom.current().nextInt(0,getFreeAnchorpoints().size());
+			AnchorpointType addType = reciever.getFreeAnchorpoints().get(random);
+			Item item = this.getItemAt(type);
+			this.removeItemAt(type);
+			reciever.addItemAt(type, item);
+		}
+		
+			
+		// add an else if clause for backpacks
 	}
 	
 	/**
