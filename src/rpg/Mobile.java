@@ -2,6 +2,7 @@ package rpg;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
@@ -55,9 +56,13 @@ public abstract class Mobile {
 	 * 	       | setMaximumHitpoints(hitpoints)
 	 * @effect Sets the strength to the given strength
 	 * 		   | setRawStrength(strength)
-	 * @post the anchors is set to the given anchors if the given anchors is valid.
+	 * @effect the anchors is set to the given anchors if the given anchors is valid, and all
+	 * 		 the items will have as holder this mobile.
 	 * 	     | if (this.isValidAnchorpointList(anchors))
 	 * 		 |		then new.anchors.equals(anchors)
+	 * 		 | 		for (anchor in anchors)
+	 * 		 |			if (anchor.getItem()!=null)
+	 * 		 |				then anchor.getItem().setHolder(this)
 	 */
 	@Raw
 	protected Mobile(String name, long hitpoints, double strength
@@ -67,7 +72,16 @@ public abstract class Mobile {
 		setMaximumHitpoints(hitpoints);
 		setRawStrength(strength);
 		if (this.isValidAnchorpointList(anchors)){
+			this.anchors = generateAnchorpoints();
+			for (Anchorpoint anchor:anchors){
+				if (anchor.getItem()!=null){
+					anchor.getItem().setHolder(this);
+				}
+			}
 			this.anchors = anchors;
+		}
+		else{
+			this.anchors = generateAnchorpoints();
 		}
 	}
 	
@@ -532,16 +546,18 @@ public abstract class Mobile {
 	 * @return the number of items the mobile has. 
 	 * 		   | let sum = 0 
 	 * 		   | for anchor in anchors 
-	 *         | if (anchor.getAnchorpointType() == null) 
-	 *         | else if (anchor.getItem() != null)
-	 *         | 	then sum++ | result == sum
+	 *         | if (anchor.getAnchorpointType() != null) 
+	 *         | 	 if (anchor.getItem() != null)
+	 *         | 		then sum++ 
+	 *         | result == sum
 	 */
 	public int getNbItems() {
 		int sum = 0;
 		for (Anchorpoint anchor : anchors) {
-			if (anchor.getAnchorpointType() == null) {
-			} else if (anchor.getItem() != null) {
-				sum++;
+			if (anchor.getAnchorpointType() != null) {
+				if (anchor.getItem() != null) {
+					sum++;
+				}  
 			}
 		}
 		return sum;
@@ -552,10 +568,12 @@ public abstract class Mobile {
 	 * 
 	 * @param number
 	 * 		  The number to check.
-	 * @return true if the number is less or equal to number of different anchorpointtypes.
+	 * @return true if the number is less or equal to number of different anchorpointtypes,
+	 * 		   and greater than zero.
+	 * 		   | result == number>=0 &&number<=AnchorpointType.NbOfAnchorpointTypes() 
 	 */
 	public boolean canHaveAsNbItems(int number){
-		return number<=AnchorpointType.NbOfAnchorpointTypes();
+		return number>=0 &&number<=AnchorpointType.NbOfAnchorpointTypes();
 	}
 	
 	/**
@@ -600,22 +618,63 @@ public abstract class Mobile {
 	 * 		   | let weight = Weight.kg_0
 	 * 	       | for anchors in anchor
 	 * 	       |	if (anchor.getAnchorpointType() != null && anchor.getItem() != null)
-	 * 		   |		then weight.add(anchor.getItem().getWeight())
+	 * 		   |		then weight = weight.add(anchor.getItem().getWeight(Unit.kg))
 	 * 		   | result.equals(weight)
 	 */
 	public Weight getTotalWeight(Unit unit) {
 		if (unit==null){
 			return null;
 		}
+		
 		Weight weight = Weight.kg_0;
 		for (Anchorpoint anchor:anchors){
 			 if (anchor.getAnchorpointType() != null && anchor.getItem() != null){
-				 weight.add(anchor.getItem().getWeight());
+				 weight = weight.add(anchor.getItem().getWeight(Unit.kg));	 
 			 }
 		}
 		return weight.toUnit(unit);
 	}
 	
+	/**
+	 * Gets the total weight of a anchors.
+	 * 
+	 * @param anchors
+	 * 		  The anchors to get the total weight of. 
+	 * @return The total weight of al the items the mobile holds, in kg.
+	 * 		   | let weight = Weight.kg_0
+	 * 	       | for anchor in anchors
+	 * 	       |	if (anchor.getAnchorpointType() != null && anchor.getItem() != null)
+	 * 		   |		then weight = weight.add(anchor.getItem().getWeight(Unit.kg))
+	 * 		   | result.equals(weight)
+	 */
+	public static Weight totalWeight(Anchorpoint[] anchors){
+		Weight weight = Weight.kg_0;
+		for (Anchorpoint anchor:anchors){
+			 if (anchor.getAnchorpointType() != null && anchor.getItem() != null){
+				 weight = weight.add(anchor.getItem().getWeight(Unit.kg));
+			 }
+		}
+		return weight;
+	}
+	
+	/**
+	 * Returns a list with fee anchor points types.
+	 * 
+	 * @return the free anchor point types of this mobile.
+	 * 		   | let free = new ArrayList<AnchorpointType>()
+	 *		   | for anchor in anchors
+	 *		   | 	if (anchor.getAnchorpointType() != null && anchor.getItem() == null)
+	 *		   |		then free.add(anchor.getAnchorpointType())
+	 */
+	public ArrayList<AnchorpointType> getFreeAnchorpoints(){
+		ArrayList<AnchorpointType> free = new ArrayList<AnchorpointType>();
+		for (Anchorpoint anchor:anchors){
+			if (anchor.getAnchorpointType() != null && anchor.getItem() == null){
+				free.add(anchor.getAnchorpointType());
+			}
+		}
+		return free;
+	}
 	
 	/**
 	 * Checks whether an item is valid at a given anchor point type.
@@ -635,7 +694,8 @@ public abstract class Mobile {
 	public boolean canHaveAsItemAt(AnchorpointType type, Item item){
 		if (type == null)
 			return false;
-		else if (item != null && (item.getWeight(Unit.kg)).compareTo(getCapacity(Unit.kg))>0){
+		else if (item != null  
+				&& (item.getWeight(Unit.kg)).compareTo(getCapacity(Unit.kg))>0){
 			return false;
 		}
 		return true;
@@ -672,17 +732,69 @@ public abstract class Mobile {
 	 * @return false if the anchors is not effective.
 	 * 		   | if (anchors == null)
 	 * 	 	   |	then result == false
-	 * @return false if the given anchors its length is greater than the number
+	 * @return false if the given anchors its length is different than the number
 	 * 		   of different anchor point types.
-	 * 		   | if (anchors.length>AnchorpointType.NbOfAnchorpointTypes())
+	 * 		   | if (anchors.length!=AnchorpointType.NbOfAnchorpointTypes())
 	 * 	       |	return false
+	 * @return false if different is false.
+	 * 		   | if (!different(anchors))
+	 * 		   |	then result == false
+	 * @return  false if the total weight of the given anchors is more than the capacity.
+	 * 		   | if (totalWeight(anchors).compareTo(getCapacity(Unit.kg))>0)
+	 * 		   | 	then result == false
 	 */
 	public boolean isValidAnchorpointList(Anchorpoint[] anchors) {
 		if (anchors == null){
 			return false;
 		}
+		if (anchors.length!=AnchorpointType.NbOfAnchorpointTypes()){
+			return false;
+		}
+		if (!different(anchors))
+			return false;
+		if (totalWeight(anchors).compareTo(getCapacity(Unit.kg))>0){
+			return false;
+		}
+		return true;
+	}
+	/**
+	 * Checks whether each anchor point type occurs at most once in the given anchors.
+	 * 
+	 * @param anchors
+	 * 		  The anchors to check.
+	 * @return false if the anchors is not effective
+	 * 		   | if (anchors == null)
+	 * 		   |	then result == false
+	 * @return false if the anchors' length is greater than the amount of different types.
+	 * 		   | if (anchors.length>AnchorpointType.NbOfAnchorpointTypes())
+	 * 		   |	then return false
+	 * @return false if a type occurs more than once.
+	 * 		   | let diff = new int[AnchorpointType.NbOfAnchorpointTypes()]
+	 * 		   | for (anchor in anchors)
+	 * 		   |	if (anchor.getAnchorpointType() != null)
+	 * 		   |		then diff[anchor.getAnchorpointType().ordinal()] += 1
+	 * 		   | for (int i:diff)
+	 * 		   |	if (i>1)
+	 * 		   |		then result == false
+	 */
+	@Model
+	public boolean different(Anchorpoint[] anchors){
+		if (anchors == null){
+			return false;
+		}
 		if (anchors.length>AnchorpointType.NbOfAnchorpointTypes()){
 			return false;
+		}
+		int[] diff = new int[AnchorpointType.NbOfAnchorpointTypes()];
+		for (Anchorpoint anchor:anchors){
+			if (anchor.getAnchorpointType() != null){
+				diff[anchor.getAnchorpointType().ordinal()] += 1;
+			}
+		}
+		for (int i:diff){
+			if (i>1){
+				return false;
+			}
 		}
 		return true;
 	}
@@ -697,6 +809,9 @@ public abstract class Mobile {
 	 * @return false if the given anchor point type or item is null.
 	 * 	       | if (type == null || item == null)
 	 * 		   |	then result == false.
+	 * @return false if the given anchorpoint is not a legal one for this mobile.
+	 * 		   | (anchors[type.ordinal()] == null)
+	 *         |	then result == false
 	 * @return  false if there is already an item at the given anchor point type.
 	 * 	       | if (anchors[type.ordinal].getItem() != null)
 	 * 		   | 	then result == false
@@ -707,12 +822,17 @@ public abstract class Mobile {
 	 * @return false if the item already has a holder.
 	 * 	       | if (item.getHolder() != null)
 	 * 		   | 	then result == false
+	 * @return false if item is already in anchors.
+	 * 		   | if (checkItemInAnchors(item))
+	 * 		   |	then result == false
 	 * @return true otherwise.
 	 */
 	public boolean canAddItemAt(AnchorpointType type, Item item) {
 		if (type == null){
 			return false;
 		}
+		else if (anchors[type.ordinal()] == null)
+			return false;
 		else if (item == null){
 			return false;
 		}
@@ -726,7 +846,38 @@ public abstract class Mobile {
 		else if (item.getHolder() != null){
 			return false;
 		}
+		else if (checkItemInAnchors(item)){
+			return false;
+		}
 		return true;
+	}
+	
+	/**
+	 * Checks whether an item is already in the anchors.
+	 * 
+	 * @param item
+	 * 		  The item to search.
+	 * @return true if the item is in the anchors.
+	 * 		  | for (anchor in anchors)
+	 * 		  |		if (anchor.getAnchorpointType() != null && anchor.getItem()!=null)
+	 * 		  |			then if (anchor.getItem().equals(item))
+	 * 		  |				return true
+	 * @return false if item is not effective.
+	 * 		  | (item == null)
+	 * 		  |	return false.
+	 */
+	public boolean checkItemInAnchors(Item item){
+		if (item == null)
+			return false;
+		for (Anchorpoint anchor:anchors){
+			if (anchor.getAnchorpointType() != null && anchor.getItem()!=null){
+				if (anchor.getItem().equals(item)){
+					return true;
+				}
+			}
+
+		}
+		return false;
 	}
 
 	/**
@@ -745,6 +896,7 @@ public abstract class Mobile {
 		if (canAddItemAt(type,item)){
 			item.setHolder(this);
 			anchors[type.ordinal()].setItem(item);
+			
 		}
 	}
 
@@ -765,7 +917,20 @@ public abstract class Mobile {
 			anchors[type.ordinal()].getItem().setHolder(null);
 			anchors[type.ordinal()].setItem(null);
 		}
-
+	}
+	
+	/**
+	 * Generates anchorpoints if no valid list is given in the constructor.
+	 * 
+	 * @return a valid anchorpointslist for the mobile.
+	 * @note the implementation is given in each subclass.
+	 */
+	public Anchorpoint[] generateAnchorpoints(){
+		return null;
+	}
+	
+	public Anchorpoint[] getAnchors(){
+		return anchors.clone();
 	}
 	
 	/**

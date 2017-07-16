@@ -5,6 +5,7 @@ import rpg.value.AnchorpointType;
 import rpg.value.Unit;
 import rpg.value.Weight;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.*;
 
@@ -265,24 +266,7 @@ public class Hero extends Mobile {
 	/************************************************
 	 * Anchors
 	 ************************************************/
-	
-	/**
-	 * Checks whether a anchor point list is a valid one for a hero.
-	 * 
-	 * @return true if it a valid one for mobiles and has all the different 
-	 * 		   anchor point types and if the total weight of all those items in
-	 * 		   those anchorpoints is not greater than the capacity.
-	 * 		   | result == super.isValidAnchorpointList(anchors) &&
-	 * 		   |		   different(anchors) && 
-	 * 		   | 		   totalWeight(anchors).compareTo(getCapacity(Unit.kg))<=0
-	 */
-	@Override
-	public boolean isValidAnchorpointList(Anchorpoint[] anchors) {
-		return super.isValidAnchorpointList(anchors) &&
-				different(anchors) && 
-				(totalWeight(anchors).compareTo(getCapacity(Unit.kg)))<=0; 
-	}
-	
+
 	/**
 	 * Checks whether each anchor point type is present in the given anchors and it occurs
 	 * 		  once.
@@ -292,54 +276,43 @@ public class Hero extends Mobile {
 	 * @return false if the anchors is not effective
 	 * 		   | if (anchors == null)
 	 * 		   |	then result == false
-	 * @return false if a type doesn't occur or twice or more.
-	 * 		   | let different = new int[AnchorpointType.NbOfAnchorpointTypes()]
-	 * 	       | for anchor in anchors
-	 * 		   |	different[anchor.getAnchorpointType().ordinal()] += 1
-	 * 		   | for i in different
-	 * 		   |	if (different[i]!=1)
-	 * 		   |		then result == false.
+	 * @return false if the anchors' length is greater than the amount of different types.
+	 * 		   | if (anchors.length>AnchorpointType.NbOfAnchorpointTypes())
+	 * 		   |	then return false
+	 * @return false if a type occurs doesn't occur or more than once.
+	 * 		   | let diff = new int[AnchorpointType.NbOfAnchorpointTypes()]
+	 * 		   | for (anchor in anchors)
+	 * 		   |	if (anchor.getAnchorpointType() != null)
+	 * 		   |		then diff[anchor.getAnchorpointType().ordinal()] += 1
+	 * 		   | for (int i:diff)
+	 * 		   |	if (i!=1)
+	 * 		   |		then result == false
 	 */
 	@Model
 	public boolean different(Anchorpoint[] anchors){
 		if (anchors == null){
 			return false;
 		}
-		int[] different = new int[AnchorpointType.NbOfAnchorpointTypes()];
-		for (Anchorpoint anchor:anchors){
-			different[anchor.getAnchorpointType().ordinal()] += 1;
+		if (anchors.length>AnchorpointType.NbOfAnchorpointTypes()){
+			return false;
 		}
-		for (int i:different){
-			if (different[i]!=1){
+		int[] diff = new int[AnchorpointType.NbOfAnchorpointTypes()];
+		for (Anchorpoint anchor:anchors){
+			if (anchor != null){
+				if (anchor.getAnchorpointType() != null){
+					diff[anchor.getAnchorpointType().ordinal()] += 1;
+				}
+			}
+		}
+		for (int i:diff){
+			if (i!=1){
 				return false;
 			}
 		}
 		return true;
 	}
 	
-	/**
-	 * Gets the total weight of a anchors.
-	 * 
-	 * @param anchors
-	 * 		  The anchors to get the total weight of. 
-	 * @return The total weight of al the items the mobile holds.
-	 * 		   | let weight = Weight.kg_0
-	 * 	       | for anchor in anchors
-	 * 	       |	if (anchor.getAnchorpointType() != null && anchor.getItem() != null)
-	 * 		   |		then weight.add(anchor.getItem().getWeight())
-	 * 		   | result.equals(weight)
-	 */
-	@Model
-	public Weight totalWeight(Anchorpoint[] anchors){
-		Weight weight = Weight.kg_0;
-		for (Anchorpoint anchor:anchors){
-			 if (anchor.getAnchorpointType() != null && anchor.getItem() != null){
-				 weight.add(anchor.getItem().getWeight());
-			 }
-		}
-		return weight;
-	}
-	
+
 	/**
 	 * Generates an empty anchor points list.
 	 * 
@@ -350,13 +323,13 @@ public class Hero extends Mobile {
 	 * 		   |	 anchors[type.ordinal()] = point
 	 * 		   | result.equals(anchors)
 	 */
-	private Anchorpoint[] generateEmptyAnchors(){
+	@Override
+	public Anchorpoint[] generateAnchorpoints(){
 		Anchorpoint[] anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
 		for (AnchorpointType type:AnchorpointType.values()){
 			Anchorpoint point= new Anchorpoint(type,null);
 			anchors[type.ordinal()] = point;
 		}
-		
 		return anchors;
 	}
 }

@@ -1,5 +1,6 @@
 package rpg;
 
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
@@ -20,6 +21,23 @@ public class Monster extends Mobile {
 	/************************************************
 	 * Constructors
 	 ************************************************/
+	/**
+	 * Initializes a new monster with given namen hitpoints and strength.
+	 * 
+	 * @param name
+	 *        The name of the monster.
+	 * @param hitpoints
+	 * 		  The hitpoints of the monster.
+	 * @param strength
+	 * 		  The raw strength of the monster.
+	 */
+	@Raw
+	public Monster(String name, long hitpoints,double strength, Anchorpoint[] anchors) {
+		super(name,hitpoints, strength ,anchors);
+		this.nbOfAnchorpoints = decideNbOfAnchorpoint(anchors);
+	}
+		
+
 
 	/**
 	 * Initializes a new monster with given namen hitpoints and strength.
@@ -34,6 +52,7 @@ public class Monster extends Mobile {
 	@Raw
 	public Monster(String name, long hitpoints,double strength) {
 		super(name,hitpoints, strength);
+		
 
 	}
 
@@ -136,10 +155,15 @@ public class Monster extends Mobile {
 		return nb<=getNbOfAnchorpoints();
 	}
 	
+	/**
+	 * Checks whether a anchorpointlist is valid for a monster
+	 * 
+	 * @return true if it is a valid anchor for a mobile.
+	 * 		  | super.isValidAnchorpointList(anchors)
+	 */
 	@Override
 	public boolean isValidAnchorpointList(Anchorpoint[] anchors) {
-		// TODO Auto-generated method stub
-		return false;
+		return super.isValidAnchorpointList(anchors);
 	}
 
 	
@@ -149,30 +173,51 @@ public class Monster extends Mobile {
 	 * @return a number between zero and to amount of different types.
 	 * 		   | ThreadLocalRandom.current().nextInt(0, AnchorpointType.NbOfAnchorpointTypes()+1)
 	 */
-	private int generateNbOfAnchorpoints(){
+	public static int generateNbOfAnchorpoints(){
 		return ThreadLocalRandom.current().nextInt(0, AnchorpointType.NbOfAnchorpointTypes()+1);
 	}
 	
-	private Anchorpoint[] generateAvailableAnchorpoints(){
-		Anchorpoint[] anchors  = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
-		int available = generateNbOfAnchorpoints();
-		int ordinals[] = new int[available];
-		
-		
-		
-		
+	/**
+	 * Generates the available anchorpoints for the monster if no valid anchorpoint list is given.
+	 * @return
+	 */
+	@Override
+	public Anchorpoint[] generateAnchorpoints(){
+		int differentTypes = AnchorpointType.NbOfAnchorpointTypes();
+		Anchorpoint[] anchors  = new Anchorpoint[differentTypes];
+		int available = getNbOfAnchorpoints();
+		int[] ints = new Random().ints(0,differentTypes).distinct().limit(available).toArray();
+		for (int i:ints){
+			Anchorpoint point= new Anchorpoint(AnchorpointType.getTypeFromOrdinal(i),null);
+			anchors[i] = point;
+		}
 		return anchors;
 	}
 	
-	
-	
-	
-	
-	
-	
+	/**
+	 * Return the available number of anchorpointypes in the given anchors.
+	 * 
+	 * @param anchors
+	 * 		  to available anchorpoint types in this anchors.
+	 * @return the number of available anchorpointtypes in this anchors.
+	 * 		   | let sum = 0
+	 * 	       | for (anchor in anchors)
+	 * 		   |	if (anchor.getAnchorpointType() != null)
+	 * 		   |		then sum++
+	 * 		   | return sum
+	 */
+	private int decideNbOfAnchorpoint(Anchorpoint[] anchors) {
+		int sum = 0;
+		for (Anchorpoint anchor:anchors){
+			if (anchor.getAnchorpointType() != null){
+				sum++;
+			}
+		}
+		return sum;
+	}
 	
 	/**
 	 * A variable referencing how many anchorpoints are available for this monster.
 	 */
-	private final int nbOfAnchorpoints;
+	private int nbOfAnchorpoints = generateNbOfAnchorpoints();
 }

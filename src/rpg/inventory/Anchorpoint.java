@@ -61,15 +61,27 @@ public class Anchorpoint {
 	/**
 	 * Returns the anchorpoint type of this anchorpoint.
 	 */
-	@Basic @Immutable
+	@Basic
 	public AnchorpointType getAnchorpointType(){
 		return this.anchorpointType;
 	}
 	
 	/**
+	 * Sets the anchorpointtype to the given type.
+	 * 
+	 * @param type
+	 * 		  The new type.
+	 * @post the new anchorpoint type is the given type.
+	 * 		 | new.getAnchorpointType().equals(type)
+	 */
+	public void setType(AnchorpointType type){
+		this.anchorpointType = type;
+	}
+	
+	/**
 	 * A variable referencing the anchorpoint type of this anchorpoint.
 	 */
-	private final AnchorpointType anchorpointType;
+	private AnchorpointType anchorpointType;
 	
 	/************************************************
 	 * item

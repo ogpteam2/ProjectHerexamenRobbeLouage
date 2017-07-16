@@ -6,6 +6,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import java.util.ArrayList;
 import rpg.*;
+import rpg.inventory.Anchorpoint;
+import rpg.inventory.Weapon;
+import rpg.value.AnchorpointType;
 import rpg.value.Unit;
 import rpg.value.Weight;
 
@@ -18,6 +21,13 @@ public class HeroTest {
 	private Hero strength1,strength2,strength3,strength4,strength5,strength6,strength7,strength8;
 	private static final double DELTA = 10E-10;
 	private Hero capacity1,capacity2,capacity3,capacity4,capacity5,capacity6,capacity7,capacity8,capacity9,capacity10,capacity11,capacity12,capacity13,capacity14,capacity15;
+	// bidirectional link test
+	private Hero link1,link2,link3,link4,link5,link6,link7,link8,link9,link10,link11;
+	private Weapon weapon1,weapon2,weapon3,weapon4,weapon5;
+	private Anchorpoint[] valid,invalid1,invalid2,invalid3;
+	
+	
+	
 	
 	@Before
 	public void setup(){
@@ -50,7 +60,51 @@ public class HeroTest {
 		capacity13 = new Hero("James",0,100);
 		capacity14 = new Hero("James",0,1000);
 		capacity15 = new Hero("James",0,5097);
+		link1 = new Hero("James",100L,40);
+		weapon1 = new Weapon(new Weight(50,Unit.kg),0);
+		weapon2 = new Weapon(new Weight(100,Unit.kg),0);
+		weapon3 = new Weapon(new Weight(150,Unit.kg),0);
+		weapon4 = new Weapon(new Weight(200,Unit.kg),0);
+		weapon5 = new Weapon(new Weight(250,Unit.kg),0);
+		valid = new Anchorpoint[5];
+		initializeValid();
+		invalid1 = new Anchorpoint[4];
+		initializeInvalid1();
+		invalid2 = new Anchorpoint[5];
+		initializeInvalid2();
+		invalid3 = new Anchorpoint[5];
+		initializeInvalid2();
 	}
+	
+	private void initializeValid(){
+		valid[0] = new Anchorpoint(AnchorpointType.BACK,weapon1);
+		valid[1] = new Anchorpoint(AnchorpointType.BODY,weapon2);
+		valid[2] = new Anchorpoint(AnchorpointType.BELT,weapon3);
+		valid[3] = new Anchorpoint(AnchorpointType.LEFT,weapon4);
+		valid[4] = new Anchorpoint(AnchorpointType.RIGHT,weapon5);
+	}
+	private void initializeInvalid1(){
+		invalid1[0] = new Anchorpoint(AnchorpointType.BACK,weapon1);
+		invalid1[1] = new Anchorpoint(AnchorpointType.BODY,weapon2);
+		invalid1[2] = new Anchorpoint(AnchorpointType.BELT,weapon3);
+		invalid1[3] = new Anchorpoint(null,weapon4);
+	}
+	private void initializeInvalid2(){
+		invalid2[0] = new Anchorpoint(AnchorpointType.BACK,weapon1);
+		invalid2[1] = new Anchorpoint(AnchorpointType.BODY,weapon2);
+		invalid2[2] = new Anchorpoint(AnchorpointType.BELT,weapon3);
+		invalid2[3] = new Anchorpoint(AnchorpointType.LEFT,weapon4);
+		invalid2[4] = new Anchorpoint(AnchorpointType.LEFT,weapon5);
+	}
+	private void initializeInvalid3(){
+		invalid3[0] = new Anchorpoint();
+		invalid3[1] = new Anchorpoint(AnchorpointType.BODY,weapon2);
+		invalid3[2] = new Anchorpoint(AnchorpointType.BELT,weapon3);
+		invalid3[3] = new Anchorpoint(AnchorpointType.LEFT,weapon4);
+		invalid3[4] = new Anchorpoint(AnchorpointType.LEFT,weapon5);
+	}
+	
+	
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName0() {
@@ -273,4 +327,149 @@ public class HeroTest {
 		assertEquals(capacity15.getCapacity(Unit.kg),new Weight(Double.POSITIVE_INFINITY,Unit.kg));
 		// method gives infinity if strength >= 5097
 	}
+	
+	@Test 
+	public void constructor2Test(){
+		assertEquals(link1.getNbItems(),0);
+		assertEquals(link1.getCapacity(),new Weight(6400,Unit.kg));
+		ArrayList<AnchorpointType> all = new ArrayList<AnchorpointType>();
+		all.add(AnchorpointType.BODY);all.add(AnchorpointType.BACK);
+		all.add(AnchorpointType.BELT);all.add(AnchorpointType.RIGHT);
+		all.add(AnchorpointType.LEFT);
+		assertEquals(link1.getFreeAnchorpoints(),all);
+		assertEquals(link1.getTotalWeight(Unit.kg),Weight.kg_0);
+		for (Anchorpoint anchor:link1.generateAnchorpoints()){
+			assertEquals(anchor.getItem(),null);
+		}
+		
+	}
+	
+	@Test
+	public void differentTest(){
+		assertTrue(link1.isValidAnchorpointList(valid));
+		assertFalse(link1.isValidAnchorpointList(invalid1));
+		assertFalse(link1.isValidAnchorpointList(invalid3));
+		assertFalse(link1.isValidAnchorpointList(invalid2));
+	}
+	
+	@Test
+	public void constructor1Test(){
+		Hero okay = new Hero("Jamevhs",10L,45,valid);
+		for (Anchorpoint anchor:okay.getAnchors()){
+			assertEquals(anchor.getAnchorpointType(),anchor.getAnchorpointType());
+			assertEquals(anchor.getItem().getHolder().getName(),"Jamevhs");
+		}
+		assertTrue(okay.hasProperItems());
+	}
+	
+	@Test
+	public void nbItemsCheck(){
+		assertTrue(link1.canHaveAsNbItems(5));
+		assertFalse(link1.canHaveAsNbItems(-1));
+		assertTrue(link1.canHaveAsNbItems(0));
+	}
+	
+	@Test
+	public void getNbItemsCheck(){
+		assertEquals(link1.getNbItems(),0);
+		link1.addItemAt(AnchorpointType.BACK, weapon1);
+		assertEquals(link1.getNbItems(),1);
+		link1.addItemAt(AnchorpointType.BODY, weapon2);
+		assertEquals(link1.getNbItems(),2);
+		link1.addItemAt(AnchorpointType.BELT, weapon3);
+		assertEquals(link1.getNbItems(),3);
+		link1.addItemAt(AnchorpointType.LEFT, weapon4);
+		assertEquals(link1.getNbItems(),4);
+		link1.addItemAt(AnchorpointType.RIGHT, weapon5);
+		assertEquals(link1.getNbItems(),5);
+	}
+	
+	@Test
+	public void getItemAtTest(){
+		link1.addItemAt(AnchorpointType.BACK, weapon1);
+		assertEquals(link1.getItemAt(AnchorpointType.BACK),weapon1);
+		assertEquals(weapon1.getHolder(),link1);
+	}
+	
+	@Test
+	public void freeAnchorpointsTest(){
+		link1.addItemAt(AnchorpointType.BACK, weapon1);
+		ArrayList<AnchorpointType> all = new ArrayList<AnchorpointType>();
+		all.add(AnchorpointType.BODY);
+		all.add(AnchorpointType.BELT);all.add(AnchorpointType.RIGHT);
+		all.add(AnchorpointType.LEFT);
+		assertEquals(link1.getFreeAnchorpoints(),all);
+		link1.addItemAt(AnchorpointType.BODY, weapon2);
+		ArrayList<AnchorpointType> all2 = new ArrayList<AnchorpointType>();
+		all2.add(AnchorpointType.BELT);all2.add(AnchorpointType.RIGHT);
+		all2.add(AnchorpointType.LEFT);
+		assertEquals(link1.getFreeAnchorpoints(),all2);
+	}
+	
+	@Test
+	public void totalWeight(){
+		assertEquals(link1.getTotalWeight(Unit.kg),Weight.kg_0);
+		link1.addItemAt(AnchorpointType.BODY, weapon1);
+		link1.addItemAt(AnchorpointType.BACK, weapon2);
+		link1.addItemAt(AnchorpointType.BELT, weapon3);
+		link1.addItemAt(AnchorpointType.LEFT, weapon4);
+		link1.addItemAt(AnchorpointType.RIGHT, weapon5);
+		assertEquals(link1.getTotalWeight(Unit.kg),new Weight(750,Unit.kg));
+	}
+	
+	@Test
+	public void canHaveAsItemAt(){
+		Weapon weapon45 = new Weapon(new Weight(500000,Unit.kg),0);
+		assertFalse(link1.canHaveAsItemAt(AnchorpointType.BODY, weapon45));
+		assertTrue(link1.canHaveAsItemAt(AnchorpointType.BODY, weapon1));
+	}
+	
+	@Test
+	public void canAddItemAt(){
+		Weapon weapon45 = new Weapon(new Weight(500000,Unit.kg),0);
+		assertTrue(link1.canAddItemAt(AnchorpointType.BODY, weapon1));
+		link1.addItemAt(AnchorpointType.BODY, weapon1);
+		assertFalse(link1.canAddItemAt(AnchorpointType.BODY, weapon2));
+		assertFalse(link1.canAddItemAt(AnchorpointType.BODY, weapon1));
+		assertFalse(link1.canAddItemAt(AnchorpointType.BODY, weapon45));
+	}
+
+	@Test
+	public void check(){
+		assertFalse(link1.checkItemInAnchors(weapon1));
+		link1.addItemAt(AnchorpointType.BACK, weapon1);
+		assertTrue(link1.checkItemInAnchors(weapon1));
+	}
+	
+	@Test
+	public void removeItem(){
+		link1.addItemAt(AnchorpointType.BACK, weapon1);
+		assertEquals(weapon1.getHolder(),link1);
+		link1.removeItemAt(AnchorpointType.BACK);
+		assertEquals(weapon1.getHolder(),null);
+		assertFalse(link1.checkItemInAnchors(weapon1));
+		
+	}
+	
+	@Test
+	public void addItem(){
+		Weapon weapon6 = new Weapon(null,0);
+		Weapon weapon7 = new Weapon(null,0);
+		link1.addItemAt(AnchorpointType.BACK, weapon1);
+		link1.addItemAt(AnchorpointType.BACK, weapon2);
+		link1.addItemAt(AnchorpointType.BODY, weapon3);
+		link1.addItemAt(AnchorpointType.BELT, weapon4);
+		link1.addItemAt(AnchorpointType.LEFT, weapon5);
+		link1.addItemAt(AnchorpointType.RIGHT, weapon6);
+		link1.addItemAt(AnchorpointType.RIGHT, weapon7);
+		assertTrue(link1.getNbItems()==5);
+		assertTrue(link1.checkItemInAnchors(weapon1));
+		assertTrue(link1.checkItemInAnchors(weapon3));
+		assertTrue(link1.checkItemInAnchors(weapon4));
+		assertTrue(link1.checkItemInAnchors(weapon5));
+		assertTrue(link1.checkItemInAnchors(weapon6));
+		assertFalse(link1.checkItemInAnchors(weapon2));
+		assertFalse(link1.checkItemInAnchors(weapon7));
+	}
+	
 }

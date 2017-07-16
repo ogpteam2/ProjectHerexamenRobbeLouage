@@ -42,5 +42,15 @@ public class AnchorpointTypeTest {
 	public void numberTest(){
 		assertEquals(AnchorpointType.NbOfAnchorpointTypes(),5);
 	}
+	
+	@Test
+	public void ordinalTest2(){
+		assertEquals(AnchorpointType.getTypeFromOrdinal(0),AnchorpointType.BODY);
+		assertEquals(AnchorpointType.getTypeFromOrdinal(1),AnchorpointType.BACK);
+		assertEquals(AnchorpointType.getTypeFromOrdinal(2),AnchorpointType.BELT);
+		assertEquals(AnchorpointType.getTypeFromOrdinal(3),AnchorpointType.RIGHT);
+		assertEquals(AnchorpointType.getTypeFromOrdinal(4),AnchorpointType.LEFT);
+	}
+
 
 }

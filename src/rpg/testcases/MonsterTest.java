@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import rpg.Hero;
 import rpg.Monster;
+import rpg.inventory.Anchorpoint;
+import rpg.inventory.Weapon;
+import rpg.value.AnchorpointType;
 import rpg.value.Unit;
 import rpg.value.Weight;
 
@@ -14,6 +17,10 @@ public class MonsterTest {
 
 	private Monster invalidName1,invalidName2,invalidName3,validName1,validName2,validName3;
 	private Monster capacity1,capacity2,capacity3,capacity4;
+	private Monster monster1,monster2,monster3,monster4;
+	private Anchorpoint[] valid,invalid1,invalid2,invalid3;
+	private Weapon weapon1,weapon2,weapon3,weapon4,weapon5;
+	
 	
 	@Before
 	public void setup(){
@@ -21,9 +28,42 @@ public class MonsterTest {
 		capacity2 = new Monster("James",0,0);
 		capacity3 = new Monster("James",0,10);
 		capacity4 = new Monster("James",0,10000);
-		
+		weapon1 = new Weapon(new Weight(50,Unit.kg),0);
+		weapon2 = new Weapon(new Weight(100,Unit.kg),0);
+		weapon3 = new Weapon(new Weight(150,Unit.kg),0);
+		weapon4 = new Weapon(new Weight(200,Unit.kg),0);
+		weapon5 = new Weapon(new Weight(250,Unit.kg),0);
+		valid = new Anchorpoint[5];
+		initializeValid();
+		invalid1 = new Anchorpoint[4];
+		initializeInvalid1();
+		invalid2 = new Anchorpoint[5];
+		initializeInvalid2();
+		invalid3 = new Anchorpoint[5];
+		initializeInvalid2();
 	}
 	
+	private void initializeValid(){
+		valid[0] = new Anchorpoint(AnchorpointType.BACK,weapon1);
+		valid[1] = new Anchorpoint(AnchorpointType.BODY,weapon2);
+		valid[2] = new Anchorpoint(AnchorpointType.BELT,weapon3);
+		valid[3] = new Anchorpoint(AnchorpointType.LEFT,weapon4);
+		valid[4] = new Anchorpoint(null,null);
+	}
+	private void initializeInvalid1(){
+		invalid1[0] = new Anchorpoint(AnchorpointType.BACK,weapon1);
+		invalid1[1] = new Anchorpoint(AnchorpointType.BODY,weapon2);
+		invalid1[2] = new Anchorpoint(AnchorpointType.BELT,weapon3);
+		invalid1[3] = new Anchorpoint(AnchorpointType.LEFT,weapon4);
+	}
+	private void initializeInvalid2(){
+		invalid2[0] = new Anchorpoint(AnchorpointType.BACK,weapon1);
+		invalid2[1] = new Anchorpoint(AnchorpointType.BODY,weapon2);
+		invalid2[2] = new Anchorpoint(AnchorpointType.BELT,weapon3);
+		invalid2[3] = new Anchorpoint(AnchorpointType.LEFT,weapon4);
+		invalid2[4] = new Anchorpoint(AnchorpointType.LEFT,weapon5);
+	}
+		
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName1() {
 		invalidName1 = new Monster(null,0,0);
@@ -68,4 +108,21 @@ public class MonsterTest {
 		assertEquals(capacity3.getCapacity(Unit.kg),new Weight(90,Unit.kg));
 		assertEquals(capacity4.getCapacity(Unit.kg),new Weight(90000,Unit.kg));
 	}
+	@Test
+	public void generatorTest(){
+		for (int i=0;i<10000;i++){
+			assertTrue(Monster.generateNbOfAnchorpoints()>=0);
+			assertTrue(Monster.generateNbOfAnchorpoints()<=AnchorpointType.NbOfAnchorpointTypes());
+		}
+	}
+	@Test
+	public void constructor1Test(){
+		monster1 = new Monster("Jared", 50L, 100);
+		for (Anchorpoint anchor:monster1.getAnchors()){
+			System.out.println(anchor);
+			
+		}
+	}
+	
+	
 }

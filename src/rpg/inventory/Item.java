@@ -1,4 +1,6 @@
 package rpg.inventory;
+import java.util.concurrent.ThreadLocalRandom;
+
 import be.kuleuven.cs.som.annotate.*;
 import rpg.Mobile;
 import rpg.utility.IDGenerator;
@@ -43,8 +45,13 @@ abstract public class Item {
 	 * 		 | else this.weight  = new weight(1,Unit.kg)
 	 * @effect The value is set to the given value.
 	 * 		  | setValue(Value)
-	 * @effect The holder is set to the given holder.
-	 * 		  | setValue(holder)
+	 * @effect if the holder is a valid one than add the item to a random free 
+	 * 		   anchorpoint of the mobile, else the holder is set to null.
+	 * 		  | if (holder!=null && canHaveAsHolder(holder))
+	 * 		  | then let random = ThreadLocalRandom.current().nextInt(0,holder.getFreeAnchorpoints().size())
+	 * 	      |	holder.addItemAt(holder.getFreeAnchorpoints().get(random), this);
+	 * 		  | else 
+	 * 		  |		setHolder(null)
 	 */
 	@Raw
 	protected Item(Weight weight,int value, Mobile holder){
@@ -56,7 +63,13 @@ abstract public class Item {
 			this.weight = new Weight(1,Unit.kg);
 		}
 		setValue(value);
-		setHolder(holder);
+		if (holder!=null && canHaveAsHolder(holder)){
+			int random = ThreadLocalRandom.current().nextInt(0,holder.getFreeAnchorpoints().size());
+			holder.addItemAt(holder.getFreeAnchorpoints().get(random), this);	
+		}
+		else{
+			setHolder(null);
+		}
 		
 	}
 	
@@ -236,7 +249,7 @@ abstract public class Item {
 	 * 		   |					result == true
 	 * 		   |	result == false
 	 */
-	public boolean hasProperHolder(){
+	public boolean hasProperHolder(){ // nog aanpassen voor backpacks
 		if (getHolder() != null){
 			for (AnchorpointType type:AnchorpointType.values()){
 				if (getHolder().getItemAt(type) != null){
@@ -256,17 +269,28 @@ abstract public class Item {
 	 * @param holder
 	 * 		  The holder to check.
 	 * @return false if the holder is effective and the weight of this item plus
-	 * 		   the holder's current weight is greater than his capacity, true otherwise.
+	 * 		   the holder's current weight is greater than his capacity.
 	 * 		   | if (holder != null)
 	 * 		   |	then let capacity = holder.getCapacity()
 	 * 		   |		if ((getWeight(Unit.kg).add(holder.getTotalWeight(Unit.kg))).compareTo(capacity)>=1)
 	 * 		   |			then result == false
-	 * 		   | result == true
+	 * @return false if the holder already has the item in his anchors.
+	 * 		   | if (holder.checkItemInAnchors(this))
+	 * 		   |	then result == false
+	 * @return false if the mobile doesnt have any free anchorpoints
+	 * 		   | if (holder.getFreeAnchorpoints().size()<=0)
+	 * 		   |	result == false
 	 */
 	public boolean canHaveAsHolder(Mobile holder){
 		if (holder != null){
 			Weight capacity = holder.getCapacity();
 			if ((getWeight(Unit.kg).add(holder.getTotalWeight(Unit.kg))).compareTo(capacity)>=1){
+				return false;
+			}
+			if (holder.checkItemInAnchors(this)){
+				return false;
+			}
+			if (holder.getFreeAnchorpoints().size()<=0){
 				return false;
 			}
 		}
@@ -275,17 +299,28 @@ abstract public class Item {
 	
 
 	/**
-	 * Sets the holder og this item to the given holder.
+	 * Sets the holder of  this item to the given holder.
 	 * 
 	 * @param holder
 	 * 		  The holder to set as new holder of this item.
-	 * @post if the holder is a valid holder then the holder is set to the given holder.
-	 * 		 | if (canHaveAsHolder(holder))
+	 * @post   If the holder is not effective the holder is set to null.
+	 * 		   | if (holder == null)
+	 * 		   | 	then new.getHolder().equals(null)
+	 * @effect If the holder is a valid holder then the holder is set to the given holder.
+	 * 		 | if (canHaveAsHolder(holder)
 	 * 		 |		then new.getHolder() = holder
+	 * @note The bidirectional relationship isn't guaranteed when you use this
+	 * 		 method, prefer the method AddItemAt from Mobile.
 	 */
 	public void setHolder(Mobile holder){
-		if (canHaveAsHolder(holder))
-			this.holder = holder;
+		if (holder == null){
+			this.holder = null;
+		}
+		else {
+			if (canHaveAsHolder(holder)){
+				this.holder = holder;		
+			}
+		}
 	}
 	
 	/**
