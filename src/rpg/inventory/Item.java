@@ -152,6 +152,14 @@ abstract public class Item {
 	}
 	
 	/**
+	 * Return the weight of an item.
+	 */
+	@Raw @Basic
+	public Weight getOwnWeight(){
+		return this.weight;
+	}
+	
+	/**
 	 * Checks whether a weight is valid for an item.
 	 * 
 	 * @param weight
@@ -185,6 +193,14 @@ abstract public class Item {
 	 */
 	@Raw @Basic
 	public int getValue(){
+		return this.value;
+	}
+	
+	/**
+	 * Returns the value of this item. 
+	 */
+	@Raw @Basic
+	public int getOwnValue(){
 		return this.value;
 	}
 	

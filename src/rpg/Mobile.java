@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
+import rpg.inventory.Ducat;
 import rpg.inventory.Item;
 import rpg.value.AnchorpointType;
 import rpg.value.Unit;
@@ -715,7 +716,7 @@ public abstract class Mobile {
 	 * 		   | for anchor in anchors
 	 * 		   |	if (!canHaveAsItemAt(anchor.getAnchorpointType(),anchor.getItem()))
 	 * 		   |		then result == false
-	 *         |	if (anchor.getItem()!=null)
+	 *         |	if (anchor.getItem()!=null && !(anchor.getItem() instanceof Ducat))
 	 * 		   |		then if (anchor.getItem().getHolder() != this)
 	 * 		   |			then result == false
 	 * 		   |	if (getTotalWeight(Unit.kg).compareTo(getCapacity(Unit.kg))>0)
@@ -726,7 +727,7 @@ public abstract class Mobile {
 		for (Anchorpoint anchor:anchors){
 			if (!canHaveAsItemAt(anchor.getAnchorpointType(),anchor.getItem()))
 				return false;
-			if (anchor.getItem()!=null){
+			if (anchor.getItem()!=null && !(anchor.getItem() instanceof Ducat)){
 				if (anchor.getItem().getHolder() != this)
 					return false;
 			}

@@ -44,16 +44,14 @@ public class Ducat extends Item{
 	/**
 	 * Returns the weight of a ducat.
 	 */
-	@Override
-	public Weight getWeight(){
+	public static Weight getDucatWeight(){
 		return ducatWeight;
 	}
 	
 	/**
 	 * Returns the value of a ducat.
 	 */
-	@Override
-	public int getValue(){
+	public static int getDucatValue(){
 		return ducatValue;
 	}
 
