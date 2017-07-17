@@ -658,6 +658,10 @@ public abstract class Mobile {
 		return weight;
 	}
 	
+	public int getTotalValue(){
+		return 0;
+	}
+	
 	/**
 	 * Returns a list with fee anchor points types.
 	 * 
@@ -711,7 +715,10 @@ public abstract class Mobile {
 	 * 		   | for anchor in anchors
 	 * 		   |	if (!canHaveAsItemAt(anchor.getAnchorpointType(),anchor.getItem()))
 	 * 		   |		then result == false
-	 * 		   |	if (anchor.getItem().getHolder() != this)
+	 *         |	if (anchor.getItem()!=null)
+	 * 		   |		then if (anchor.getItem().getHolder() != this)
+	 * 		   |			then result == false
+	 * 		   |	if (getTotalWeight(Unit.kg).compareTo(getCapacity(Unit.kg))>0)
 	 * 		   |		then result == false
 	 * @return true otherwise.
 	 */
@@ -719,8 +726,13 @@ public abstract class Mobile {
 		for (Anchorpoint anchor:anchors){
 			if (!canHaveAsItemAt(anchor.getAnchorpointType(),anchor.getItem()))
 				return false;
-			if (anchor.getItem().getHolder() != this)
+			if (anchor.getItem()!=null){
+				if (anchor.getItem().getHolder() != this)
+					return false;
+			}
+			if (getTotalWeight(Unit.kg).compareTo(getCapacity(Unit.kg))>0){
 				return false;
+			}
 		}
 		return true;
 	}
@@ -811,7 +823,7 @@ public abstract class Mobile {
 	 * 	       | if (type == null || item == null)
 	 * 		   |	then result == false.
 	 * @return false if the given anchorpoint is not a legal one for this mobile.
-	 * 		   | (anchors[type.ordinal()] == null)
+	 * 		   | (anchors[type.ordinal()].getAnchorpointType() == null)
 	 *         |	then result == false
 	 * @return  false if there is already an item at the given anchor point type.
 	 * 	       | if (anchors[type.ordinal].getItem() != null)
@@ -832,7 +844,7 @@ public abstract class Mobile {
 		if (type == null){
 			return false;
 		}
-		else if (anchors[type.ordinal()] == null)
+		else if (anchors[type.ordinal()].getAnchorpointType() == null)
 			return false;
 		else if (item == null){
 			return false;
@@ -876,7 +888,6 @@ public abstract class Mobile {
 					return true;
 				}
 			}
-
 		}
 		return false;
 	}
@@ -902,6 +913,28 @@ public abstract class Mobile {
 	}
 
 	/**
+	 * Adds an item to the mobile.
+	 * 
+	 * @param item
+	 * 		  The item to attach to the given type.
+	 * @effect Sets the item at a free anchor point.
+	 * 		   | if (item == null)
+	 * 		   | if (getFreeAnchorpoints().size()>0)
+	 * 		   | let random = ThreadLocalRandom.current().nextInt(0,getFreeAnchorpoints().size())
+	 * 		   | let addType = getFreeAnchorpoints().get(random)
+	 * 		   |addItemAt(addType, item)
+	 * 		   
+	 */
+	public void addItem(Item item) {
+		if (item == null){}
+		else if (getFreeAnchorpoints().size()>0){
+			int random = ThreadLocalRandom.current().nextInt(0,getFreeAnchorpoints().size());
+			AnchorpointType addType = getFreeAnchorpoints().get(random);
+			addItemAt(addType, item);
+		}
+	}
+	
+	/**
 	 * Removes the item at the given anchor point type.
 	 * 
 	 * @param type
@@ -924,18 +957,68 @@ public abstract class Mobile {
 	}
 	
 	/**
+	 * Transfers an item from this mobile's anchorpointtype to another mobile's anchorpointtype.
 	 * 
 	 * @param type
+	 * 		  the type from this mobile.
 	 * @param newHolder
+	 * 		  The new holder.
+	 * @param type2
+	 * 		  The type of the new holder to which the item will be attached.
+	 * @effect The item is added to the other mobile if all param are effective,
+	 * 		   the item is removed from this mobile.
+	 * 		   |  if (type == null || reciever == null || type2==null)
+	 * 		   |  else if (reciever.getItemAt(type2)==null)
+	 * 	       |  	let  item = this.getItemAt(type)
+	 * 		   |		this.removeItemAt(type)
+	 * 		   |		reciever.addItemAt(type2,item)
+	 * 		    
+	 */
+	public void transfersItem(AnchorpointType type,Mobile reciever, AnchorpointType type2){
+		if (type == null || reciever == null || type2==null){}
+		else if (reciever.getItemAt(type2)==null && (reciever.getAnchors()[type2.ordinal()]!=null)){
+			Item item = this.getItemAt(type);
+			this.removeItemAt(type);
+			if (reciever.canAddItemAt(type2,item)){
+				reciever.addItemAt(type2,item);
+			}
+			else{
+				this.addItemAt(type, item);
+			}
+
+		}
+		// add an else if clause for backpacks
+	}
+	
+	/**
+	 * Transfers an item from this mobile's anchorpointtype to another mobile.
+	 * 
+	 * @param type
+	 * 		  the type from this mobile.
+	 * @param newHolder
+	 * 		  The new holder.
+	 * @effect The item is added to the other mobile if all param are effective,
+	 * 		   the item is removed from this mobile.
+	 * 		   | if (type == null || reciever == null)
+	 * 		   | else if (reciever.getFreeAnchorpoints().size()>0)
+	 * 		   |	then let random = ThreadLocalRandom.current().nextInt(0,reciever.getFreeAnchorpoints().size())
+	 * 		   |	let item = this.getItemAt(type)
+	 * 		   |	this.removeItemAt(type)
+	 * 		   |	reciever.addItemAt(type, item)
 	 */
 	public void transfersItem(AnchorpointType type,Mobile reciever){
 		if (type == null || reciever == null){}
 		else if (reciever.getFreeAnchorpoints().size()>0){
-			int random = ThreadLocalRandom.current().nextInt(0,getFreeAnchorpoints().size());
+			int random = ThreadLocalRandom.current().nextInt(0,reciever.getFreeAnchorpoints().size());
 			AnchorpointType addType = reciever.getFreeAnchorpoints().get(random);
 			Item item = this.getItemAt(type);
 			this.removeItemAt(type);
-			reciever.addItemAt(type, item);
+			if (reciever.canAddItemAt(addType,item)){
+				reciever.addItemAt(addType,item);
+			}
+			else{
+				this.addItemAt(type, item);
+			}
 		}
 		
 			

@@ -23,7 +23,7 @@ public class HeroTest {
 	private Hero capacity1,capacity2,capacity3,capacity4,capacity5,capacity6,capacity7,capacity8,capacity9,capacity10,capacity11,capacity12,capacity13,capacity14,capacity15;
 	// bidirectional link test
 	private Hero link1,link2,link3,link4,link5,link6,link7,link8,link9,link10,link11;
-	private Weapon weapon1,weapon2,weapon3,weapon4,weapon5;
+	private Weapon weapon1,weapon2,weapon3,weapon4,weapon5,weapon6;
 	private Anchorpoint[] valid,invalid1,invalid2,invalid3;
 	
 	
@@ -66,6 +66,7 @@ public class HeroTest {
 		weapon3 = new Weapon(new Weight(150,Unit.kg),0);
 		weapon4 = new Weapon(new Weight(200,Unit.kg),0);
 		weapon5 = new Weapon(new Weight(250,Unit.kg),0);
+		weapon6 = new Weapon(new Weight(250,Unit.kg),0);
 		valid = new Anchorpoint[5];
 		initializeValid();
 		invalid1 = new Anchorpoint[4];
@@ -416,7 +417,15 @@ public class HeroTest {
 		link1.addItemAt(AnchorpointType.RIGHT, weapon5);
 		assertEquals(link1.getTotalWeight(Unit.kg),new Weight(750,Unit.kg));
 	}
-	
+	@Test
+	public void properTest(){
+		Hero hero1 = new Hero("HeroOne",100L,50);
+		hero1.addItem(weapon1);
+		hero1.addItem(weapon2);
+		hero1.addItem(weapon3);
+		hero1.addItem(weapon4);
+		assertTrue(hero1.hasProperItems());
+	}
 	@Test
 	public void canHaveAsItemAt(){
 		Weapon weapon45 = new Weapon(new Weight(500000,Unit.kg),0);
@@ -452,7 +461,7 @@ public class HeroTest {
 	}
 	
 	@Test
-	public void addItem(){
+	public void addItemAt(){
 		Weapon weapon6 = new Weapon(null,0);
 		Weapon weapon7 = new Weapon(null,0);
 		link1.addItemAt(AnchorpointType.BACK, weapon1);
@@ -471,5 +480,55 @@ public class HeroTest {
 		assertFalse(link1.checkItemInAnchors(weapon2));
 		assertFalse(link1.checkItemInAnchors(weapon7));
 	}
-	
+	@Test
+	public void addItemTest(){
+		Hero hero1 = new Hero("HeroOne",100L,50);
+		hero1.addItem(weapon1);
+		assertEquals(hero1.getFreeAnchorpoints().size(),4);
+		assertTrue(hero1.hasProperItems());
+		assertFalse(hero1.checkItemInAnchors(weapon6));	
+
+		
+	}
+	@Test
+	public void transferTest1(){
+		Hero hero1 = new Hero("HeroOne",100L,50);
+		Hero hero2 = new Hero("HeroTwo",100L,50);
+		hero1.addItemAt(AnchorpointType.BACK,weapon1);
+		hero1.addItemAt(AnchorpointType.BELT,weapon2);
+		hero1.transfersItem(AnchorpointType.BACK, hero2, AnchorpointType.BACK);
+		hero1.transfersItem(AnchorpointType.BELT, hero2, AnchorpointType.BACK);
+		assertEquals(hero1.getNbItems(),1);
+		assertEquals(hero2.getNbItems(),1);
+		assertFalse(hero1.checkItemInAnchors(weapon1));
+		assertTrue(hero2.checkItemInAnchors(weapon1));
+		assertTrue(hero1.hasProperItems());
+		assertTrue(hero2.hasProperItems());
+	}
+	@Test
+	public void transferTest2(){
+		Hero hero1 = new Hero("HeroOne",100L,50);
+		Hero hero2 = new Hero("HeroTwo",100L,50);
+		hero1.addItemAt(AnchorpointType.BACK, weapon1);
+		hero1.transfersItem(AnchorpointType.BACK, hero2);
+		assertFalse(hero1.checkItemInAnchors(weapon1));
+		assertTrue(hero2.checkItemInAnchors(weapon1));
+	}
+	@Test
+	public void transferTest3(){
+		Hero hero1 = new Hero("HeroOne",100L,50);
+		Hero hero2 = new Hero("HeroTwo",100L,50);
+		hero2.addItem(weapon1);
+		hero2.addItem(weapon2);
+		hero2.addItem(weapon3);
+		hero2.addItem(weapon4);
+		hero2.addItem(weapon5);
+		hero1.addItemAt(AnchorpointType.BACK,weapon6);
+		hero1.transfersItem(AnchorpointType.BACK, hero2);
+		assertEquals(hero1.getNbItems(),1);
+		assertEquals(hero2.getNbItems(),5);
+		assertTrue(hero1.checkItemInAnchors(weapon6));
+		assertFalse(hero2.checkItemInAnchors(weapon6));
+	}
+
 }

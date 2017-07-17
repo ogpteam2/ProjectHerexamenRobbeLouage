@@ -21,6 +21,7 @@ public class WeaponTest {
 	private Weapon weapon5,weapon6,weapon7,weapon8,weapon9,weapon10,weapon11,weapon12;
 	private Hero hero1,hero2,hero3,hero4,strong;
 	private Weapon heavy1,heavy2,heavy3,heavy4;
+	private Weapon damage1,damage2,damage3,damage4;
 	
 	@Before
 	public void setup(){
@@ -78,10 +79,10 @@ public class WeaponTest {
 	}
 	
 	@Test
-	public void valueTest(){
-		assertEquals(weapon5.getValue(),10);
-		assertEquals(weapon6.getValue(),-10);
-		assertEquals(weapon7.getValue(),0);
+	public void valueWeaponTest(){
+		assertEquals(weapon5.getDamage(),10);
+		assertEquals(weapon6.getDamage(),-10);
+		assertEquals(weapon7.getDamage(),weapon7.getDamage()*2);
 		assertTrue(weapon5.canHaveAsValue(0));
 		assertFalse(weapon5.canHaveAsValue(-1));
 		assertTrue(weapon5.canHaveAsValue(1));
@@ -90,7 +91,7 @@ public class WeaponTest {
 	@Test 
 	public void constructor1HolderTest(){
 		assertEquals(hero1.getNbItems(),0);
-		Weapon holder = new Weapon(new Weight(100,Unit.kg),0,hero1);
+		Weapon holder = new Weapon(new Weight(100,Unit.kg),0,hero1,5);
 		assertEquals(holder.getHolder(),hero1); // first part of bidirectional link OK
 		assertEquals(hero1.getNbItems(),1);
 		for (Anchorpoint anchor:hero1.getAnchors()){
@@ -143,11 +144,11 @@ public class WeaponTest {
 	@Test
 	public void addingTest(){
 		assertEquals(strong.getNbItems(),0);
-		Weapon adding1 = new Weapon(new Weight(50,Unit.kg),0,strong);
-		Weapon adding2 = new Weapon(new Weight(50,Unit.kg),0,strong);
-		Weapon adding3 = new Weapon(new Weight(50,Unit.kg),0,strong);
-		Weapon adding4 = new Weapon(new Weight(50,Unit.kg),0,strong);
-		Weapon adding5 = new Weapon(new Weight(50,Unit.kg),0,strong);
+		Weapon adding1 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
+		Weapon adding2 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
+		Weapon adding3 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
+		Weapon adding4 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
+		Weapon adding5 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
 		assertEquals(adding1.getHolder(),strong);
 		assertEquals(adding2.getHolder(),strong);
 		assertEquals(adding3.getHolder(),strong);
@@ -167,12 +168,12 @@ public class WeaponTest {
 
 	@Test
 	public void addingTest2(){
-		Weapon adding1 = new Weapon(new Weight(50,Unit.kg),0,strong);
-		Weapon adding2 = new Weapon(new Weight(50,Unit.kg),0,strong);
-		Weapon adding3 = new Weapon(new Weight(50,Unit.kg),0,strong);
-		Weapon adding4 = new Weapon(new Weight(50,Unit.kg),0,strong);
-		Weapon adding5 = new Weapon(new Weight(50,Unit.kg),0,strong);
-		Weapon adding6 = new Weapon(new Weight(50,Unit.kg),0,strong);
+		Weapon adding1 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
+		Weapon adding2 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
+		Weapon adding3 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
+		Weapon adding4 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
+		Weapon adding5 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
+		Weapon adding6 = new Weapon(new Weight(50,Unit.kg),0,strong,5);
 		assertEquals(adding1.getHolder(),strong);
 		assertEquals(adding2.getHolder(),strong);
 		assertEquals(adding3.getHolder(),strong);
@@ -180,6 +181,54 @@ public class WeaponTest {
 		assertEquals(adding5.getHolder(),strong);
 		assertEquals(adding6.getHolder(),null);
 	}
+	
+	@Test
+	public void constructor1TestDamage(){
+		damage1 = new Weapon(new Weight(5,Unit.kg),50,strong,77);
+		assertEquals(damage1.getWeight(),new Weight(5.0,Unit.kg));
+		assertEquals(damage1.getDamage(),77);
+		assertEquals(damage1.getValue(),50);
+		assertEquals(damage1.getHolder(),strong);
+		assertTrue(strong.checkItemInAnchors(damage1));
+	}
+	@Test
+	public void constructor2TestDamage(){
+		damage2 = new Weapon(new Weight(5,Unit.kg),50,77);
+		assertEquals(damage2.getWeight(),new Weight(5.0,Unit.kg));
+		assertEquals(damage2.getDamage(),77);
+		assertEquals(damage2.getValue(),50);
+		assertEquals(damage2.getHolder(),null);
+	}
+	@Test
+	public void constructor3TestDamage(){
+		damage3 = new Weapon(new Weight(5,Unit.kg),strong,77);
+		assertEquals(damage3.getWeight(),new Weight(5.0,Unit.kg));
+		assertEquals(damage3.getDamage(),77);
+		assertEquals(damage3.getValue(),154);
+		assertEquals(damage3.getHolder(),strong);
+	}
+	@Test
+	public void constructor4TestDamage(){
+		damage4 = new Weapon(new Weight(5,Unit.kg),77);
+		assertEquals(damage4.getWeight(),new Weight(5.0,Unit.kg));
+		assertEquals(damage4.getDamage(),77);
+		assertEquals(damage4.getValue(),154);
+	}
+	@Test
+	public void settDamageTest(){
+		damage4 = new Weapon(new Weight(5,Unit.kg),77);
+		assertEquals(damage4.getValue(),154);
+		damage4.setDamage(80);
+		assertEquals(damage4.getValue(),160);
+	}
+	@Test
+	public void damageValueTest(){
+		damage1 = new Weapon(new Weight(5,Unit.kg),50,strong,77);
+		assertEquals(damage1.getValue(),50);
+		damage1.setDamage(80);
+		assertEquals(damage1.getValue(),160);
+	}
+	
 	
 	
 }

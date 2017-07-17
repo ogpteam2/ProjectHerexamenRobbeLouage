@@ -212,9 +212,9 @@ abstract public class Item {
 	 * @pre The given amount must be a valid value.
 	 * 		| canHaveAsValue(amount)
 	 * @effect the new value of this item is the given amount.
-	 * 		   | this.value = amount
+	 * 		   | new.getValue == amount
 	 */
-	protected void setValue(int amount){
+	public void setValue(int amount){
 		this.value = amount;
 	}
 	
