@@ -140,7 +140,7 @@ abstract public class Container extends Item {
 		return true;
 	}
 	
-	
+
 	/**
 	 * checks whether given content can be the contents of this container.
 	 * 
@@ -341,5 +341,19 @@ abstract public class Container extends Item {
 	 * A variable referencing the capacity of the container.
 	 */
 	protected Weight capacity;
-
+	
+	
+	/************************************************
+	 * Parent
+	 ************************************************/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

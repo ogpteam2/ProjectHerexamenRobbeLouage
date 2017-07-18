@@ -166,15 +166,14 @@ public class BackpackTest {
 	
 	@Test 
 	public void getNbTest(){
-		backpack1.addItem(weapon1);
-		backpack2.addItem(weapon2);
 		backpack3.addItem(weapon3);
+		backpack2.addItem(weapon2);
+		backpack2.addItem(weapon1);
+		backpack2.addItem(backpack3);
 		backpack1.addItem(backpack2);
-		backpack1.addItem(backpack3);
+		backpack1.addItem(weapon4);
 		backpack1.addItem(purse1);
-		backpack3.addItem(weapon4);
-		purse1.addItem(new Ducat());;
-		assertEquals(backpack1.getNbItems(),9);
+		assertEquals(backpack1.getNbItems(),8);
 		
 	}
 	@Test 
@@ -230,7 +229,15 @@ public class BackpackTest {
 		backpack1.addItem(ducat6);
 		assertEquals(backpack1.getItemWithID(ducat6.getId()),ducat5);
 	}
-
-
+	@Test 
+	public void addTestRecursion(){
+		Backpack backpack = new Backpack(new Weight(1,Unit.kg),10,new Weight(7,Unit.kg));
+		Backpack backpack2 = new Backpack(new Weight(1,Unit.kg),10,new Weight(100,Unit.kg));
+		Weapon weapon = new Weapon(new Weight(8,Unit.kg),50);
+		backpack.addItem(backpack2);
+		backpack2.addItem(weapon);
+		System.out.println(backpack.getCapacity());
+		System.out.println(backpack.getWeightOfContents(Unit.kg));
+	}
 
 }

@@ -101,7 +101,6 @@ public class Purse extends Container {
 			Weight total = item.getWeight(Unit.kg).add(getWeightOfContents(Unit.kg));
 			if (total.compareTo(getCapacity(Unit.kg))>0){
 				brokenAction();
-				System.out.println("Brooooooooken");
 			}
 		}
 		else {
@@ -118,9 +117,19 @@ public class Purse extends Container {
 	 */
 	@Model
 	private void brokenAction(){
-		Mobile holder = getHolder();
-		
-
+		if (getHolder() != null){
+			Mobile holder = getHolder();
+			Weight totalWeight = getWeight(Unit.kg);
+			for (Backpack backpack:holder.findBackpacks()){
+				Weight backpackWeight = backpack.getWeightOfContents(Unit.kg);
+				if (totalWeight.add(backpackWeight).compareTo(backpack.getCapacity(Unit.kg))<=0){
+					for (int i=0;i<getValue();i++){
+						backpack.addItem(new Ducat());
+					}
+					break;
+				}
+			}
+		}
 		setBroken(true);
 		contents.clear();
 	}

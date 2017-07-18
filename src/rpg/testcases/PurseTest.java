@@ -5,13 +5,16 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import rpg.Hero;
+import rpg.inventory.Backpack;
 import rpg.inventory.Ducat;
 import rpg.inventory.Item;
 import rpg.inventory.Purse;
 import rpg.inventory.Weapon;
+import rpg.value.AnchorpointType;
 import rpg.value.Unit;
 import rpg.value.Weight;
 
@@ -114,6 +117,33 @@ public class PurseTest {
 			purse2.addItem(new Ducat());
 		}
 		assertEquals(purse2.getNbItems(),10);
+	}
+	@Test
+	public void brokenTest(){
+		Backpack backpack = new Backpack(new Weight(1,Unit.kg),5,new Weight(100,Unit.kg));
+		purse1 = new Purse(new Weight(100,Unit.g),new Weight(250,Unit.g));
+		hero1.addItemAt(AnchorpointType.BACK, backpack);
+		backpack.addItem(purse1);
+		assertEquals(backpack.getNbItems(),1);
+		System.out.println(backpack.getHolder());
+		for (int i=0;i<6;i++){
+			
+			purse1.addItem(new Ducat());
+		}
+		assertEquals(backpack.getNbItems(),6);
+	}
+	@Ignore@Test
+	public void brokenTest2Fail(){
+		Backpack backpack = new Backpack(new Weight(1,Unit.kg),5,new Weight(151,Unit.g));
+		purse1 = new Purse(new Weight(100,Unit.g),new Weight(250,Unit.g));
+		hero1.addItemAt(AnchorpointType.BACK, backpack);
+		backpack.addItem(purse1);
+		assertEquals(backpack.getNbItems(),1);
+		for (int i=0;i<6;i++){
+			assertEquals(backpack.getNbItems(),i+1);
+			purse1.addItem(new Ducat());
+		}
+		assertEquals(backpack.getNbItems(),1);
 	}
 	
 }

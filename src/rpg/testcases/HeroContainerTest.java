@@ -165,11 +165,90 @@ public class HeroContainerTest {
 		assertEquals(backpack1.getHolder(),hero1);
 		assertEquals(backpack2.getHolder(),hero1);
 	}
-	
-	
-	
-	
-	
+	@Test
+	public void addItemToBackpackTest1(){
+		hero1.addItemAt(AnchorpointType.BACK,backpack1);
+		hero1.addItemToBackpack(AnchorpointType.BACK, weapon1);
+		assertEquals(weapon1.getHolder(),hero1);
+		assertEquals(backpack1.getHolder(),hero1);
+		assertTrue(hero1.hasProperItems());
+		assertTrue(backpack1.ItemIn(weapon1));
+		assertTrue(hero1.checkItemInAnchors(weapon1));
+	}
+	@Test (expected = IllegalArgumentException.class)
+	public void addItemToBackpackTest2(){
+		Weapon weapon = new Weapon(new Weight(1000,Unit.kg),50);
+		hero1.addItemAt(AnchorpointType.BACK,backpack1);
+		hero1.addItemToBackpack(AnchorpointType.BACK, weapon);
+	}
+    @Test
+    public void addItemToBackpackTest3(){
+    	hero1.addItem(backpack1);
+    	hero1.addItem(backpack2);
+    	hero1.addItem(backpack3);
+    	hero1.addItemToBackpack(weapon1);
+    	assertTrue(weapon1.getHolder().equals(hero1));
+    	assertTrue(hero1.checkItemInAnchors(weapon1));
+    	assertEquals(hero1.getTotalValue(),20);
+    }
+    @Test
+    public void addItemToBackpackTest4(){
+    	Weapon weapon = new Weapon(new Weight(30,Unit.kg),10);
+    	Backpack backpack = new Backpack(new Weight(1,Unit.kg),0, new Weight(2,Unit.kg));
+    	hero1.addItem(backpack);
+    	hero1.addItem(backpack2);
+    	hero1.addItem(backpack3);
+    	hero1.addItemToBackpack(weapon);
+    	assertTrue(weapon.getHolder().equals(hero1));
+    	assertTrue(hero1.checkItemInAnchors(weapon));
+    	assertEquals(hero1.getTotalValue(),20);
+    }
+	@Test 
+	public void addItemTest5Fail(){
+		Weapon weapon = new Weapon(new Weight(101,Unit.kg),10);
+    	hero1.addItem(backpack1);
+    	hero1.addItem(backpack2);
+    	hero1.addItem(backpack3);
+    	hero1.addItemToBackpack(weapon);
+    	assertEquals(weapon.getHolder(),null);
+    	assertFalse(hero1.checkItemInAnchors(weapon));
+    	assertEquals(hero1.getTotalValue(),0);
+	}
+	@Test
+	public void addOwnItemToBackpackTest1(){
+		hero1.addItemAt(AnchorpointType.BACK, backpack1);
+		hero1.addItemAt(AnchorpointType.BELT,weapon1);
+		hero1.addOwnItemToBackpack(AnchorpointType.BELT, AnchorpointType.BACK);
+		assertTrue(backpack1.ItemIn(weapon1));
+		assertEquals(hero1.getItemAt(AnchorpointType.BELT),null);
+	}
+	@Test
+	public void addOwnItemToBackpackTest2(){
+		Weapon weapon = new Weapon(new Weight(101,Unit.kg),10);
+		hero1.addItemAt(AnchorpointType.BACK, backpack1);
+		hero1.addItemAt(AnchorpointType.BELT,weapon);
+		hero1.addOwnItemToBackpack(AnchorpointType.BELT, AnchorpointType.BACK);
+		assertFalse(backpack1.ItemIn(weapon));
+		assertFalse(hero1.getItemAt(AnchorpointType.BELT).equals(null));
+		assertEquals(hero1.getItemAt(AnchorpointType.BELT),weapon);
+	}
+	@Test
+	public void addOwnItemToBackpack1(){
+		hero1.addItemAt(AnchorpointType.BACK, backpack1);
+		hero1.addItemAt(AnchorpointType.BODY, backpack2);
+		hero1.addItemAt(AnchorpointType.BELT, backpack3);
+		hero1.addItemAt(AnchorpointType.LEFT, weapon1);
+		hero1.addOwnItemToBackpack(AnchorpointType.LEFT);
+		assertEquals(hero1.getItemAt(AnchorpointType.LEFT),null);
+		assertEquals(hero1.getTotalValue(),20);
+	}
+	@Test
+	public void addOwnItemToBackpack2(){
+		hero1.addItemAt(AnchorpointType.LEFT, weapon1);
+		hero1.addOwnItemToBackpack(AnchorpointType.LEFT);
+		assertEquals(hero1.getItemAt(AnchorpointType.LEFT),weapon1);
+		assertEquals(hero1.getTotalValue(),20);
+	}
 	
 	
 }

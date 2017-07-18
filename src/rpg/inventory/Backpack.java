@@ -123,6 +123,7 @@ public class Backpack extends Container {
 	 * 		   | if (canAdd(item))
 	 * 		   |	then contents.add(item)
 	 * 		   |		item.setHolder(getHolder())
+	 * 		   |		item.setInContainer(true)
 	 * @throws IllegalArgumentException
 	 * 		   the item cant be added.
 	 * 	       | (!canAdd(item))
@@ -132,7 +133,7 @@ public class Backpack extends Container {
 		if (canAdd(item)){
 			item.setHolder(getHolder());
 			contents.add(item);
-			item.setInContainer(true);
+			item.setInContainer(true);	
 		}
 		else {
 			throw new IllegalArgumentException("item can't be added");
@@ -304,7 +305,5 @@ public class Backpack extends Container {
 		sum += getOwnValue();
 		return sum;
 	}
-
-
-
+	
 }

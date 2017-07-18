@@ -683,7 +683,7 @@ public abstract class Mobile {
 	 * 
 	 * @return the total value.
 	 * 		   | let sum = 0
-	 * 		   | for (Anchorpoint anchor:anchors)
+	 * 		   | for anchor in anchors
 	 * 		   |	if (anchor.getAnchorpointType() != null && anchor.getItem() != null)
 	 * 		   |		then let sum = sum + anchor.getItem().getValue()
 	 * 		   | result == sum
@@ -1044,20 +1044,125 @@ public abstract class Mobile {
 	}
 	
 	/**
+	 * Adds a given item to the backpack given at given type.
 	 * 
 	 * @param type
+	 * 		  The type where the backpack is at.
 	 * @param item
+	 * 		  The item to put in the backpack.
+	 * @effect adds the item to the given type if the item at the given type
+	 * 		   is a backpack.
+	 * 		   | if (getItemAt(type) instanceof Backpack)
+	 * 		   |	then let current = (Backpack) getItemAt(type)
+	 * 	       |		 current.addItem(item)
 	 */
-	public void addItemToBackpack(AnchorpointType type,Item item){
-		
+	public void addItemToBackpack(AnchorpointType type,Item item) throws IllegalArgumentException{
+		if (type == null || item == null){}
+		else if (getItemAt(type) instanceof Backpack){
+			Backpack current = (Backpack) getItemAt(type);
+			current.addItem(item);
+		}
 	}
 	
+	/**
+	 * Adds a given item to a backpack in the mobile.
+	 * 
+	 * @param item
+	 * 		  The item to add to a backpack.
+	 * @effect add the item to one backpack.
+	 * 		   | for (backpack in findBackpacks())
+	 * 		   |	if (backpack.canAdd(item))
+	 * 		   |		then backpack.addItem(item)
+	 * 		   |			 break
+	 */
 	public void addItemToBackpack(Item item){
-		
+		for (Backpack backpack:findBackpacks()){
+			if (backpack.canAdd(item)){
+				backpack.addItem(item);
+				break;
+			}
+		}
 	}
 	
+	/**
+	 * Returns an arraylist with all the backpacks at the anchorpoints.
+	 * 
+	 * @return An arraylist with all the backpacks at the anchorpoints.
+	 * 		   | let backpacks = new ArrayList<Backpack>()
+	 * 		   | for (anchors in anchor)
+	 * 		   |	if (anchor.getAnchorpointType() != null && anchor.getItem() != null)
+	 * 		   |		then if (anchor.getItem() instanceof Backpack)
+	 * 		   |				then backpacks.add((Backpack)anchor.getItem())
+	 * 		   | result.equals(backpacks)
+	 */
+	public ArrayList<Backpack> findBackpacks(){
+		ArrayList<Backpack> backpacks = new ArrayList<Backpack>();
+		for (Anchorpoint anchor:anchors){
+			if (anchor.getAnchorpointType() != null && anchor.getItem() != null){
+				if (anchor.getItem() instanceof Backpack){
+					backpacks.add((Backpack)anchor.getItem());
+				}
+			}
+		}
+		return backpacks;
+	}
+	
+	/**
+	 * Adds an own item to a given backpack at a anchor point type.
+	 * 
+	 * @param type
+	 * 		  The type where the item is at.
+	 * @param type2
+	 * 		  To type where the item will be added to a backpack.
+	 * @effect the item will be added to the backpack at type 2 if it can be added there.
+	 * 		   | if (type != null && type2 != null)
+	 * 		   | 	then if (getItemAt(type2) instanceof Backpack)
+	 * 		   |		 	then let item = getItemAt(type)
+	 * 		   |				 removeItemAt(type)
+	 * 		   |		 		 if (((Backpack)getItemAt(type2)).canAdd(item))
+	 * 		   |				 	    then ((Backpack)getItemAt(type2)).addItem(item)
+	 * 		   |				 else
+	 * 		   |				 		addItemAt(type, item)
+	 */
 	public void addOwnItemToBackpack(AnchorpointType type,AnchorpointType type2){
-		
+		if (type != null && type2 != null){
+			if (getItemAt(type2) instanceof Backpack){
+			Item item = getItemAt(type);
+			removeItemAt(type);	
+			if (((Backpack)getItemAt(type2)).canAdd(item)){
+				((Backpack)getItemAt(type2)).addItem(item);
+				}
+			else{
+				addItemAt(type, item);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Adds an own item to a random backpack if one can add that item.
+	 * 
+	 * @param type
+	 * 		  The item at this item gets put in a backpack.
+	 * @effect the item is put in a backpack.
+	 * 		   | let item = getItemAt(type)
+	 * 		   | for (backpack in findBackpacks())
+	 * 		   |	removeItemAt(type)
+	 * 		   |	if (backpack.canAdd(item))
+	 * 		   |		then backpack.addItem(item)
+	 * 		   |		break
+	 * 		   |	addItemAt(type,item)
+	 */
+	public void addOwnItemToBackpack(AnchorpointType type){
+		Item item = getItemAt(type);
+		for (Backpack backpack:findBackpacks()){
+			removeItemAt(type);
+			if (backpack.canAdd(item)){
+				backpack.addItem(item);
+				break;
+			}
+			addItemAt(type,item);
+		}
 	}
 
 	/**
