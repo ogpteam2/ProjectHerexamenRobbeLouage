@@ -112,6 +112,16 @@ abstract public class Container extends Item {
 	 * 		   | if (getHolder() != null)
 	 * 		   | 	then if (!getHolder().canHaveAsItem(item))
 	 * 		   |			then result == false;
+	 * @return false if the item is already in a container
+	 * 		   | if (item.getInContainer())
+	 * 		   |	then result == false
+	 * @return false if the parent can't add this item.
+	 * 		   | if (getParent()!=null)
+	 * 		   |	then let parent = getParent()
+	 * 		   |		 if (!parent.canAdd(item))
+	 * 		   |			then result == false
+	 * 		   |		else
+	 * 		   |			parent.canAdd(item)
 	 * @return false if the item has already a holder.
 	 * 		   | if (item.getHolder() != null)
 	 * 		   | 	then result == false
@@ -137,10 +147,21 @@ abstract public class Container extends Item {
 		if (item.getInContainer()){
 			return false;
 		}
+		if (getParent()!=null){
+			Backpack parent = getParent();
+			if (!parent.canAdd(item)){
+				return false;
+			}
+			else{
+				parent.canAdd(item);
+			}
+		}
 		return true;
 	}
 	
-
+	
+	
+	
 	/**
 	 * checks whether given content can be the contents of this container.
 	 * 
@@ -210,6 +231,9 @@ abstract public class Container extends Item {
 	 * 		  | item.setHolder(null)
 	 * 		  | contents.remove(index)
 	 * 		  | item.setInContainer(false)
+	 * @effect Sets the parent to null if the item at given index is a container.
+	 * 		   | if (item instanceof Container)
+	 * 		   |	then ((Container)item).setParent(null)
 	 * @throws IllegalArgumentException
 	 * 		   The index is greater than the Nb items.
 	 * 		   | (index>getNbItems())
@@ -223,6 +247,9 @@ abstract public class Container extends Item {
 			item.setHolder(null);
 			contents.remove(index);	
 			item.setInContainer(false);
+			if (item instanceof Container){
+				((Container)item).setParent(null);
+			}
 		}
 	}
 	
@@ -234,6 +261,9 @@ abstract public class Container extends Item {
 	 * @effect removes the item from the container and sets the holder of the item to null.
 	 * 		  | contents.remove(item)
 	 * 		  | item.setHolder(null)
+	 * @effect Sets the parent to null if the given item is a container.
+	 * 		   | if (item instanceof Container)
+	 * 		   |	then ((Container)item).setParent(null)
 	 * @throws IllegalArgumentException
 	 * 		  if contents doenst contains the item.
 	 * 		  |  (!contents.contains(item))
@@ -247,6 +277,9 @@ abstract public class Container extends Item {
 			contents.remove(item);
 			item.setHolder(null);
 			item.setInContainer(false);
+			if (item instanceof Container){
+				((Container)item).setParent(null);
+			}
 		}
 	}
 	
@@ -348,12 +381,15 @@ abstract public class Container extends Item {
 	 ************************************************/
 	
 	
+	public Backpack getParent(){
+		return this.parent;
+	}
 	
+	protected void setParent(Backpack backpack){
+		this.parent = backpack;
+	}
 	
+
 	
-	
-	
-	
-	
-	
+	private Backpack parent;
 }

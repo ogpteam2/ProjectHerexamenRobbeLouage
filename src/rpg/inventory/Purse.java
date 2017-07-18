@@ -93,42 +93,42 @@ public class Purse extends Container {
 	 */
 	@Override
 	public void addItem(Item item) throws IllegalArgumentException{
-		if (canAdd(item)){
-			contents.add(item);
-			item.setInContainer(true);
-		}
-		else if (item!=null && item instanceof Ducat){
-			Weight total = item.getWeight(Unit.kg).add(getWeightOfContents(Unit.kg));
-			if (total.compareTo(getCapacity(Unit.kg))>0){
+		if (!canAdd(item)){
+			if (!(item instanceof Ducat)){
+				throw new IllegalArgumentException("only ducats can be added");
+			}
+			else if (getParent()!=null){
+				if (!getParent().canAdd(item)){
+					throw new IllegalArgumentException("parent can't hold");
+				}
+			}
+			if (item instanceof Ducat){
 				brokenAction();
 			}
 		}
 		else {
-			throw new IllegalArgumentException("item can't be added.");
-		}
+			contents.add(item);
+			item.setInContainer(true);
+		}		
 	}
 	
 	
 	/**
-	 * When the purse breaks these actions are taken.
 	 * 
-	 * @effect
-	 * @effect
 	 */
 	@Model
 	private void brokenAction(){
-		if (getHolder() != null){
-			Mobile holder = getHolder();
+		if (getParent() != null){
+			Backpack parent = getParent();
 			Weight totalWeight = getWeight(Unit.kg);
-			for (Backpack backpack:holder.findBackpacks()){
-				Weight backpackWeight = backpack.getWeightOfContents(Unit.kg);
-				if (totalWeight.add(backpackWeight).compareTo(backpack.getCapacity(Unit.kg))<=0){
-					for (int i=0;i<getValue();i++){
-						backpack.addItem(new Ducat());
-					}
-					break;
+			Weight backpackWeight = parent.getWeightOfContents(Unit.kg);
+			if (totalWeight.add(backpackWeight).compareTo(parent.getCapacity(Unit.kg))<=0){
+				for (int i=0;i<getValue();i++){
+					parent.addItem(new Ducat());
 				}
 			}
+			parent.removeItem(this);
+			
 		}
 		setBroken(true);
 		contents.clear();
@@ -202,7 +202,10 @@ public class Purse extends Container {
 	 * 		   | if (purse != null)
 	 * 		   |	then for I in 0...getNbItems
 	 * 		   |		purse.addItem(new Ducat())
-	 * 		   | 	brokenAction()
+	 * 		   | 	setBroken(true)
+	 * 		   | 	contents.clear()
+	 * 		   |	if (getParent()!= null)
+	 * 		   |		then getParent().removeItem(this)
 	 */
 	public void transfer(Purse purse){
 		if (purse == null){	
@@ -211,7 +214,11 @@ public class Purse extends Container {
 			for (int i=0;i<this.getNbItems();i++){
 				purse.addItem(new Ducat());
 			}
-			brokenAction();
+			setBroken(true);
+			contents.clear();
+			if (getParent()!= null){
+				getParent().removeItem(this);
+			}
 		}	
 	}
 

@@ -124,8 +124,12 @@ public class Backpack extends Container {
 	 * 		   |	then contents.add(item)
 	 * 		   |		item.setHolder(getHolder())
 	 * 		   |		item.setInContainer(true)
+	 * @effect If the item is a container the parent will be set to this backpack
+	 * 		   | if (canAdd(item))
+	 * 		   |	then if (item instanceof Container)
+	 * 	       |		then ((Container)item).setParent(this)
 	 * @throws IllegalArgumentException
-	 * 		   the item cant be added.
+	 * 		   the item can't be added.
 	 * 	       | (!canAdd(item))
 	 */
 	@Override
@@ -133,7 +137,10 @@ public class Backpack extends Container {
 		if (canAdd(item)){
 			item.setHolder(getHolder());
 			contents.add(item);
-			item.setInContainer(true);	
+			item.setInContainer(true);
+			if (item instanceof Container){
+				((Container)item).setParent(this);
+			}
 		}
 		else {
 			throw new IllegalArgumentException("item can't be added");

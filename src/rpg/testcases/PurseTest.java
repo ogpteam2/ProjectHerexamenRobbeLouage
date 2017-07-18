@@ -73,7 +73,7 @@ public class PurseTest {
 		assertFalse(purse1.canAdd(new Ducat()));
 	}
 	@Test (expected = IllegalArgumentException.class)
-	public void addItemTestBrokenFail(){
+	public void addItemTestFail(){
 		purse1.addItem(new Weapon(null,50));
 	}
 	@Test
@@ -100,16 +100,13 @@ public class PurseTest {
 		assertTrue(purse1.getBroken());
 		assertEquals(purse2.getNbItems(),5);
 	}
-	@Test
+	@Test 
 	public void transferTest2(){
 		for (int i=0;i<5;i++){
 			purse1.addItem(new Ducat());
 		}
 		purse1.transfer(purse3);
-		assertEquals(purse1.getValue(),0);
 		assertEquals(purse3.getValue(),0);
-		assertEquals(purse1.getBroken(),true);
-		assertEquals(purse3.getBroken(),true);
 	}
 	@Test
 	public void nbItems(){
@@ -120,30 +117,32 @@ public class PurseTest {
 	}
 	@Test
 	public void brokenTest(){
-		Backpack backpack = new Backpack(new Weight(1,Unit.kg),5,new Weight(100,Unit.kg));
-		purse1 = new Purse(new Weight(100,Unit.g),new Weight(250,Unit.g));
-		hero1.addItemAt(AnchorpointType.BACK, backpack);
+		Backpack backpack = new Backpack(new Weight(1,Unit.kg),0,new Weight(2,Unit.kg));
 		backpack.addItem(purse1);
-		assertEquals(backpack.getNbItems(),1);
-		System.out.println(backpack.getHolder());
-		for (int i=0;i<6;i++){
-			
-			purse1.addItem(new Ducat());
-		}
-		assertEquals(backpack.getNbItems(),6);
+		purse1.addItem(new Ducat());
+		purse1.addItem(new Ducat());
+		purse1.addItem(new Ducat());
+		purse1.addItem(new Ducat());
+		purse1.addItem(new Ducat());
+		purse1.addItem(new Ducat());
+		purse1.addItem(new Ducat());
+		purse1.addItem(new Ducat());
+		assertTrue(purse1.getBroken());
+		assertEquals(backpack.getValue(),5);
+		assertFalse(backpack.ItemIn(purse1));
 	}
-	@Ignore@Test
+
+
+	@Test (expected = IllegalArgumentException.class)
 	public void brokenTest2Fail(){
-		Backpack backpack = new Backpack(new Weight(1,Unit.kg),5,new Weight(151,Unit.g));
-		purse1 = new Purse(new Weight(100,Unit.g),new Weight(250,Unit.g));
-		hero1.addItemAt(AnchorpointType.BACK, backpack);
-		backpack.addItem(purse1);
-		assertEquals(backpack.getNbItems(),1);
-		for (int i=0;i<6;i++){
-			assertEquals(backpack.getNbItems(),i+1);
-			purse1.addItem(new Ducat());
-		}
-		assertEquals(backpack.getNbItems(),1);
+		Backpack backpack = new Backpack(new Weight(1,Unit.kg),0,new Weight(150,Unit.g));
+		Purse purse = new Purse(new Weight(100,Unit.g),new Weight(300,Unit.g));
+		backpack.addItem(purse);
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
 	}
 	
 }

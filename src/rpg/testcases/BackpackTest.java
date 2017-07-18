@@ -229,15 +229,37 @@ public class BackpackTest {
 		backpack1.addItem(ducat6);
 		assertEquals(backpack1.getItemWithID(ducat6.getId()),ducat5);
 	}
-	@Test 
+	@Test (expected = IllegalArgumentException.class)
 	public void addTestRecursion(){
 		Backpack backpack = new Backpack(new Weight(1,Unit.kg),10,new Weight(7,Unit.kg));
 		Backpack backpack2 = new Backpack(new Weight(1,Unit.kg),10,new Weight(100,Unit.kg));
 		Weapon weapon = new Weapon(new Weight(8,Unit.kg),50);
 		backpack.addItem(backpack2);
 		backpack2.addItem(weapon);
-		System.out.println(backpack.getCapacity());
-		System.out.println(backpack.getWeightOfContents(Unit.kg));
 	}
-
+	@Test (expected = IllegalArgumentException.class)
+	public void AddTest(){
+		Backpack backpack = new Backpack(new Weight(1,Unit.kg),10,new Weight(500,Unit.g));
+		Purse purse = new Purse(new Weight(100,Unit.g),new Weight(1,Unit.kg));
+		backpack.addItem(purse);
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+		purse.addItem(new Ducat());
+	}
+	@Test (expected = IllegalArgumentException.class)
+	public void addTest3Deep(){
+		Backpack backpack1 = new Backpack(new Weight(1,Unit.kg),10,new Weight(5,Unit.kg));
+		Backpack backpack2 = new Backpack(new Weight(1,Unit.kg),10,new Weight(1000,Unit.g));
+		Backpack backpack3 = new Backpack(new Weight(1,Unit.kg),10,new Weight(1000,Unit.g));
+		backpack1.addItem(backpack2);
+		backpack2.addItem(backpack3);
+		backpack3.addItem(new Weapon(new Weight(6,Unit.kg),0,50));
+	}
+	
 }

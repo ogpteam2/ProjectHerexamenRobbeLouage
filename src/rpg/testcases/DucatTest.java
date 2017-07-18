@@ -28,13 +28,18 @@ public class DucatTest {
 
 	@Test
 	public void stressTest(){
-		for (Integer i=0;i<Integer.MAX_VALUE/10;i++){
+		for (Integer i=0;i<Integer.MAX_VALUE/100;i++){
 			Ducat name = new Ducat();
 			assertEquals(name.getId(),-1L);
 			assertEquals(name.getWeight(),new Weight(50,Unit.g));
 			assertEquals(name.getValue(),1);
 			assertEquals(ducat.getHolder(),null);
 		}
+	}
+	@Test
+	public void weightTest(){
+		System.out.println(Ducat.getDucatWeight());
+		System.out.println(Ducat.getDucatWeight().toUnit(Unit.g));
 	}
 	
 
