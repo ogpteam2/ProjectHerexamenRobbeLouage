@@ -1043,18 +1043,18 @@ public abstract class Mobile {
 		}
 	}
 	
+	public void addItemToBackpack(AnchorpointType type,Item item){
+		
+	}
+	
 	public void addItemToBackpack(Item item){
 		
 	}
+	
 	public void addOwnItemToBackpack(AnchorpointType type,AnchorpointType type2){
 		
 	}
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * Removes the item at the given anchor point type.
 	 * 
