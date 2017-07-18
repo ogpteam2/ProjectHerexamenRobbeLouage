@@ -1,5 +1,6 @@
 package rpg.inventory;
 import be.kuleuven.cs.som.annotate.*;
+import rpg.Mobile;
 import rpg.utility.DucatIDGenerator;
 import rpg.utility.IDGenerator;
 import rpg.value.Unit;
@@ -67,4 +68,11 @@ public class Ducat extends Item{
 	 * A variable referencing the ducatValue.
 	 */
 	private static final int ducatValue = 1;
+	/**
+	 * Does nothing
+	 */
+	@Override
+	public void setHolder(Mobile holder){}
+	
 }
+

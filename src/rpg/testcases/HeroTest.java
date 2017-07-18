@@ -97,16 +97,6 @@ public class HeroTest {
 		invalid2[3] = new Anchorpoint(AnchorpointType.LEFT,weapon4);
 		invalid2[4] = new Anchorpoint(AnchorpointType.LEFT,weapon5);
 	}
-	private void initializeInvalid3(){
-		invalid3[0] = new Anchorpoint();
-		invalid3[1] = new Anchorpoint(AnchorpointType.BODY,weapon2);
-		invalid3[2] = new Anchorpoint(AnchorpointType.BELT,weapon3);
-		invalid3[3] = new Anchorpoint(AnchorpointType.LEFT,weapon4);
-		invalid3[4] = new Anchorpoint(AnchorpointType.LEFT,weapon5);
-	}
-	
-	
-	
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName0() {
 		invalidName0 = new Hero(null,0,0);

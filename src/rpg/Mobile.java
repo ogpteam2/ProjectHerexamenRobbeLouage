@@ -1,5 +1,6 @@
 package rpg;
 
+import java.awt.Container;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -7,8 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
+import rpg.inventory.Backpack;
 import rpg.inventory.Ducat;
 import rpg.inventory.Item;
+import rpg.inventory.Purse;
 import rpg.value.AnchorpointType;
 import rpg.value.Unit;
 import rpg.value.Weight;
@@ -558,7 +561,17 @@ public abstract class Mobile {
 		for (Anchorpoint anchor : anchors) {
 			if (anchor.getAnchorpointType() != null) {
 				if (anchor.getItem() != null) {
-					sum++;
+					if (anchor.getItem() instanceof Backpack){
+						Backpack current = (Backpack) anchor.getItem();
+						sum += current.getNbItems();
+					}
+					else if (anchor.getItem() instanceof Purse){
+						Purse current = (Purse) anchor.getItem();
+						sum += current.getNbItems();
+					}
+					else{
+						sum++;
+					}
 				}  
 			}
 		}

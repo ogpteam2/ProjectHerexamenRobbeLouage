@@ -3,44 +3,109 @@ package rpg.inventory;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Model;
 import be.kuleuven.cs.som.annotate.Raw;
-import filesystem.DiskItem;
 
 /**
  * An backpack iterator that iterates through all elements of a backpack.
- * 		implements enumeration.
+ * implements enumeration.
+ * 
+ * Each iterator has a position. The position is initialized at zero.
+ * You can get the next element by using the nextElement() method. This
+ * method throws an exception when there are no more elements.
+ * 
+ * You can also reset the iterator by using reset(),
+ * then the position is again set to 0.
+ * 
+ * 
  * 
  * @author Robbe
  * @version 1.0
  */
 public class BackpackIterator implements Enumeration<Item> {
 	
+	/************************************************
+	 * Constructor
+	 ************************************************/
 	
+	public BackpackIterator(ArrayList<Item> contents){
+		this.remainingItems = contents;
+	}
 	
+	/************************************************
+	 * Enumeration
+	 ************************************************/
 	
+	/**
+	 * Checks whether the iterator has more items.
+	 * 
+	 * @return false if the conents are not effective
+	 * 		   | if (remainingItems ==null)
+	 * 		   | result == false
+	 * @return false if the position is greater than the remaining items' size.
+	 * 		  | if (position>remainingItems.size())
+	 * 		  |		then result == false
+	 */
 	@Override
 	public boolean hasMoreElements() {
-		// TODO Auto-generated method stub
-		return false;
+		if (remainingItems ==null){
+			return false;
+		}
+		if (position>=remainingItems.size()){
+			return false;
+		}
+		return true;
 	}
 
+	/**
+	 * Gives the next element in the list.
+	 * 
+	 * @effect if the iterator has more elements then the item at the current position is given.
+	 * 		   And the position is incremented.
+	 * 		   | if (hasMoreElements())
+	 * 		   |	then let item = remainingItems.get(position)
+	 * 		   |		 position++
+	 * 		   |		 result.equals(item)
+	 * @throws RuntimeException
+	 * 		   if the iterator has no more elements.
+	 * 	       | (!hasMoreElements())
+	 */
 	@Override
-	public Item nextElement() {
-		// TODO Auto-generated method stub
-		return null;
+	public Item nextElement() throws RuntimeException {
+		if (hasMoreElements()){
+			Item item = remainingItems.get(position);
+			position++;
+			return item;
+		}
+		else{
+			throw new RuntimeException("no more elements.");
+		}
+	}
+	
+	/**
+	 * Resets the iterator.
+	 * 
+	 * @post set position to zero.
+	 * 		  | new.getPosition()==0
+	 */
+	public void reset(){
+		position = 0;
 	}
 	
 	/************************************************
 	 * Position
 	 ************************************************/
 	
+	public int getNbRemainingItems(){
+		return remainingItems.size()-position;
+	}
+	
 	/**
 	 * Returns the current position of the iterator
 	 */
 	@Raw @Basic
-	public int getPostion(){
+	public int getPosition(){
 		return this.position;
 	}
 	
@@ -54,8 +119,8 @@ public class BackpackIterator implements Enumeration<Item> {
 	 ************************************************/
 	
 	/**
-	 * 
+	 * A variable referencing the list of items.
 	 */
-	private List<Item> remainingItems = new ArrayList<Item>();
+	private ArrayList<Item> remainingItems = new ArrayList<Item>();
 		
 }

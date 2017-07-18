@@ -125,6 +125,9 @@ abstract public class Container extends Item {
 		if (item.getHolder() != null){
 			return false;
 		}
+		if (item.getInContainer()){
+			return false;
+		}
 		return true;
 	}
 	
@@ -176,12 +179,31 @@ abstract public class Container extends Item {
 	public abstract void addItem(Item item) throws IllegalArgumentException;
 	
 	/**
+	 * Checks whether an item is in a container.
+	 * 
+	 * @param item
+	 * 		  The item to check.
+	 * @return true if the item is in the backpack.
+	 * 		   | result == contents.contains(item)
+	 */
+	public boolean ItemIn(Item item){
+		return contents.contains(item);
+	}
+	
+	/**
 	 * Removes an item from the container at the given index.
 	 * 
 	 * @param index
 	 * 		  The index to remove the item at.
-	 * @effect removes the item from the container and sets the  
-	 * @throws
+	 * @effect removes the item from the container and sets the  the holder of the item
+	 * 		   to null and sets inContainer of the item to false.
+	 * 		  | let item = contents.get(index)
+	 * 		  | item.setHolder(null)
+	 * 		  | contents.remove(index)
+	 * 		  | item.setInContainer(false)
+	 * @throws IllegalArgumentException
+	 * 		   The index is greater than the Nb items.
+	 * 		   | (index>getNbItems())
 	 */
 	public void removeItem(int index) throws IllegalArgumentException{
 		if (index>getNbItems()){
@@ -190,7 +212,8 @@ abstract public class Container extends Item {
 		else {
 			Item item = contents.get(index);
 			item.setHolder(null);
-			contents.remove(index);			
+			contents.remove(index);	
+			item.setInContainer(false);
 		}
 	}
 	
@@ -214,6 +237,7 @@ abstract public class Container extends Item {
 		else {
 			contents.remove(item);
 			item.setHolder(null);
+			item.setInContainer(false);
 		}
 	}
 	

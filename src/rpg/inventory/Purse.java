@@ -95,6 +95,7 @@ public class Purse extends Container {
 	public void addItem(Item item) throws IllegalArgumentException{
 		if (canAdd(item)){
 			contents.add(item);
+			item.setInContainer(true);
 		}
 		else if (item!=null && item instanceof Ducat){
 			Weight total = item.getWeight(Unit.kg).add(getWeightOfContents(Unit.kg));
@@ -205,6 +206,18 @@ public class Purse extends Container {
 		}	
 	}
 
+	/**
+	 * Checks whether an item is in a container.
+	 * 
+	 * @param item
+	 * 		  The item to check.
+	 * @return true if the item is in the backpack.
+	 * 		   | result == contents.contains(item)
+	 */
+	@Override
+	public boolean ItemIn(Item item){
+		return contents.contains(item);
+	}
 	
 	/************************************************
 	 * Weight

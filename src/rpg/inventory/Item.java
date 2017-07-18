@@ -344,4 +344,31 @@ abstract public class Item {
 	 */
 	private Mobile holder;
 	
+	/************************************************
+	 * In Container
+	 ************************************************/
+	
+	/**
+	 * Return the inContainer status.
+	 */
+	@Raw @Basic
+	public boolean getInContainer(){
+		return this.inContainer;
+	}
+	
+	/**
+	 * Sets the inContainer status to the given state.
+	 * 
+	 * @post the inContainer status gets set to state.
+	 * 		 | new.getContainer()==state
+	 */
+	protected void setInContainer(boolean state){
+		this.inContainer = state;
+	}
+	
+	
+	/**
+	 * A variable checking whether the item is in a container or not.
+	 */
+	private boolean inContainer = false;
 }
