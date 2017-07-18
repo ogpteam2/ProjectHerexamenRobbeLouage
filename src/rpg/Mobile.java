@@ -1043,6 +1043,11 @@ public abstract class Mobile {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param type
+	 * @param item
+	 */
 	public void addItemToBackpack(AnchorpointType type,Item item){
 		
 	}
