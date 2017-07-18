@@ -486,8 +486,8 @@ public class HeroTest {
 		Hero hero2 = new Hero("HeroTwo",100L,50);
 		hero1.addItemAt(AnchorpointType.BACK,weapon1);
 		hero1.addItemAt(AnchorpointType.BELT,weapon2);
-		hero1.transfersItem(AnchorpointType.BACK, hero2, AnchorpointType.BACK);
-		hero1.transfersItem(AnchorpointType.BELT, hero2, AnchorpointType.BACK);
+		hero1.transfersItemToAnchor(AnchorpointType.BACK, hero2, AnchorpointType.BACK);
+		hero1.transfersItemToAnchor(AnchorpointType.BELT, hero2, AnchorpointType.BACK);
 		assertEquals(hero1.getNbItems(),1);
 		assertEquals(hero2.getNbItems(),1);
 		assertFalse(hero1.checkItemInAnchors(weapon1));
@@ -500,7 +500,7 @@ public class HeroTest {
 		Hero hero1 = new Hero("HeroOne",100L,50);
 		Hero hero2 = new Hero("HeroTwo",100L,50);
 		hero1.addItemAt(AnchorpointType.BACK, weapon1);
-		hero1.transfersItem(AnchorpointType.BACK, hero2);
+		hero1.transfersItemToAnchor(AnchorpointType.BACK, hero2);
 		assertFalse(hero1.checkItemInAnchors(weapon1));
 		assertTrue(hero2.checkItemInAnchors(weapon1));
 	}
@@ -514,7 +514,7 @@ public class HeroTest {
 		hero2.addItem(weapon4);
 		hero2.addItem(weapon5);
 		hero1.addItemAt(AnchorpointType.BACK,weapon6);
-		hero1.transfersItem(AnchorpointType.BACK, hero2);
+		hero1.transfersItemToAnchor(AnchorpointType.BACK, hero2);
 		assertEquals(hero1.getNbItems(),1);
 		assertEquals(hero2.getNbItems(),5);
 		assertTrue(hero1.checkItemInAnchors(weapon6));

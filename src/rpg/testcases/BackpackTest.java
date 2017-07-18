@@ -3,6 +3,7 @@ package rpg.testcases;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import rpg.Hero;
@@ -30,7 +31,7 @@ public class BackpackTest {
 		purse1.addItem(ducat1);
 		backpack1  = new Backpack(new Weight(1,Unit.kg),10,new Weight(7,Unit.kg));
 		backpack2  = new Backpack(new Weight(2,Unit.kg),10,new Weight(10,Unit.kg));
-		backpack3  = new Backpack(new Weight(2,Unit.kg),10,new Weight(10,Unit.kg));
+		backpack3  = new Backpack(new Weight(2,Unit.kg),10,new Weight(100,Unit.kg));
 	}
 	
 	
@@ -176,4 +177,60 @@ public class BackpackTest {
 		assertEquals(backpack1.getNbItems(),9);
 		
 	}
+	@Test 
+	public void getNbTest2(){
+		backpack1.addItem(weapon1);
+		backpack2.addItem(weapon2);
+		backpack3.addItem(weapon3);
+		backpack3.addItem(backpack2);
+		backpack1.addItem(backpack3);
+		assertEquals(backpack1.getNbItems(),5);
+		
+	}
+	@Test
+	public void weightTest(){
+		backpack1.addItem(weapon1);
+		backpack2.addItem(weapon2);
+		backpack3.addItem(weapon3);
+		backpack2.addItem(backpack1);
+		backpack3.addItem(backpack2);
+		assertEquals(backpack3.getWeight(Unit.kg),new Weight(5.18,Unit.kg));
+		Hero hero = new Hero("Rich",100L,50);
+		hero.addItem(backpack3);
+		assertEquals(hero.getTotalWeight(Unit.kg),backpack3.getWeight(Unit.kg));
+	}
+	@Test
+	public void ValueTest(){
+		backpack1.addItem(weapon1);
+		backpack2.addItem(weapon2);
+		backpack3.addItem(weapon3);
+		backpack2.addItem(backpack1);
+		backpack3.addItem(backpack2);
+		assertEquals(backpack3.getValue(),330);
+		Hero hero = new Hero("Rich",100L,50);
+		hero.addItem(backpack3);
+		assertEquals(hero.getTotalValue(),backpack3.getValue());
+	}
+	@Test
+	public void getTest1(){
+		backpack1.addItem(weapon1);
+		backpack1.addItem(weapon2);
+		backpack1.addItem(weapon3);
+		backpack1.addItem(weapon4);
+		assertEquals(backpack1.getItemWithID(weapon1.getId()),weapon1);
+		assertEquals(backpack1.getItemWithID(weapon2.getId()),weapon2);
+		assertEquals(backpack1.getItemWithID(weapon3.getId()),weapon3);
+		assertEquals(backpack1.getItemWithID(weapon4.getId()),weapon4);
+	}
+	@Test
+	public void duplicateGet(){
+		Ducat ducat5 = new Ducat();
+		Ducat ducat6 = new Ducat();
+		backpack1.addItem(ducat5);
+		backpack1.addItem(ducat6);
+		assertEquals(backpack1.getItemWithID(ducat6.getId()),ducat5);
+	}
+
+
+
 }

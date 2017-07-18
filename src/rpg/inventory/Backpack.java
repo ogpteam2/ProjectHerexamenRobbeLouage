@@ -102,8 +102,7 @@ public class Backpack extends Container {
 			Item current = it.nextElement();
 			if (current instanceof Backpack){
 				Backpack backpack = (Backpack) current;
-				sum += backpack.getContents().size() + 1;
-				backpack.getNbItems();
+				sum += backpack.getNbItems()+1;
 			}
 			else if (current instanceof Purse){
 				Purse purse = (Purse) current;
@@ -131,8 +130,8 @@ public class Backpack extends Container {
 	@Override
 	public void addItem(Item item) throws IllegalArgumentException {
 		if (canAdd(item)){
-			contents.add(item);
 			item.setHolder(getHolder());
+			contents.add(item);
 			item.setInContainer(true);
 		}
 		else {
@@ -187,9 +186,15 @@ public class Backpack extends Container {
 	 * 		   |			then subresult ==true
 	 * 		   |	if (subresult)
 	 * 		   |		then result ==  subresult
+	 * @return true if the item given is the backpack.	
+	 * 		   | if (item.equals(this))
+	 * 		   |	then result == true.
 	 */
 	@Override
 	public boolean ItemIn(Item item){
+		if (item.equals(this)){
+			return true;
+		}
 		boolean result = false;
 		BackpackIterator it = getIterator();
 		while (it.hasMoreElements()){

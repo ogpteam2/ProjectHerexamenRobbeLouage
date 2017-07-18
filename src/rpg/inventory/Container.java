@@ -108,6 +108,10 @@ abstract public class Container extends Item {
 	 * 		   than the capacity.
 	 * 		   | if (item.getWeight(Unit.kg).add(getWeightOfContents(Unit.kg)).compareTo(getCapacity(Unit.kg)>0)
 	 * 		   |	then result == false
+	 * @return false if the holder can't add the item.
+	 * 		   | if (getHolder() != null)
+	 * 		   | 	then if (!getHolder().canHaveAsItem(item))
+	 * 		   |			then result == false;
 	 * @return false if the item has already a holder.
 	 * 		   | if (item.getHolder() != null)
 	 * 		   | 	then result == false
@@ -124,6 +128,11 @@ abstract public class Container extends Item {
 		}
 		if (item.getHolder() != null){
 			return false;
+		}
+		if (getHolder() != null){
+			if (!getHolder().canHaveAsItem(item)){
+				return false;
+			}
 		}
 		if (item.getInContainer()){
 			return false;

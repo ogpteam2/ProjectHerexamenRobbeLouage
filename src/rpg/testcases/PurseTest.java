@@ -108,5 +108,12 @@ public class PurseTest {
 		assertEquals(purse1.getBroken(),true);
 		assertEquals(purse3.getBroken(),true);
 	}
+	@Test
+	public void nbItems(){
+		for (int i=0;i<10;i++){
+			purse2.addItem(new Ducat());
+		}
+		assertEquals(purse2.getNbItems(),10);
+	}
 	
 }

@@ -1,14 +1,13 @@
 package rpg;
-
-import java.awt.Container;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
-
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
 import rpg.inventory.Backpack;
+import rpg.inventory.BackpackIterator;
+import rpg.inventory.Container;
 import rpg.inventory.Ducat;
 import rpg.inventory.Item;
 import rpg.inventory.Purse;
@@ -553,7 +552,14 @@ public abstract class Mobile {
 	 * 		   | for anchor in anchors 
 	 *         | if (anchor.getAnchorpointType() != null) 
 	 *         | 	 if (anchor.getItem() != null)
-	 *         | 		then sum++ 
+	 *         | 		if (anchor.getItem() instanceof Backpack)
+	 *         |			then let current = (Backpack) anchor.getItem()
+	 *         |				 let sum += current.getNbItems()+1
+	 *         |	else if (anchor.getItem() instanceof Purse)
+	 *         |			then let current = (Purse) anchor.getItem()
+	 *         |				 let sum += current.getNbItems()+1
+	 *         |	else
+	 *         |		sum++
 	 *         | result == sum
 	 */
 	public int getNbItems() {
@@ -563,11 +569,11 @@ public abstract class Mobile {
 				if (anchor.getItem() != null) {
 					if (anchor.getItem() instanceof Backpack){
 						Backpack current = (Backpack) anchor.getItem();
-						sum += current.getNbItems();
+						sum += current.getNbItems()+1;
 					}
 					else if (anchor.getItem() instanceof Purse){
 						Purse current = (Purse) anchor.getItem();
-						sum += current.getNbItems();
+						sum += current.getNbItems()+1;
 					}
 					else{
 						sum++;
@@ -672,8 +678,25 @@ public abstract class Mobile {
 		return weight;
 	}
 	
+	/**
+	 * Return the total value of all the items in the anchors.
+	 * 
+	 * @return the total value.
+	 * 		   | let sum = 0
+	 * 		   | for (Anchorpoint anchor:anchors)
+	 * 		   |	if (anchor.getAnchorpointType() != null && anchor.getItem() != null)
+	 * 		   |		then let sum = sum + anchor.getItem().getValue()
+	 * 		   | result == sum
+	 */
 	public int getTotalValue(){
-		return 0;
+		int sum = 0;
+		for (Anchorpoint anchor:anchors){
+			 if (anchor.getAnchorpointType() != null && anchor.getItem() != null){
+				 sum = sum + anchor.getItem().getValue();
+			 }
+		}
+		
+		return sum;
 	}
 	
 	/**
@@ -716,6 +739,26 @@ public abstract class Mobile {
 		else if (item != null  
 				&& (item.getWeight(Unit.kg)).compareTo(getCapacity(Unit.kg))>0){
 			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Checks whether an item is valid to add.
+	 * 
+	 * @param item
+	 * 		  The item to check.
+	 * @return false if the item would exceed the capacity.
+	 * 		   | let total = item.getWeight(Unit.kg)
+	 * 		   | if (total.add(getTotalWeight(Unit.kg)).compareTo(getCapacity(Unit.kg))>0)
+	 * 		   | 	then result == false
+	 */
+	public boolean canHaveAsItem(Item item){
+		if (item != null ){
+			Weight total = item.getWeight(Unit.kg);
+			if (total.add(getTotalWeight(Unit.kg)).compareTo(getCapacity(Unit.kg))>0){
+				return false;
+			}
 		}
 		return true;
 	}
@@ -885,10 +928,17 @@ public abstract class Mobile {
 	 * @param item
 	 * 		  The item to search.
 	 * @return true if the item is in the anchors.
-	 * 		  | for (anchor in anchors)
-	 * 		  |		if (anchor.getAnchorpointType() != null && anchor.getItem()!=null)
-	 * 		  |			then if (anchor.getItem().equals(item))
-	 * 		  |				return true
+	 * 		   | let subresult = false
+	 * 		   | for (anchor in anchors)
+	 * 		   |	if (anchor.getAnchorpointType() != null && anchor.getItem()!=null)
+	 * 		   |		then if (anchor.getItem().equals(item))
+	 * 		   |			let subresult = true
+	 * 		   |	else if ( anchor.getItem() instanceof Backpack || anchor.getItem() instanceof Purse)
+	 * 		   |			then current = (Container) anchor.getItem()
+	 * 		   |			let subresult = current.ItemIn(item)
+	 * 		   |	if (result)
+	 * 		   |		then result == true
+	 * 		   |result == false
 	 * @return false if item is not effective.
 	 * 		  | (item == null)
 	 * 		  |	return false.
@@ -896,11 +946,19 @@ public abstract class Mobile {
 	public boolean checkItemInAnchors(Item item){
 		if (item == null)
 			return false;
+		boolean result = false;
 		for (Anchorpoint anchor:anchors){
 			if (anchor.getAnchorpointType() != null && anchor.getItem()!=null){
 				if (anchor.getItem().equals(item)){
-					return true;
+					result = true;
 				}
+				else if ( anchor.getItem() instanceof Backpack || anchor.getItem() instanceof Purse){
+						Container current = (Container) anchor.getItem();
+						result = current.ItemIn(item);
+				}
+			}
+			if (result){
+				return true;
 			}
 		}
 		return false;
@@ -914,18 +972,55 @@ public abstract class Mobile {
 	 * @param item
 	 * 		  The item to attach to the given type.
 	 * @effect Sets the item at the given anchor point, if the item can be added,
-	 * 		   also the holder of the item is set to this mobile.
+	 * 		   also the holder of the item(s) is set to this mobile. 
 	 * 		   | if (canAddItemAt(type,item))
-	 * 		   |	then anchors[type.ordinal()].setItem(item)
+	 *         |	then if (item instanceof Backpack)
+	 * 		   |		then setAllItemsOfBackpackToThis((Backpack) item,this)
+	 * 		   |	item.setHolder(this)
+	 * 		   |	anchors[type.ordinal()].setItem(item)
 	 */
 	public void addItemAt(AnchorpointType type, Item item) {
 		if (canAddItemAt(type,item)){
+			if (item instanceof Backpack){
+				setAllItemsOfBackpackToThis((Backpack) item,this);
+				}
 			item.setHolder(this);
 			anchors[type.ordinal()].setItem(item);
-			
+			}	
+		}
+	
+	/**
+	 * Sets all items' holder of a backpack to this mobile.
+	 * 
+	 * @param backpack
+	 * 		  The backpack to set all items' holder to this moible.
+	 * @param holder
+	 * 		  The new holder of all the items.
+	 * @effect set all items in the backpack holder to this mobile.
+	 * 		   | let it = backpack.getIterator()
+	 * 	       | while (it.hasMoreElements())
+	 * 		   |	let current = it.nextElement()
+	 * 		   |	if (current instanceof Backpack)
+	 * 	       |		then let current2 = (Backpack) current
+	 * 		   |			 setAllItemsOfBackpackToThis(current2)
+	 * 		   |	else current.setHolder(holder)
+	 */
+	@Model
+	private void setAllItemsOfBackpackToThis(Backpack backpack,Mobile holder){
+		BackpackIterator it = backpack.getIterator();
+		while (it.hasMoreElements()){
+			Item current = it.nextElement();
+			if (current instanceof Backpack){
+				current.setHolder(holder);
+				Backpack current2 = (Backpack) current;
+				setAllItemsOfBackpackToThis(current2,holder);
+			}
+			else{
+				current.setHolder(holder);
+			}
 		}
 	}
-
+	
 	/**
 	 * Adds an item to the mobile.
 	 * 
@@ -948,6 +1043,18 @@ public abstract class Mobile {
 		}
 	}
 	
+	public void addItemToBackpack(Item item){
+		
+	}
+	public void addOwnItemToBackpack(AnchorpointType type,AnchorpointType type2){
+		
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * Removes the item at the given anchor point type.
 	 * 
@@ -957,13 +1064,18 @@ public abstract class Mobile {
 	 * 		   item makes to this mobile, if the type is effective.
 	 * 		   | if type != null
 	 * 	       |	if (anchors[type.ordinal()].getAnchorpointType()!=null)
-	 * 		   | 		then anchors[type.ordinal()].getItem().setHolder(null)
+	 * 		   |		then if (anchors[type.ordinal()].getItem() instanceof Backpack)
+	 * 		   |				then setAllItemsOfBackpackToThis((Backpack) anchors[type.ordinal()].getItem(),null)
+	 * 		   | 		    anchors[type.ordinal()].getItem().setHolder(null)
 	 * 		   | 		 	anchors[type.ordinal()].setItem(null)
 	 *
 	 */
 	public void removeItemAt(AnchorpointType type) {
 		if (type != null){
 			if (anchors[type.ordinal()].getAnchorpointType()!=null){
+				if (anchors[type.ordinal()].getItem() instanceof Backpack){
+					setAllItemsOfBackpackToThis((Backpack) anchors[type.ordinal()].getItem(),null);
+					}
 				anchors[type.ordinal()].getItem().setHolder(null);
 				anchors[type.ordinal()].setItem(null);
 			}
@@ -988,7 +1100,7 @@ public abstract class Mobile {
 	 * 		   |		reciever.addItemAt(type2,item)
 	 * 		    
 	 */
-	public void transfersItem(AnchorpointType type,Mobile reciever, AnchorpointType type2){
+	public void transfersItemToAnchor(AnchorpointType type,Mobile reciever, AnchorpointType type2){
 		if (type == null || reciever == null || type2==null){}
 		else if (reciever.getItemAt(type2)==null && (reciever.getAnchors()[type2.ordinal()]!=null)){
 			Item item = this.getItemAt(type);
@@ -999,9 +1111,7 @@ public abstract class Mobile {
 			else{
 				this.addItemAt(type, item);
 			}
-
 		}
-		// add an else if clause for backpacks
 	}
 	
 	/**
@@ -1016,27 +1126,16 @@ public abstract class Mobile {
 	 * 		   | if (type == null || reciever == null)
 	 * 		   | else if (reciever.getFreeAnchorpoints().size()>0)
 	 * 		   |	then let random = ThreadLocalRandom.current().nextInt(0,reciever.getFreeAnchorpoints().size())
-	 * 		   |	let item = this.getItemAt(type)
-	 * 		   |	this.removeItemAt(type)
-	 * 		   |	reciever.addItemAt(type, item)
+	 *		   | 		 let addType = reciever.getFreeAnchorpoints().get(random)
+	 *	       |		 transfersItemToAnchor(type,receiver,addType)
 	 */
-	public void transfersItem(AnchorpointType type,Mobile reciever){
+	public void transfersItemToAnchor(AnchorpointType type,Mobile reciever){
 		if (type == null || reciever == null){}
 		else if (reciever.getFreeAnchorpoints().size()>0){
 			int random = ThreadLocalRandom.current().nextInt(0,reciever.getFreeAnchorpoints().size());
 			AnchorpointType addType = reciever.getFreeAnchorpoints().get(random);
-			Item item = this.getItemAt(type);
-			this.removeItemAt(type);
-			if (reciever.canAddItemAt(addType,item)){
-				reciever.addItemAt(addType,item);
-			}
-			else{
-				this.addItemAt(type, item);
-			}
+			transfersItemToAnchor(type,reciever,addType);
 		}
-		
-			
-		// add an else if clause for backpacks
 	}
 	
 	/**
