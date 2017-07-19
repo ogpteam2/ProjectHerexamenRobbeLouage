@@ -9,6 +9,9 @@ import java.util.stream.IntStream;
 
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
+import rpg.inventory.Ducat;
+import rpg.inventory.Item;
+import rpg.inventory.Purse;
 import rpg.inventory.Weapon;
 import rpg.value.AnchorpointType;
 import rpg.value.Unit;
@@ -298,7 +301,16 @@ public class Monster extends Mobile {
 	 * Hit
 	 ************************************************/
 	
-	
+	/**
+	 * Generates a random number between 1 and 100 but if the number if
+	 * higher than the current hitpoints, the currenthitpoints are chosen.
+	 * 
+	 *  @return a number between 0 and 100.
+	 *  		| let random = ThreadLocalRandom.current().nextInt(1,100)
+	 *  		| if (random>getCurrentHitpoints())
+	 *  		|	 then result == getCurrentHitpoints()
+	 *  		| result == random
+	 */
 	@Override
 	protected int random0to100(){
 		int random = ThreadLocalRandom.current().nextInt(1,100);
@@ -309,12 +321,100 @@ public class Monster extends Mobile {
 	}
 
 
+	/**
+	 * 
+	 */
 	@Override
 	protected void collectTreasures(Mobile other) {
 	}
 
+	public void takeDucatsAndPurses(Mobile other){
+		AnchorpointType[] acnhorpoinTypes = AnchorpointType.values();
+		ArrayList<AnchorpointType> otherFree = other.getFreeAnchorpoints();
+		if (this.getFreeAnchorpoints().size()>0){
+			for (AnchorpointType type:acnhorpoinTypes){
+				if (!otherFree.contains(type)){
+					Item item = other.getItemAt(type);
+					other.removeItemAt(type);
+					if (item instanceof Purse || item instanceof Ducat){
+						this.addItem(item);
+					}
+					else if (item instanceof Weapon){
+						item = null;
+					}
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private void takeRandom(Mobile other){
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private void switchItems(Mobile other){
+		
+	}
 
 
+	
+	/**
+	 * Heals the monster for 0.
+	 * 
+	 * @effect the monster gets healed for an amount of 0.
+	 * 		   | setCurrentHitpoints(getCurrentHitpoints())
+	 */
 	@Override
 	protected void heal(){}
 }

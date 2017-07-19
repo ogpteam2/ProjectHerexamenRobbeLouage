@@ -845,8 +845,8 @@ public abstract class Mobile {
 	 * 		   | for (anchor in anchors)
 	 * 		   |	if (anchor.getAnchorpointType() != null)
 	 * 		   |		then diff[anchor.getAnchorpointType().ordinal()] += 1
-	 * 		   | for (int i:diff)
-	 * 		   |	if (i>1)
+	 * 		   | for I in diff
+	 * 		   |	if (I>1)
 	 * 		   |		then result == false
 	 */
 	@Model
@@ -1033,7 +1033,7 @@ public abstract class Mobile {
 	 * 		   | if (getFreeAnchorpoints().size()>0)
 	 * 		   | let random = ThreadLocalRandom.current().nextInt(0,getFreeAnchorpoints().size())
 	 * 		   | let addType = getFreeAnchorpoints().get(random)
-	 * 		   |addItemAt(addType, item)
+	 * 		   | addItemAt(addType, item)
 	 * 		   
 	 */
 	public void addItem(Item item) {
@@ -1294,11 +1294,30 @@ public abstract class Mobile {
 	 * Hit
 	 ************************************************/
 	
-	
+	/**
+	 * Hits another mobile.
+	 * 
+	 * @param other
+	 * 		  The other mobile to hit.
+	 * @effect if one of the two mobiles is no hero then one mobile hits another,
+	 * 		   the current hitpoints of the other are subtracted with the
+	 * 		   total damage of the hitter.
+	 * 		   | if (!(this instanceof Hero && other instanceof Hero))
+	 * 	       |	then let random = random0to100()
+	 * 		   |		 if (random>=getProtection())
+	 * 		   |		 	then let damage = (int)getTotalDamage()
+	 * 		   |	     		 if (other.canHaveAsCurrentHitpoints(newHitpoints))
+	 * 		   |				     then ther.setCurrentHitpoints(newHitpoints)
+	 * @effect if the new hitpoints of the other mobile aren't valid,
+	 * 		   his hitpoints are set to 0, this mobile will be healed and 
+	 * 		   this mobile will collectTreasures from the other one.
+	 * 		   | if (!(other.canHaveAsCurrentHitpoints(newHitpoints)))
+	 * 		   |	then other.setCurrentHitpoints(0)
+	 * 		   |		 heal()
+	 * 		   |	     collectTreasures(other)
+	 */
 	public void hit(Mobile other){
-		if (this instanceof Hero && other instanceof Hero){
-			System.out.println("Don't fight against other heroes.");
-		}
+		if (this instanceof Hero && other instanceof Hero){}
 		else{
 			int random = random0to100();
 			if (random>=getProtection()){
@@ -1308,32 +1327,42 @@ public abstract class Mobile {
 					other.setCurrentHitpoints(newHitpoints);
 				}
 				else{
-					System.out.println("you killed the mobile");
 					other.setCurrentHitpoints(0);
 					heal();
 					collectTreasures(other);
 				}
 			}
-			else{
-				System.out.println("NO HIT");
-			}
 		}
-
 	}
 	
+	/**
+	 * Generates a random integer between 0 and 100.
+	 * 
+	 * @return A random integer between 0 and 100.
+	 * 		  | result>0 && result<100
+	 */
 	@Model
     protected int random0to100(){
     	return ThreadLocalRandom.current().nextInt(1,100);
     }
 	
+	/**
+	 * Heals a mobile a certain amount.
+	 * 
+	 * @return the healing done is greater or equal to zero,
+	 * 		   the amount is implented at the subclass but is always
+	 * 		   greater than or equal to zero.
+	 * 		   | setCurrentHitpoints(getCurrentHipoints() + amount)
+	 * 
+	 * @note the implementation is given at each subclass.
+	 */
     protected abstract void heal();
     
+    /**
+     * When a mobile kills another mobile, he collects items from it.
+     * 
+     * @param other
+     * 		  The other mobile to collect treasures from.
+     */
     protected abstract void collectTreasures(Mobile other);
-	
-	
-	
-	
-	
-	
-	
 }

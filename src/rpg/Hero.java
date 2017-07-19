@@ -1,6 +1,7 @@
 package rpg;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
+import rpg.inventory.Backpack;
 import rpg.inventory.Item;
 import rpg.inventory.Weapon;
 import rpg.value.AnchorpointType;
@@ -356,16 +357,71 @@ public class Hero extends Mobile {
 	 * Hit
 	 ************************************************/
 	
+	/**
+	 * Heals a hero a certain amount based on his max and current 
+	 * hitpoints.
+	 * 
+	 * @effect the hero is healed a random fraction of the difference
+	 * 		    between the max and current hitpoints.
+	 * 		    | let percentage = ThreadLocalRandom.current().nextInt(1,101)
+	 * 		    | let percentage = percentage/100
+	 * 		    | let difference = getMaximumHitpoints()-getCurrentHitpoints()
+	 * 		    | let healing = difference*percentage
+	 * 		    | setCurrentHitpoints(getCurrentHitpoints()+healing)
+	 */
 	@Override
 	protected void heal(){
-		int percentage = ThreadLocalRandom.current().nextInt(1,101);
-		int difference = (int) (getMaximumHitpoints()-getCurrentHitpoints());
-		int healing = (int)(difference * (percentage/100));
-		setCurrentHitpoints(getCurrentHitpoints()+healing);
+		double percentage = ThreadLocalRandom.current().nextInt(1,101);
+		percentage = percentage/100;
+		double difference = getMaximumHitpoints()-getCurrentHitpoints();
+		double healing = difference*percentage;
+		setCurrentHitpoints(getCurrentHitpoints()+(int)healing);
+		
 	}
 
+	/**
+	 * Collects treasures from a monster.
+	 * 
+	 * @effect if the hero has free anchorpoints then all items of the monster
+	 * 		   are added until there are no more free anchorpoints.
+	 * 		   | let acnhorpoinTypes = AnchorpointType.values()
+	 * 		   | let otherFree = other.getFreeAnchorpoints()
+	 * 	       | if (this.getFreeAnchorpoints().size()>0)
+	 * 		   |	then for (type in acnhorpoinTypes)
+	 * 		   |		 	 if (!otherFree.contains(type))
+	 * 		   |			  	 then let item = other.getItemAt(type)
+	 * 		   |			     	  other.removeItemAt(type)
+	 * 		   |				      this.addItem(item)
+	 * @effect if the hero has no free anchors but some backpacks,
+	 * 		   all the items of the monster are added to the available
+	 * 		   backpacks.
+	 * 		   | if (this.getFreeAnchorpoints().size()==0)
+	 * 		   |	then for (type in acnhorpoinTypes)
+	 * 		   |			 let item = other.getItemAt(type)	
+	 * 		   |			 other.removeItemAt(type)
+	 * 		   |			 this.addItemToBackpack(item)
+	 */
 	@Override
 	protected void collectTreasures(Mobile other) {
-		
+		AnchorpointType[] acnhorpoinTypes = AnchorpointType.values();
+		ArrayList<AnchorpointType> otherFree = other.getFreeAnchorpoints();
+		if (this.getFreeAnchorpoints().size()>0){
+			for (AnchorpointType type:acnhorpoinTypes){
+				if (!otherFree.contains(type)){
+					Item item = other.getItemAt(type);
+					other.removeItemAt(type);
+					this.addItem(item);
+				}
+			}
+		}
+		else{
+			for (AnchorpointType type:acnhorpoinTypes){
+				if (!otherFree.contains(type)){
+					Item item = other.getItemAt(type);
+					other.removeItemAt(type);
+					this.addItemToBackpack(item);
+				}
+			}
+		}
 	}
 }

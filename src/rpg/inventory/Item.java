@@ -293,9 +293,13 @@ abstract public class Item {
 	 * @return false if the holder already has the item in his anchors.
 	 * 		   | if (holder.checkItemInAnchors(this))
 	 * 		   |	then result == false
-	 * @return false if the mobile doesnt have any free anchorpoints
+	 * @return false if the mobile doesnt have any free anchorpoints and
+	 * 		   can't be added to one of his backpacks.
 	 * 		   | if (holder.getFreeAnchorpoints().size()<=0)
-	 * 		   |	result == false
+	 * 		   |	then for (backpack in holder.findBackpacks())
+	 * 		   | 		 	 if (backpack.canAdd(this))
+	 * 		   |			    then result == true
+	 * 		   |		 result == false
 	 */
 	public boolean canHaveAsHolder(Mobile holder){
 		if (holder != null){
@@ -307,6 +311,11 @@ abstract public class Item {
 				return false;
 			}
 			if (holder.getFreeAnchorpoints().size()<=0){
+				for (Backpack backpack:holder.findBackpacks()){
+					if (backpack.canAdd(this)){
+						return true;
+					}
+				}
 				return false;
 			}
 		}

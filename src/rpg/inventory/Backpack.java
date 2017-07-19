@@ -135,7 +135,7 @@ public class Backpack extends Container {
 	@Override
 	public void addItem(Item item) throws IllegalArgumentException {
 		if (canAdd(item)){
-			item.setHolder(getHolder());
+			item.setHolder(this.getHolder());
 			contents.add(item);
 			item.setInContainer(true);
 			if (item instanceof Container){

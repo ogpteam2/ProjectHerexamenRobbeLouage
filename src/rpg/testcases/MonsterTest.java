@@ -8,6 +8,7 @@ import org.junit.Test;
 import rpg.Hero;
 import rpg.Monster;
 import rpg.inventory.Anchorpoint;
+import rpg.inventory.Ducat;
 import rpg.inventory.Weapon;
 import rpg.value.AnchorpointType;
 import rpg.value.Unit;
@@ -203,6 +204,17 @@ public class MonsterTest {
 			monster0.hit(monster1);
 		}
 		assertEquals(monster1.getCurrentHitpoints(),0);
+	}
+	@Test
+	public void lkfsqdjfdksq(){
+		Ducat ducat1 = new Ducat();
+		Ducat ducat2 = new Ducat();
+		Ducat ducat3 = new Ducat();
+		Ducat ducat4 = new Ducat();
+		Hero hero0 = new Hero("Fighter",50L,25);
+		Monster monster0 = new Monster("Jared",9,25,hero0.generateAllAnchorpoints(),new Weapon(null,0,10));
+		
+	
 	}
 	
 	
