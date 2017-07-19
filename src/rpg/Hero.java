@@ -1,6 +1,8 @@
 package rpg;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
+import rpg.inventory.Item;
+import rpg.inventory.Weapon;
 import rpg.value.AnchorpointType;
 import rpg.value.Unit;
 import rpg.value.Weight;
@@ -148,8 +150,25 @@ public class Hero extends Mobile {
 	 * Damage: total
 	 ************************************************/
 	
+	/**
+	 * Calculates the total damage of the hero.
+	 */
 	public  double getTotalDamage(){
-		return 0;
+		double total = getRawStrength();
+		Item left =  getItemAt(AnchorpointType.LEFT);
+		Item right = getItemAt(AnchorpointType.RIGHT);
+		if (left != null && left instanceof Weapon){
+			total += ((Weapon)left).getDamage();
+		}
+		if (right != null && right instanceof Weapon){
+			total += ((Weapon)right).getDamage();
+		}
+		total = (total-10)/2;
+		if (total<0)
+			return 0;
+		else{
+			return (int) total;
+		}
 	}
 
 
@@ -331,5 +350,22 @@ public class Hero extends Mobile {
 			anchors[type.ordinal()] = point;
 		}
 		return anchors;
+	}
+
+	/************************************************
+	 * Hit
+	 ************************************************/
+	
+	@Override
+	protected void heal(){
+		int percentage = ThreadLocalRandom.current().nextInt(1,101);
+		int difference = (int) (getMaximumHitpoints()-getCurrentHitpoints());
+		int healing = (int)(difference * (percentage/100));
+		setCurrentHitpoints(getCurrentHitpoints()+healing);
+	}
+
+	@Override
+	protected void collectTreasures(Mobile other) {
+		
 	}
 }

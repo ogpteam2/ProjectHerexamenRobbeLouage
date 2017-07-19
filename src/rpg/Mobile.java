@@ -33,7 +33,9 @@ import rpg.value.Weight;
  *        | 	canHaveItemAt(getItemAt(I))
  * @invar Each mobile should have valid anchorpointsList 
  *        | isValidAnchorpointList(anchors)
+ *        
  * @author Robbe
+ * @version 1.0
  *
  */
 public abstract class Mobile {
@@ -76,7 +78,7 @@ public abstract class Mobile {
 		setMaximumHitpoints(hitpoints);
 		setRawStrength(strength);
 		if (this.isValidAnchorpointList(anchors)){
-			this.anchors = generateAnchorpoints();
+			this.anchors = generateAllAnchorpoints();
 			for (Anchorpoint anchor:anchors){
 				if (anchor.getItem()!=null){
 					anchor.getItem().setHolder(this);
@@ -298,21 +300,6 @@ public abstract class Mobile {
 	}
 
 	/**
-	 * Sets the current number to a given amount.
-	 * 
-	 * @param hitpoints
-	 *            The new currentHitpoints
-	 * @pre the given amount must be a valid amount for the current hitpoints. 
-	 * 		| canHaveAsCurrentHitpoints(getCurrentHitpoints())
-	 * @post the currenthitpoints is set to the given hitpoints 
-	 * 		| (new).getCurrentHitpoints() == amount
-	 *       
-	 */
-	public void setCurrentHitpoints(long hitpoints) {
-		this.currentHitpoints = hitpoints;
-	}
-
-	/**
 	 * Sets the maximum number to a given amount.
 	 * 
 	 * @param amount
@@ -326,7 +313,22 @@ public abstract class Mobile {
 	public void setMaximumHitpoints(long amount) {
 		this.maximumHitpoints = amount;
 	}
-
+	
+	/**
+	 * Sets the current number to a given amount.
+	 * 
+	 * @param hitpoints
+	 *            The new currentHitpoints
+	 * @pre the given amount must be a valid amount for the current hitpoints. 
+	 * 		| canHaveAsCurrentHitpoints(getCurrentHitpoints())
+	 * @post the currenthitpoints is set to the given hitpoints 
+	 * 		| (new).getCurrentHitpoints() == amount
+	 *       
+	 */
+	protected void setCurrentHitpoints(long hitpoints) {
+		this.currentHitpoints = hitpoints;
+	}
+	
 	/**
 	 * Variable referencing the current hitpoints of the mobile.
 	 */
@@ -1258,6 +1260,26 @@ public abstract class Mobile {
 		return null;
 	}
 	
+	/**
+	 * Generates an empty anchor points list.
+	 * 
+	 * @return an empty anchor points list with each anchor point once in the list.
+	 * 		   | let anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()]
+	 * 		   | for type in AnchorpointType.values()
+	 * 		   |	 point= new Anchorpoint(type,null)
+	 * 		   |	 anchors[type.ordinal()] = point
+	 * 		   | result.equals(anchors)
+	 */
+	public Anchorpoint[] generateAllAnchorpoints(){
+		Anchorpoint[] anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
+		for (AnchorpointType type:AnchorpointType.values()){
+			Anchorpoint point= new Anchorpoint(type,null);
+			anchors[type.ordinal()] = point;
+		}
+		return anchors;
+	}
+	
+	
 	public Anchorpoint[] getAnchors(){
 		return anchors.clone();
 	}
@@ -1271,4 +1293,47 @@ public abstract class Mobile {
 	/************************************************
 	 * Hit
 	 ************************************************/
+	
+	
+	public void hit(Mobile other){
+		if (this instanceof Hero && other instanceof Hero){
+			System.out.println("Don't fight against other heroes.");
+		}
+		else{
+			int random = random0to100();
+			if (random>=getProtection()){
+				int damage = (int)getTotalDamage();
+				int newHitpoints = (int)other.getCurrentHitpoints()-damage;
+				if (other.canHaveAsCurrentHitpoints(newHitpoints)){
+					other.setCurrentHitpoints(newHitpoints);
+				}
+				else{
+					System.out.println("you killed the mobile");
+					other.setCurrentHitpoints(0);
+					heal();
+					collectTreasures(other);
+				}
+			}
+			else{
+				System.out.println("NO HIT");
+			}
+		}
+
+	}
+	
+	@Model
+    protected int random0to100(){
+    	return ThreadLocalRandom.current().nextInt(1,100);
+    }
+	
+    protected abstract void heal();
+    
+    protected abstract void collectTreasures(Mobile other);
+	
+	
+	
+	
+	
+	
+	
 }

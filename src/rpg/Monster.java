@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
+import rpg.inventory.Weapon;
 import rpg.value.AnchorpointType;
 import rpg.value.Unit;
 import rpg.value.Weight;
@@ -35,9 +36,11 @@ public class Monster extends Mobile {
 	 * 		  The raw strength of the monster.
 	 */
 	@Raw
-	public Monster(String name, long hitpoints,double strength, Anchorpoint[] anchors) {
+	public Monster(String name, long hitpoints,double strength, Anchorpoint[] anchors,
+			Weapon claws) {
 		super(name,hitpoints, strength ,anchors);
-		this.nbOfAnchorpoints = decideNbOfAnchorpoint(anchors);
+		this.nbOfAnchorpoints = decideNbOfAnchorpoint(getAnchors());
+		this.claws = claws;
 	}
 		
 
@@ -53,9 +56,23 @@ public class Monster extends Mobile {
 	 * 		  The raw strength of the monster.
 	 */
 	@Raw
+	public Monster(String name, long hitpoints,double strength,Weapon claws) {
+		this(name,hitpoints, strength,null,claws);
+	}
+	
+	/**
+	 * Initializes a new monster with given namen hitpoints and strength.
+	 * 
+	 * @param name
+	 *        The name of the monster.
+	 * @param hitpoints
+	 * 		  The hitpoints of the monster.
+	 * @param strength
+	 * 		  The raw strength of the monster.
+	 */
+	@Raw
 	public Monster(String name, long hitpoints,double strength) {
-		super(name,hitpoints, strength);
-		this.nbOfAnchorpoints = decideNbOfAnchorpoint(getAnchors());
+		this(name,hitpoints, strength,null,null);
 
 	}
 
@@ -102,8 +119,23 @@ public class Monster extends Mobile {
 	 ************************************************/
 	
 	public double getTotalDamage(){
-		return 0;
+		double total = 0;
+		if (getClaws()!=null){
+			total = getClaws().getDamage();
+		}
+		double sub = (int)(getRawStrength() - 5)/3;
+		double result = total +sub;
+		if (result<=0){
+			return 0;
+		}
+		return result;
 	}
+	
+	public Weapon getClaws(){
+		return this.claws;
+	}
+	
+	private final Weapon claws;
 
 
 	/************************************************
@@ -247,7 +279,7 @@ public class Monster extends Mobile {
 	 * 		   |		then sum++
 	 * 		   | return sum
 	 */
-	private int decideNbOfAnchorpoint(Anchorpoint[] anchors) {
+	private int decideNbOfAnchorpoint(Anchorpoint[] anchors){
 		int sum = 0;
 		for (Anchorpoint anchor:anchors){
 			if (anchor.getAnchorpointType() != null){
@@ -261,4 +293,28 @@ public class Monster extends Mobile {
 	 * A variable referencing how many anchorpoints are available for this monster.
 	 */
 	private int nbOfAnchorpoints;
+	
+	/************************************************
+	 * Hit
+	 ************************************************/
+	
+	
+	@Override
+	protected int random0to100(){
+		int random = ThreadLocalRandom.current().nextInt(1,100);
+		if (random>getCurrentHitpoints()){
+			return (int)getCurrentHitpoints();
+		}
+		return random;
+	}
+
+
+	@Override
+	protected void collectTreasures(Mobile other) {
+	}
+
+
+
+	@Override
+	protected void heal(){}
 }

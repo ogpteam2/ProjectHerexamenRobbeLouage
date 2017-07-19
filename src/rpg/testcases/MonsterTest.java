@@ -15,6 +15,7 @@ import rpg.value.Weight;
 
 public class MonsterTest {
 
+	private static final double DELTA = 10E-5;
 	private Monster invalidName1,invalidName2,invalidName3,validName1,validName2,validName3;
 	private Monster capacity1,capacity2,capacity3,capacity4;
 	private Monster monster1,monster2,monster3,monster4;
@@ -141,6 +142,73 @@ public class MonsterTest {
 			assertEquals(monster1.getAnchors()[AnchorpointType.BACK.ordinal()].getAnchorpointType(),null);
 		}
 	}
+	@Test
+	public void constructor1Test(){
+		for (int i=0;i<100;i++){
+			monster1 = new Monster("Jared", 50L, 100,valid,null);
+			assertEquals(monster1.getNbItems(),4);
+			assertEquals(monster1.getItemAt(AnchorpointType.BACK).getHolder(),monster1);
+			assertEquals(monster1.getItemAt(AnchorpointType.BODY).getHolder(),monster1);
+			assertEquals(monster1.getItemAt(AnchorpointType.BELT).getHolder(),monster1);
+			assertEquals(monster1.getItemAt(AnchorpointType.RIGHT).getHolder(),monster1);
+			assertTrue(monster1.checkItemInAnchors(weapon1));
+			assertTrue(monster1.checkItemInAnchors(weapon2));
+			assertTrue(monster1.checkItemInAnchors(weapon3));
+			assertTrue(monster1.checkItemInAnchors(weapon4));
+		}
+	}
+	@Test
+	public void totalDamageTest1(){
+		Weapon weapon = new Weapon(new Weight(1,Unit.kg),49);
+		monster1 = new Monster("Jared", 50L, 100,null,weapon);
+		assertEquals(monster1.getTotalDamage(),80.0,DELTA);
+	}
+	@Test
+	public void totalDamageTest2(){
+		monster1 = new Monster("Jared", 50L, 100,null,null);
+		assertEquals(monster1.getTotalDamage(),31,DELTA);
+	}
+	@Test
+	public void totalDamageTest3(){
+		monster1 = new Monster("Jared", 50L,-5,null,null);
+		assertEquals(monster1.getTotalDamage(),0,DELTA);
+	}
+	@Test
+	public void totalDamageTest4(){
+		Weapon weapon = new Weapon(new Weight(1,Unit.kg),49);
+		monster1 = new Monster("Jared", 50L,0,null,weapon);
+		assertEquals(monster1.getTotalDamage(),48,DELTA);
+	}
+	@Test
+	public void monsterHitTestWithoutCollectingTreasures(){
+		Hero hero0 = new Hero("Fighter",50L,25);
+		Monster monster0 = new Monster("Jared",50L,25,new Weapon(null,0,10));
+		while (hero0.getCurrentHitpoints()>0){
+			monster0.hit(hero0);
+		}
+		assertEquals(hero0.getCurrentHitpoints(),0);
+	}
+	@Test
+	public void monsterHitTestWithoutCollectingTreasures2(){
+		Hero hero0 = new Hero("Fighter",50L,25);
+		Monster monster0 = new Monster("Jared",9,25,new Weapon(null,0,10));
+		monster0.hit(hero0);
+		assertEquals(hero0.getCurrentHitpoints(),50);
+	}
+	@Test
+	public void monsterHitTestWithoutCollectingTreasures3(){
+		Monster monster1 = new Monster("Jahghred",50,25,new Weapon(null,0,10));
+		Monster monster0 = new Monster("Jared",50,25,new Weapon(null,0,10));
+		while (monster1.getCurrentHitpoints()>0){
+			monster0.hit(monster1);
+		}
+		assertEquals(monster1.getCurrentHitpoints(),0);
+	}
+	
+	
+	
+	
+	
 	
 	
 }

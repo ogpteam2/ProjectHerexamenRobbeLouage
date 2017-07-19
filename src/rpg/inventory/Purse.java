@@ -78,18 +78,17 @@ public class Purse extends Container {
 	 * 
 	 * @param item
 	 * 		  The item to add.
-	 * @effect adds the item to the purse.
+	 * @effect add the item to this purse if the item can be added.
 	 * 		   | if (canAdd(item))
-	 * 		   | 	then contents.add(item)
-	 * @effect is the item added will exceed the capacity of the purse.
-	 * 		   The purse will be broken.
-	 * 		   | if (item!=null && item instanceof Ducat)	
-	 * 		   |	then let total = item.getWeight(Unit.kg).add(getWeightOfContents(Unit.kg))
-	 * 		   |		 if (total.compareTo(getCapacity(Unit.kg))>0)
-	 * 		   |		 	then brokenAction();
+	 * 		   |	then contents.add(item)
+	 * 		   |		 item.setInContainer(true)
+	 * @effect breaks the purse if item can't be added and is a ducat.
+	 * 		   | if (!canAdd(item))
+	 * 		   | 	then if (item instanceof Ducat)
+	 * 		   |		  	then brokenAction()
 	 * @throws IllegalArgumentException
-	 * 		   if item can't be added.
-	 * 		   | !canAdd(item)
+	 * 		   item is not a ducat or item can't be added to the parent.
+	 * 		   | !(item instanceof Ducat) || (!getParent().canAdd(item))
 	 */
 	@Override
 	public void addItem(Item item) throws IllegalArgumentException{
@@ -114,7 +113,20 @@ public class Purse extends Container {
 	
 	
 	/**
+	 * Adds the items to the backpack it belonged to and removes this from the
+	 * backpack it belonged to.
 	 * 
+	 * @effect if parent is effective, add content to parent.
+	 * 		   | if (getParent() != null)
+	 * 		   | 	then let parent = getParent()
+	 * 		   |		 let totalWeight = getWeight(Unit.kg)
+	 * 		   |		 let backpackWeight = parent.getWeightOfContents(Unit.kg)
+	 * 		   | 		 if (totalWeight.add(backpackWeight).compareTo(parent.getCapacity(Unit.kg))<=0)
+	 * 		   |			 then for I in 0...getValue()
+	 * 		   |			 	 	parent.addItem(new Ducat())
+	 * @effect set broken to true and clears content.
+	 * 		   | setBroken(true)
+	 * 		   | contents.clear()
 	 */
 	@Model
 	private void brokenAction(){
@@ -133,10 +145,6 @@ public class Purse extends Container {
 		setBroken(true);
 		contents.clear();
 	}
-	
-	
-	
-	
 	
 	/**
 	 * Checks whether an item can be added to the purse.

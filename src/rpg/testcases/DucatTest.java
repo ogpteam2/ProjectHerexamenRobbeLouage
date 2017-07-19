@@ -36,13 +36,4 @@ public class DucatTest {
 			assertEquals(ducat.getHolder(),null);
 		}
 	}
-	@Test
-	public void weightTest(){
-		System.out.println(Ducat.getDucatWeight());
-		System.out.println(Ducat.getDucatWeight().toUnit(Unit.g));
-	}
-	
-
-	
-	
 }

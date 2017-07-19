@@ -141,8 +141,7 @@ public class HeroTest {
 		assertEquals(hitpoints1.getCurrentHitpoints(),-10L);
 		assertEquals(hitpoints1.getMaximumHitpoints(),-10L);
 		hitpoints1.setMaximumHitpoints(13L);
-		hitpoints1.setCurrentHitpoints(12L);
-		assertEquals(hitpoints1.getCurrentHitpoints(),12L);
+		assertEquals(hitpoints1.getCurrentHitpoints(),-10L);
 		assertEquals(hitpoints1.getMaximumHitpoints(),13L);
 	}
 	@Test
