@@ -33,6 +33,7 @@ public class Main {
 			System.out.println("The winner is the monster.");
 		else
 			System.out.println("The winnner is the hero.");
+		
 	}
 	
 

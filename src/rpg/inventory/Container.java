@@ -380,16 +380,27 @@ abstract public class Container extends Item {
 	 * Parent
 	 ************************************************/
 	
-	
+	/**
+	 * get the parent.
+	 */
+	@Raw @Basic
 	public Backpack getParent(){
 		return this.parent;
 	}
 	
+	/**
+	 * Sets the parent
+	 * @param backpack
+	 * 		  The parent.
+	 * @post the new parent is the given backpack
+	 * 		 | new.getParent().equals(backpack)
+	 */
 	protected void setParent(Backpack backpack){
 		this.parent = backpack;
 	}
 	
-
-	
+	/**
+	 * A variable referencing the parent of this backpack.
+	 */
 	private Backpack parent;
 }

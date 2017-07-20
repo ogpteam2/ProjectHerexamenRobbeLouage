@@ -168,6 +168,7 @@ public class Hero extends Mobile {
 	 * 		   | else
 	 * 		   |	result == total
 	 */
+	@Override
 	public  double getTotalDamage(){
 		double total = getRawStrength();
 		Item left =  getItemAt(AnchorpointType.LEFT);

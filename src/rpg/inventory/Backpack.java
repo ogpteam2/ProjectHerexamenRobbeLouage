@@ -3,7 +3,6 @@ import be.kuleuven.cs.som.annotate.*;
 import rpg.Mobile;
 import rpg.utility.BackpackIDGenerator;
 import rpg.utility.IDGenerator;
-import rpg.utility.PurseIDGenerator;
 import rpg.value.Unit;
 import rpg.value.Weight;
 
