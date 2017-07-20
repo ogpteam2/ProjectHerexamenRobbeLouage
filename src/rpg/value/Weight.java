@@ -297,7 +297,7 @@ public class Weight implements Comparable<Weight> {
 	 ************************************************/
 
 	/**
-	 * Compute the sum of this weight and the given weight. 
+	 * Computes the sum of this weight and the given weight. 
 	 * 
 	 * @param other
 	 * 	      the other weight that should be added to this weight.
@@ -319,7 +319,7 @@ public class Weight implements Comparable<Weight> {
 	}
 	
 	/**
-	 * Compute the difference of this weight and the given weight. 
+	 * Computes the difference of this weight and the given weight. 
 	 * 
 	 * @param other
 	 * 	      the other weight that should be subtracted  to this weight.
@@ -341,7 +341,7 @@ public class Weight implements Comparable<Weight> {
 	}
 	
 	/**
-	 * Compute the product of this weight and the given weight. 
+	 * Computes the product of this weight and the given weight. 
 	 * 
 	 * @param other
 	 * 	      the other weight that should be multiplied  to this weight.
@@ -363,7 +363,7 @@ public class Weight implements Comparable<Weight> {
 	}
 	
 	/**
-	 * Compute the product of this weight and a given double. 
+	 * Computes the product of this weight and a given double. 
 	 * 
 	 * @param factor
 	 * 	      the  factor that should be multiplied  to this weight.
@@ -383,7 +383,7 @@ public class Weight implements Comparable<Weight> {
 	}
 	
 	/**
-	 * Compute the quotient  of this weight and the given weight. 
+	 * Computes the quotient  of this weight and the given weight. 
 	 * 
 	 * @param other
 	 * 	      the other weight that should be multiplied  to this weight.

@@ -59,6 +59,7 @@ public class AnchorpointTest {
 	}
 	@Test
 	public void contructor3Test() throws InterruptedException {
+		System.gc();
 		Thread.sleep(10000);
 		assertEquals(point8.getItem(),null);
 		assertEquals(point8.getAnchorpointType(),null);

@@ -33,6 +33,8 @@ abstract public class Item {
 	 * 		  The weight of the item.
 	 * @param value
 	 * 		  The value of the item.
+	 * @param holder
+	 * 		  The holder of the item.
 	 * @pre The given value must be valid.
 	 * 		| canHaveAsValue(value)
 	 * @effect the ID is generated and set.

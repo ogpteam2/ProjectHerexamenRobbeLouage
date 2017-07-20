@@ -7,6 +7,14 @@ import rpg.utility.PurseIDGenerator;
 import rpg.value.Unit;
 import rpg.value.Weight;
 
+/**
+ * A class of backpacks.
+ * 
+ * no additional invars imposed.
+ * 
+ * @author Robbe
+ * @version 1.0
+ */
 public class Backpack extends Container {
 
 	/************************************************

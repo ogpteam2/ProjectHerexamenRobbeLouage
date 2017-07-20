@@ -1188,8 +1188,10 @@ public abstract class Mobile {
 				if (anchors[type.ordinal()].getItem() instanceof Backpack){
 					setAllItemsOfBackpackToThis((Backpack) anchors[type.ordinal()].getItem(),null);
 					}
-				anchors[type.ordinal()].getItem().setHolder(null);
-				anchors[type.ordinal()].setItem(null);
+				if (anchors[type.ordinal()].getItem()!=null){
+					anchors[type.ordinal()].getItem().setHolder(null);
+					anchors[type.ordinal()].setItem(null);
+				}
 			}
 		}
 	}

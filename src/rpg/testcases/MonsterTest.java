@@ -3,6 +3,7 @@ package rpg.testcases;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import rpg.Hero;
@@ -181,7 +182,7 @@ public class MonsterTest {
 		monster1 = new Monster("Jared", 50L,0,null,weapon);
 		assertEquals(monster1.getTotalDamage(),48,DELTA);
 	}
-	@Test
+	@Ignore@Test
 	public void monsterHitTestWithoutCollectingTreasures(){
 		Hero hero0 = new Hero("Fighter",50L,25);
 		Monster monster0 = new Monster("Jared",50L,25,new Weapon(null,0,10));
@@ -197,7 +198,7 @@ public class MonsterTest {
 		monster0.hit(hero0);
 		assertEquals(hero0.getCurrentHitpoints(),50);
 	}
-	@Test
+	@Ignore@Test
 	public void monsterHitTestWithoutCollectingTreasures3(){
 		Monster monster1 = new Monster("Jahghred",50,25,new Weapon(null,0,10));
 		Monster monster0 = new Monster("Jared",50,25,new Weapon(null,0,10));
@@ -211,19 +212,22 @@ public class MonsterTest {
 		Ducat ducat1 = new Ducat();
 		Ducat ducat2 = new Ducat();
 		Purse purse = new Purse(new Weight(200,Unit.g),new Weight(1,Unit.kg));
-		Hero hero0 = new Hero("Fighter",50L,50);
+		Hero hero0 = new Hero("Fighter",20,50);
 		hero0.addItemAt(AnchorpointType.BACK,ducat1);
 		hero0.addItemAt(AnchorpointType.BELT,ducat2);
 		hero0.addItemAt(AnchorpointType.BODY,purse);
 		hero0.addItemAt(AnchorpointType.LEFT,weapon1);
 		hero0.addItemAt(AnchorpointType.RIGHT,weapon2);
 		assertEquals(hero0.getNbItems(),5);
-		Monster monster0 = new Monster("Jared",9,1000,null,new Weapon(null,0,10));
+		Monster monster0 = new Monster("Jared",100,1000,null,new Weapon(null,0,100));
 		monster0.addItemAt(AnchorpointType.BACK,weapon3);
 		monster0.addItemAt(AnchorpointType.BELT,weapon4);
 		monster0.addItemAt(AnchorpointType.BODY,weapon5);
-
-	
+		while (hero0.getCurrentHitpoints()>0){
+			monster0.hit(hero0); // kills hero.
+		}
+		assertEquals(hero0.getCurrentHitpoints(),0);
+		assertEquals(hero0.getNbItems(),0);
 	}
 	
 	

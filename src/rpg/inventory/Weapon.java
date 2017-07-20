@@ -24,6 +24,14 @@ public class Weapon extends Item {
 	/**
 	 * Initializes a weapon with a weight,value,holder.
 	 * 
+	 * @param weight
+	 * 		  The weight of the item.
+	 * @param value
+	 * 		  The value of the item.
+	 * @param holder
+	 * 		  The holder of the item.
+	 * @param damage
+	 * 		  The damage of the weapon.
 	 * @effect the weapon is an item with given weigh,value and holder.
 	 * 		   | super(weight,value,holder)
 	 * @post the damage is set to the given damage.
@@ -39,6 +47,12 @@ public class Weapon extends Item {
 	/**
 	 * Initializes a weapon with a weight,value,holder.
 	 * 
+	 * @param weight
+	 * 		  The weight of the item.
+	 * @param value
+	 * 		  The value of the item.
+	 * @param damage
+	 * 		  The damage of the weapon.
 	 * @effect the weapon is an item with given weight,value,damage.
 	 * 		   | super(weight,value,holder,damage)
 	 */
@@ -53,6 +67,12 @@ public class Weapon extends Item {
 	/**
 	 * Initializes a weapon with a weight,damage,holder.
 	 * 
+	 * @param weight
+	 * 		  The weight of the item.
+	 * @param holder
+	 * 		  The holder of the item.
+	 * @param damage
+	 * 		  The damage of the weapon.
 	 * @effect the weapon is an item with given weight,holder,damage.
 	 * 		   | super(weight,calculateValue(damage),holder,damage)
 	 */
