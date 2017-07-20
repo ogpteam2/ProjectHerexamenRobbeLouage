@@ -359,13 +359,27 @@ abstract public class Item {
 	 * container
 	 ************************************************/
 	
+	/**
+	 * Return the inContainer status.
+	 */
 	public boolean getInContainer(){
 		return this.inContainer;
 	}
 	
+	/**
+	 * Sets the inContainer status to the given state
+	 * 
+	 * @param state
+	 * 		  The state to set the inContainer.
+	 * @post the inContainer status gets set to the given state.
+	 * 		 | new.getContainer() == state
+	 */
 	protected void setInContainer(boolean state){
 		this.inContainer =  state;
 	}
 	
+	/**
+	 * A variable referencing the inContainer state of this item.
+	 */
 	private boolean inContainer = false;
 }
