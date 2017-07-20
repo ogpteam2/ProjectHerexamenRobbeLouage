@@ -9,6 +9,7 @@ import rpg.Hero;
 import rpg.Monster;
 import rpg.inventory.Anchorpoint;
 import rpg.inventory.Ducat;
+import rpg.inventory.Purse;
 import rpg.inventory.Weapon;
 import rpg.value.AnchorpointType;
 import rpg.value.Unit;
@@ -206,14 +207,22 @@ public class MonsterTest {
 		assertEquals(monster1.getCurrentHitpoints(),0);
 	}
 	@Test
-	public void lkfsqdjfdksq(){
+	public void collectTreasures(){
 		Ducat ducat1 = new Ducat();
 		Ducat ducat2 = new Ducat();
-		Ducat ducat3 = new Ducat();
-		Ducat ducat4 = new Ducat();
-		Hero hero0 = new Hero("Fighter",50L,25);
-		Monster monster0 = new Monster("Jared",9,25,hero0.generateAllAnchorpoints(),new Weapon(null,0,10));
-		
+		Purse purse = new Purse(new Weight(200,Unit.g),new Weight(1,Unit.kg));
+		Hero hero0 = new Hero("Fighter",50L,50);
+		hero0.addItemAt(AnchorpointType.BACK,ducat1);
+		hero0.addItemAt(AnchorpointType.BELT,ducat2);
+		hero0.addItemAt(AnchorpointType.BODY,purse);
+		hero0.addItemAt(AnchorpointType.LEFT,weapon1);
+		hero0.addItemAt(AnchorpointType.RIGHT,weapon2);
+		assertEquals(hero0.getNbItems(),5);
+		Monster monster0 = new Monster("Jared",9,1000,null,new Weapon(null,0,10));
+		monster0.addItemAt(AnchorpointType.BACK,weapon3);
+		monster0.addItemAt(AnchorpointType.BELT,weapon4);
+		monster0.addItemAt(AnchorpointType.BODY,weapon5);
+
 	
 	}
 	

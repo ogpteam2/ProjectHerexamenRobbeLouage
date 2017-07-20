@@ -153,6 +153,20 @@ public class Hero extends Mobile {
 	
 	/**
 	 * Calculates the total damage of the hero.
+	 * 
+	 * @return the total damage of the hero.
+	 * 		   | let total = getRawStrength()
+	 * 	       | let left =  getItemAt(AnchorpointType.LEFT)
+	 * 		   | let right = getItemAt(AnchorpointType.RIGHT)
+	 * 		   | if (left != null && left instanceof Weapon)
+	 * 		   | 	then total += ((Weapon)left).getDamage()
+	 * 		   | if (right != null && right instanceof Weapon)
+	 * 		   |	then total += ((Weapon)right).getDamage()
+	 * 		   | let total = (total-10)/2
+	 * 		   | if (total<0)
+	 * 		   | 	then result == 0
+	 * 		   | else
+	 * 		   |	result == total
 	 */
 	public  double getTotalDamage(){
 		double total = getRawStrength();

@@ -78,6 +78,17 @@ public class Monster extends Mobile {
 		this(name,hitpoints, strength,null,null);
 
 	}
+	
+	/**
+	 * 
+	 * @param name
+	 * @param hitpoints
+	 * @param claws
+	 */
+	public Monster(String name, long hitpoints,Weapon claws) {
+		this(name,hitpoints, 10,null,null);
+		this.addStandardWeapons();
+	}
 
 	/************************************************
 	 * Name: defensive
@@ -121,6 +132,20 @@ public class Monster extends Mobile {
 	 * Damage: total
 	 ************************************************/
 	
+	/**
+	 * Calculates the total damage of this monster.
+	 * 
+	 * @return the total damage of this mobile.
+	 *         | let total = 0
+	 *         | if (getClaws()!=null)
+	 *         |	then total = getClaws().getDamage()
+	 *         | let sub = (getRawStrength() - 5)/3
+	 *         | let damage = total + sub
+	 *         | if (result<=0)
+	 *         |	then result == 0
+	 *         | else
+	 *         |	result == damage
+	 */
 	public double getTotalDamage(){
 		double total = 0;
 		if (getClaws()!=null){
@@ -134,10 +159,17 @@ public class Monster extends Mobile {
 		return result;
 	}
 	
+	/**
+	 * Returns the claws of this monster.
+	 */
+	@Raw @Basic
 	public Weapon getClaws(){
 		return this.claws;
 	}
 	
+	/**
+	 * A variable referencing the claws of the monster.
+	 */
 	private final Weapon claws;
 
 
@@ -238,6 +270,21 @@ public class Monster extends Mobile {
 	}
 	
 	/**
+	 * Adds tree standard weapons to the mobile.
+	 * 
+	 * @effect tree weapons are added.
+	 * 		   | this.addItem(new Weapon(new Weight(1,Unit.kg),10))
+	 * 		   | this.addItem(new Ducat())
+	 * 		   | this.addItem(new Purse(new Weight(500,Unit.g),new Weight(500,Unit.g)))
+	 */
+	private void addStandardWeapons(){
+		this.addItem(new Weapon(new Weight(1,Unit.kg),10));
+		this.addItem(new Ducat());
+		this.addItem(new Purse(new Weight(500,Unit.g),new Weight(500,Unit.g)));
+	}
+	
+	
+	/**
 	 * Generates unique random integers between min and max.
 	 * 
 	 * @param min
@@ -320,15 +367,56 @@ public class Monster extends Mobile {
 		return random;
 	}
 
-
 	/**
+	 * Collects treasures from another mobile.
 	 * 
+	 * @effect A random number between 0 and 3 is chosen.
+	 * 		  | let  random = ThreadLocalRandom.current().nextInt(0,3+1)
+	 * @effect if random is 0 or 1 take ducats and purses from other mobile.
+	 * 		   | if (random == 0 || random == 1)
+	 * 		   |	then takeDucatsAndPurses(other)
+	 * @effect if random is 2 take random items from other.
+	 * 		   | if (random == 2)
+	 * 		   |	then switchItems(other)
+	 * @effect if random is 3 then switch item with other.
+	 * 		   | if (random == 3)
+	 * 		   |	then switchItems(other)
 	 */
 	@Override
 	protected void collectTreasures(Mobile other) {
+		int random = ThreadLocalRandom.current().nextInt(0,4+1);
+		if (random == 0 || random == 1){
+			takeDucatsAndPurses(other);
+		}
+		else if (random == 2){
+			takeRandom(other);
+		}
+		else if (random == 3){
+			switchItems(other);
+		}
+			
 	}
 
-	public void takeDucatsAndPurses(Mobile other){
+	/**
+	 * Takes the ducats and purses of a mobile until the anchorpoints are full.
+	 * 
+	 * @param other
+	 * 		  The other mobile to take the ducats and purses of.
+	 * @effect the ducats and purses of another mobile will be added to this monster.
+	 * 		   | let acnhorpoinTypes = AnchorpointType.values()
+	 * 	       | let otherFree = other.getFreeAnchorpoints()
+	 * 		   | if (this.getFreeAnchorpoints().size()>0)
+	 * 		   |	then for type in acnhorpoinTypes
+	 * 		   |		  	if (!otherFree.contains(type))
+	 * 		   |				then let item = other.getItemAt(type)
+	 * 	       |			    	 other.removeItemAt(type)
+	 * 		   |				     if (item instanceof Purse || item instanceof Ducat)
+	 * 		   |						 then this.addItem(item)
+	 * 		   |				     else if (item instanceof Weapon)
+	 * 		   |						  	  then item = null
+	 */
+	@Model
+	private void takeDucatsAndPurses(Mobile other){
 		AnchorpointType[] acnhorpoinTypes = AnchorpointType.values();
 		ArrayList<AnchorpointType> otherFree = other.getFreeAnchorpoints();
 		if (this.getFreeAnchorpoints().size()>0){
@@ -347,68 +435,80 @@ public class Monster extends Mobile {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * Takes random items from a another mobile.
+	 * 
+	 * @param other
+	 * 		  The other mobile to take items from.
+	 * @effect takes random items from another mobile.
+	 * 		   | let acnhorpoinTypes = AnchorpointType.values()
+	 * 	       | let otherFree = other.getFreeAnchorpoints()
+	 * 		   | if (this.getFreeAnchorpoints().size()>0)
+	 * 		   |	then for type in acnhorpoinTypes
+	 * 		   |		  	if (!otherFree.contains(type))
+	 * 		   |				then let item = other.getItemAt(type)
+	 * 	       |			    	 other.removeItemAt(type)
+	 * 		   |					 if (type.ordinal()%2==0)
+	 * 		   |					 	then this.addItem(item)
+	 * 		   |					 else if (item instanceof Weapon)
+	 * 		   |						  	  then item = null
+	 */
+	@Model
 	private void takeRandom(Mobile other){
-		
+		AnchorpointType[] acnhorpoinTypes = AnchorpointType.values();
+		ArrayList<AnchorpointType> otherFree = other.getFreeAnchorpoints();
+		if (this.getFreeAnchorpoints().size()>0){
+			for (AnchorpointType type:acnhorpoinTypes){
+				if (!otherFree.contains(type)){
+					Item item = other.getItemAt(type);
+					other.removeItemAt(type);
+					if (type.ordinal()%2==0){
+						this.addItem(item);
+					}
+					else if (item instanceof Weapon){
+						item = null;
+					}
+				}
+			}
+		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * Switches certain items with another mobile.
+	 * 
+	 * @param other
+	 * 		  The other mobile to switch items with.
+	 * @effect some items of the other mobile will be added to this mobile.
+	 * 		   | let acnhorpoinTypes = AnchorpointType.values()
+	 * 	       | let otherFree = other.getFreeAnchorpoints()
+	 * 		   | let thisFree = this.getFreeAnchorpoints()
+	 * 		   | for type in acnhorpoinTypes
+	 * 		   | 	let item = other.getItemAt(type)
+	 * 		   |	other.removeItemAt(type)
+	 * 		   |	if (!otherFree.contains(type) && !thisFree.contains(type))
+	 * 		   |		then this.removeItemAt(type)
+	 * 		   |		then this.addItemAt(type,item)
+	 * 		   |	else if (item instanceof Weapon)
+	 * 		   |			then item = null
+	 */
+	@Model
 	private void switchItems(Mobile other){
-		
+		AnchorpointType[] acnhorpoinTypes = AnchorpointType.values();
+		ArrayList<AnchorpointType> otherFree = other.getFreeAnchorpoints();
+		ArrayList<AnchorpointType> thisFree = this.getFreeAnchorpoints();
+		for (AnchorpointType type:acnhorpoinTypes){
+			Item item = other.getItemAt(type);
+			other.removeItemAt(type);
+			if (!otherFree.contains(type) && !thisFree.contains(type)){
+				this.removeItemAt(type);
+				this.addItemAt(type,item);
+			}
+			else if (item instanceof Weapon){
+				item = null;
+			}
+		}
 	}
 
-
-	
 	/**
 	 * Heals the monster for 0.
 	 * 
@@ -416,5 +516,6 @@ public class Monster extends Mobile {
 	 * 		   | setCurrentHitpoints(getCurrentHitpoints())
 	 */
 	@Override
+	@Model
 	protected void heal(){}
 }
