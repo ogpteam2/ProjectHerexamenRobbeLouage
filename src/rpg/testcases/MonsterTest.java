@@ -182,7 +182,7 @@ public class MonsterTest {
 		monster1 = new Monster("Jared", 50L,0,null,weapon);
 		assertEquals(monster1.getTotalDamage(),48,DELTA);
 	}
-	@Ignore@Test
+	@Test
 	public void monsterHitTestWithoutCollectingTreasures(){
 		Hero hero0 = new Hero("Fighter",50L,25);
 		Monster monster0 = new Monster("Jared",50L,25,new Weapon(null,0,10));
@@ -198,7 +198,7 @@ public class MonsterTest {
 		monster0.hit(hero0);
 		assertEquals(hero0.getCurrentHitpoints(),50);
 	}
-	@Ignore@Test
+	@Test
 	public void monsterHitTestWithoutCollectingTreasures3(){
 		Monster monster1 = new Monster("Jahghred",50,25,new Weapon(null,0,10));
 		Monster monster0 = new Monster("Jared",50,25,new Weapon(null,0,10));

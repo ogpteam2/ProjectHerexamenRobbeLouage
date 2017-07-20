@@ -263,11 +263,15 @@ public class Monster extends Mobile {
 	/**
 	 * Generates the number of availabe anchor point types for a monster.
 	 * 
-	 * @return a number between zero and to amount of different types.
-	 * 		   | ThreadLocalRandom.current().nextInt(0, AnchorpointType.NbOfAnchorpointTypes()+1)
+	 * @return a number between zero and 5.
+	 * 		   | let random = new int[] {0,0,1,1,2,2,3,3,3,3,4,4,4,4,4,5,5,5,5,5}
+	 * 		   | let random2 = ThreadLocalRandom.current().nextInt(0,random.length)
+	 * 		   | result == random[random2]
 	 */
 	public static int generateNbOfAnchorpoints(){
-		return ThreadLocalRandom.current().nextInt(0, AnchorpointType.NbOfAnchorpointTypes()+1);
+		int[] random = new int[] {0,0,1,1,2,2,3,3,3,3,4,4,4,4,4,5,5,5,5,5};
+		int random2 = ThreadLocalRandom.current().nextInt(0,random.length);
+		return random[random2];
 	}
 	
 	/**
