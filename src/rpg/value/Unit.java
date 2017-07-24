@@ -1,7 +1,5 @@
 package rpg.value;
 
-import java.math.BigDecimal;
-
 import be.kuleuven.cs.som.annotate.*;
 
 /**

@@ -406,7 +406,7 @@
               <layoutConstraint xmi:type="notation:Bounds" xmi:id="_leAbgW1rEeedFrJfpC2PbQ"/>
             </children>
             <element xmi:type="uml:Class" href="model.uml#_ld1cUG1rEeedFrJfpC2PbQ"/>
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ld_0YW1rEeedFrJfpC2PbQ" x="59" y="290" height="168"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ld_0YW1rEeedFrJfpC2PbQ" x="59" y="290" width="181" height="182"/>
           </children>
           <children xmi:type="notation:Shape" xmi:id="_lr-mAG1rEeedFrJfpC2PbQ" type="Class_Shape_CN">
             <children xmi:type="notation:DecorationNode" xmi:id="_lr_NEG1rEeedFrJfpC2PbQ" type="Class_NameLabel_CN"/>

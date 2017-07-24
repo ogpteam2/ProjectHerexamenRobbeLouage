@@ -8,6 +8,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 		  | isValidNumeral(getNumeral())
  * @invar The unit of each weight must be a valid unit.
  * 		  | isValidUnit(getUnit())
+ * 
  * @author Robbe
  * @version 1.0
  */

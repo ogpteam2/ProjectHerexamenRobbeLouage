@@ -1,7 +1,6 @@
 package rpg;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
-import rpg.inventory.Backpack;
 import rpg.inventory.Item;
 import rpg.inventory.Weapon;
 import rpg.value.AnchorpointType;
@@ -25,7 +24,7 @@ public class Hero extends Mobile {
 	 ************************************************/
 	
 	/**
-	 * Initializes a new Hero with given name and hitpoints.
+	 * Initializes a new Hero with given name, hitpoints, strength and anchors.
 	 * 
 	 * @param name
 	 *        The name of the hero.
@@ -136,7 +135,7 @@ public class Hero extends Mobile {
 	private static final Pattern firstPattern = Pattern.compile("[A-Z][:'A-Za-z\\s]+");
 	/**
 	 * The second pattern to check the name against, and checks whether the name
-	 * consists of '.
+	 * consists of 's.
 	 */
 	@Model
 	private static final Pattern patternApo = Pattern.compile("'");
@@ -163,10 +162,10 @@ public class Hero extends Mobile {
 	 * 		   | if (right != null && right instanceof Weapon)
 	 * 		   |	then total += ((Weapon)right).getDamage()
 	 * 		   | let total = (total-10)/2
+	 *		   | result == total
+	 * @return 0 if total is less or equal to 0.
 	 * 		   | if (total<0)
-	 * 		   | 	then result == 0
-	 * 		   | else
-	 * 		   |	result == total
+	 * 		   |	then result == null
 	 */
 	@Override
 	public  double getTotalDamage(){
@@ -324,7 +323,7 @@ public class Hero extends Mobile {
 	 * 		   |		then result == false
 	 */
 	@Model
-	public boolean different(Anchorpoint[] anchors){
+	protected boolean different(Anchorpoint[] anchors){
 		if (anchors == null){
 			return false;
 		}

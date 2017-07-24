@@ -2,11 +2,8 @@ package rpg;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
-import java.util.stream.IntStream;
-
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
 import rpg.inventory.Ducat;
@@ -44,8 +41,8 @@ public class Monster extends Mobile {
 	 * @effect the monster gets initialized as a mobile with given name, hitpoints,
 	 * 		   strength and anchors.
 	 * 		   | super(name,hitpoints, strength ,anchors)
-	 * @effect the nbOfAnchorpoints gets set.
-	 * 		   | this.nbOfAnchorpoints = decideNbOfAnchorpoint(getAnchors())
+	 * @post the nbOfAnchorpoints gets set.
+	 * 		   | new.getNbOfAnchorpoints() == decideNbOfAnchorpoint(getAnchors())
 	 * @post the claws get set.
 	 * 	     | new.getClaws().equals(claws)
 	 */
@@ -164,10 +161,10 @@ public class Monster extends Mobile {
 	 *         |	then total = getClaws().getDamage()
 	 *         | let sub = (getRawStrength() - 5)/3
 	 *         | let damage = total + sub
-	 *         | if (result<=0)
-	 *         |	then result == 0
-	 *         | else
-	 *         |	result == damage
+	 *         | result == damage
+	 * @return 0 if the damage is less than 0.
+	 * 		   | if (damage<0)
+	 * 		   |	then result == 0
 	 */
 	public double getTotalDamage(){
 		double total = 0;
@@ -240,19 +237,32 @@ public class Monster extends Mobile {
 	/**
 	 * Checks whether a monster can have the given nb items.
 	 * 
-	 * @return true if the nb is less or equal to the NbOfAnchorpoints
-	 * 		   | result == nb<=getNbOfAnchorpoints()
+	 * @return true if the nb is less or equal to the NbOfAnchorpoints and greater
+	 * 		   or equal to zero.
+	 * 		   | result == nb>=0 && nb<=getNbOfAnchorpoints()
 	 */
 	@Override
 	public boolean canHaveAsNbItems(int nb){
-		return nb<=getNbOfAnchorpoints();
+		return nb>=0 && nb<=getNbOfAnchorpoints();
 	}
 	
 	/**
 	 * Checks whether a anchorpointlist is valid for a monster
 	 * 
-	 * @return true if it is a valid anchor for a mobile.
-	 * 		  | super.isValidAnchorpointList(anchors)
+	 * @return false if the anchors is not effective.
+	 * 		   | if (anchors == null)
+	 * 	 	   |	then result == false
+	 * @return false if the given anchors its length is different than the number
+	 * 		   of different anchor point types.
+	 * 		   | if (anchors.length!=AnchorpointType.NbOfAnchorpointTypes())
+	 * 	       |	return false
+	 * @return false if different is false.
+	 * 		   | if (!different(anchors))
+	 * 		   |	then result == false
+	 * @return  false if the total weight of the given anchors is more than the capacity.
+	 * 		   | if (totalWeight(anchors).compareTo(getCapacity(Unit.kg))>0)
+	 * 		   | 	then result == false
+	 * @return true otherwise.
 	 */
 	@Override
 	public boolean isValidAnchorpointList(Anchorpoint[] anchors) {

@@ -48,14 +48,6 @@ public class WeaponTest {
 	
 	
 	@Test
-	public void IDtest() {
-		for (int i=0;i<100;i++){
-			Weapon weapon = new Weapon(null,0);
-			assertEquals(weapon.getId(),78+6*i);
-		}
-	}
-	
-	@Test
 	public void invalidWeightTest(){
 		assertEquals(weapon1.getWeight(),new Weight(1,Unit.kg));
 		assertEquals(weapon2.getWeight(),new Weight(1,Unit.kg));

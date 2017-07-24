@@ -16,10 +16,11 @@ import rpg.value.Unit;
 import rpg.value.Weight;
 
 /**
- * An abstract class of movable objects in the rpg.
+ * An abstract class of movable objects in the rpg, with a name, hitpoints, 
+ * strength and anchors.
  * 
  * @invar Each mobile must have a valid name. 
- *        | isValidName(getName)
+ *        | isValidName(getName())
  * @invar Each mobile must have a valid maximumHitpoints. 
  *        | isValidMaximumHitpoints(getMaximumHitpoints())      
  * @invar Each mobile must have a valid currentHitpoints. 
@@ -27,10 +28,10 @@ import rpg.value.Weight;
  * @invar Each Mobile must have a valid protection. 
  *        | isValidProtection(getProtection())
  * @invar The number of items must be valid for each mobile. 
- *        | canHaveAsNbItems(getNbItems)  
+ *        | canHaveAsNbItems(getNbItems())
  * @invar Each mobile can have each of its items at its anchorpoints. 
- * 		  | for each I in anchorpoints:
- *        | 	canHaveItemAt(getItemAt(I))
+ * 		  | for each type, item in anchors:
+ *        | 	canHaveItemAt(type ,getItemAt(type))
  * @invar Each mobile should have valid anchorpointsList 
  *        | isValidAnchorpointList(anchors)
  *        
@@ -45,7 +46,7 @@ public abstract class Mobile {
 	 ************************************************/
 
 	/**
-	 * Initialize a new Mobile with given name, hitpoints and strength and anchor point list.
+	 * Initialize a new Mobile with given name, hitpoints, strength and anchor point list.
 	 * 
 	 * @param name
 	 *            The name of the mobile.
@@ -62,13 +63,16 @@ public abstract class Mobile {
 	 * 	       | setMaximumHitpoints(hitpoints)
 	 * @effect Sets the strength to the given strength
 	 * 		   | setRawStrength(strength)
-	 * @effect the anchors is set to the given anchors if the given anchors is valid, and all
+	 * @post the anchors is set to the given anchors if the given anchors is valid, and all
 	 * 		 the items will have as holder this mobile.
 	 * 	     | if (this.isValidAnchorpointList(anchors))
 	 * 		 |		then new.anchors.equals(anchors)
 	 * 		 | 		for (anchor in anchors)
 	 * 		 |			if (anchor.getItem()!=null)
 	 * 		 |				then anchor.getItem().setHolder(this)
+	 * @post if the given anchors are not valid they are generated.
+	 * 		 | if (!this.isValidAnchorpointList(anchors))
+	 * 		 |		then new.anchors = generateAnchorpoints()
 	 */
 	@Raw
 	protected Mobile(String name, long hitpoints, double strength
@@ -126,11 +130,9 @@ public abstract class Mobile {
 	 * 
 	 * @param name
 	 *            The name to check.
-	 * @return false if the name is null, true otherwise 
+	 * @return false if the name is null. 
 	 * 		   | if name == null 
 	 *         |	result == false
-	 *         | else 
-	 *         | 	result == true
 	 */
 	public boolean isValidName(String name) {
 		if (name == null)
@@ -145,7 +147,8 @@ public abstract class Mobile {
 	 *            The new name of the mobile.
 	 * @post If the given name is valid the name of the mobile is set to the
 	 *       given name. 
-	 *       | this.name = name
+	 *       | if (isValidName(name)
+	 *       | 		then new.getname().equals(name)
 	 * @throws IllegalArgumentException
 	 *        The given name is not valid 
 	 *        | ! isValidName(name)
@@ -171,8 +174,7 @@ public abstract class Mobile {
 	/**
 	 * Returns the current hitpoints of the Mobile.
 	 */
-	@Raw
-	@Basic
+	@Raw @Basic
 	public long getCurrentHitpoints() {
 		return this.currentHitpoints;
 	}
@@ -180,8 +182,7 @@ public abstract class Mobile {
 	/**
 	 * Returns the maximum hitpoints of the Mobile.
 	 */
-	@Raw
-	@Basic
+	@Raw @Basic
 	public long getMaximumHitpoints() {
 		return this.maximumHitpoints;
 	}
@@ -192,12 +193,10 @@ public abstract class Mobile {
 	 * @param current
 	 *        The hitpoints to check whether they are valid as current
 	 *        hitpoints.
-	 * @return true if and only if the given hitpoints lays between the maximum
+	 * @return false if and only if the given hitpoints doesn't lay between the maximum
 	 *         hitpoints and 0, both included. 
 	 *         | if (current > getMaximumHitpoints() || current < 0)  
-	 *         | 	then return false 
-	 *         | else
-	 *         | 	result == true
+	 *         | 	then result == false 
 	 */
 	public boolean canHaveAsCurrentHitpoints(long current) {
 		if (current > getMaximumHitpoints() || current < 0) {
@@ -211,8 +210,8 @@ public abstract class Mobile {
 	 * 
 	 * @param max
 	 *        the number to set as the maximum hitpoints.
-	 * @return true if and only if the given hitpoints is greater than zero and
-	 *         prime. 
+	 * @return false if and only if the given hitpoints is less than zero or
+	 *         not prime. 
 	 *         | if (max < 0 || !isPrime(max)) 
 	 *         | 	then result == false; 
 	 *         | else 
@@ -242,12 +241,11 @@ public abstract class Mobile {
 	 * @return false if the given number is divisible by a second number between
 	 *         6 and the root of the number, the second number is incremented
 	 *         six times each loop, then the first number is checked against the
-	 *         increment and decrement of the second number. True otherwise 
+	 *         increment and decrement of the second number.
 	 *         | let sqrtN = sqrt(n) 
-	 *         | for {i in 6..sqrtN, i+=6} 
+	 *         | for i in 6..sqrtN, i+=6 
 	 *         | 	if (n%(i-1) == 0 || n%(i+1) == 0 )
-	 *         | 	then return == false 
-	 *         | result == true
+	 *         | 		then result == false 
 	 */
 	public static boolean isPrime(long n) {
 		if (n < 2)
@@ -269,7 +267,7 @@ public abstract class Mobile {
 	 * 
 	 * @param n
 	 *       The number of which the nearest prime will be sought.
-	 * @pre the given number must greater than 1 and less than
+	 * @pre the given number must be greater than 1 and less than
 	 *      9223372036854775783 (biggest prime in range of long values). 
 	 *      | n > 1 && n < 9223372036854775783  
 	 * @return The nearest prime of a given number. If the two neighbor primes
@@ -277,12 +275,12 @@ public abstract class Mobile {
 	 *         | let nextprime = n
 	 *         | let previousprime = n 
 	 *         | while true 
-	 *         | nextPrime++
-	 *         | previousPrime-- 
-	 *         | if isPrime(nextPrime) 
-	 *         | 	then return nextPrime
-	 *         | else if isPrime(previousPrime) 
-	 *         | 	then return previousPrime
+	 *         | 	nextPrime++
+	 *         | 	previousPrime-- 
+	 *         | 	if isPrime(nextPrime) 
+	 *         | 		then result == nextPrime
+	 *         | 	else if isPrime(previousPrime) 
+	 *         | 		then result == previousPrime
 	 */
 	public static long closestPrime(long n) {
 		long nextPrime = n;
@@ -300,13 +298,12 @@ public abstract class Mobile {
 	}
 
 	/**
-	 * Sets the maximum number to a given amount.
+	 * Sets the maximum hitpoints to a given amount.
 	 * 
 	 * @param amount
 	 *            The new maximumHitpoints
 	 * @pre the given amount must be a valid amount for the maximum hitpoints. 
-	 * 		|isValidMaximumHitpoints(getMaximumHitpoints())
-	 *      
+	 * 		|isValidMaximumHitpoints(amount)
 	 * @post the maximumthitpoints is set to the given hitpoints 
 	 *       | (new).getMaximumHitpoints() == amount
 	 */
@@ -319,10 +316,10 @@ public abstract class Mobile {
 	 * 
 	 * @param hitpoints
 	 *            The new currentHitpoints
-	 * @pre the given amount must be a valid amount for the current hitpoints. 
-	 * 		| canHaveAsCurrentHitpoints(getCurrentHitpoints())
+	 * @pre the given hitpoints must be a valid amount for the current hitpoints. 
+	 * 		| canHaveAsCurrentHitpoints(hitpoints)
 	 * @post the currenthitpoints is set to the given hitpoints 
-	 * 		| (new).getCurrentHitpoints() == amount
+	 * 		| (new).getCurrentHitpoints() == hitpoints
 	 *       
 	 */
 	protected void setCurrentHitpoints(long hitpoints) {
@@ -345,8 +342,7 @@ public abstract class Mobile {
 	/**
 	 * Return the raw strength of a mobile.
 	 */
-	@Raw
-	@Basic
+	@Raw @Basic
 	public double getRawStrength() {
 		return this.rawStrength;
 	}
@@ -354,9 +350,7 @@ public abstract class Mobile {
 	/**
 	 * Return the precision of the strength.
 	 */
-	@Raw
-	@Basic
-	@Immutable
+	@Raw @Basic @Immutable
 	private static int getpPrecisionOfStrength() {
 		return precisionOfStrength;
 	}
@@ -389,9 +383,6 @@ public abstract class Mobile {
 	 * @return The total damage of the Mobile.
 	 * @return The totalDamage is greater or equal to zero. 
 	 * 		   | getTotalDamage()>= 0        
-	 * @return The total damage of the Mobile is the raw Strength plus a number,
-	 *         the number is calculated in the subclasses. 
-	 *         | getTotalDamage()+number >= getRawStrength()
 	 * @note the implementation is given at the level of the subclasses.
 	 */
 	@Raw
@@ -413,7 +404,8 @@ public abstract class Mobile {
 	 *         | bd = bd.setScale(places,roundingMode.HALF_UP)
 	 *         | result == bd.doubleValue()        
 	 */
-	public static double round(double value, int places) {
+	@Model
+	private static double round(double value, int places) {
 		if (places < 0) {
 			return value;
 		}
@@ -428,11 +420,11 @@ public abstract class Mobile {
 	 * 
 	 * @param amount
 	 *            The new raw strength of the mobile.
-	 * @effect The given value is rounded down to the strength precision. 
-	 *         | newAmount = round(amount,getpPrecisionOfStrength())
 	 * @post The raw strength is set to the given amount rounded down to the
 	 *       strength precision. 
-	 *       | (new).getRawStrength() == Amount
+	 *       | (new).getRawStrength() == round(amount, getpPrecisionOfStrength())
+	 * @effect the capacity is set based on the given amount.
+	 *        | setCapacity(calculateCapacity(getRawStrength(), Unit.kg))
 	 */
 	@Model
 	private void setRawStrength(double amount) {
@@ -463,8 +455,7 @@ public abstract class Mobile {
 	 *             The unit is not effective. 
 	 *         | unit == null
 	 */
-	@Raw
-	@Basic
+	@Raw @Basic
 	public Weight getCapacity(Unit unit) throws IllegalArgumentException {
 		if (unit == null) {
 			throw new IllegalArgumentException("not effective unit.");
@@ -475,8 +466,7 @@ public abstract class Mobile {
 	/**
 	 * Return the capacity of this mobile.
 	 */
-	@Raw
-	@Basic
+	@Raw @Basic
 	public Weight getCapacity() {
 		return this.capacity;
 	}
@@ -553,8 +543,8 @@ public abstract class Mobile {
 	 * 		   | let sum = 0 
 	 * 		   | for anchor in anchors 
 	 *         | if (anchor.getAnchorpointType() != null) 
-	 *         | 	 if (anchor.getItem() != null)
-	 *         | 		if (anchor.getItem() instanceof Backpack)
+	 *         | 	 then if (anchor.getItem() != null)
+	 *         | 		then if (anchor.getItem() instanceof Backpack)
 	 *         |			then let current = (Backpack) anchor.getItem()
 	 *         |				 let sum += current.getNbItems()+1
 	 *         |	else if (anchor.getItem() instanceof Purse)
@@ -608,7 +598,7 @@ public abstract class Mobile {
 	 * 		   | if (type==null) 
 	 *         | 	then result == false
 	 * @return null if the anchor point type is null in the anchors.
-	 * 		  | if (anchors[type.ordinal()]..getAnchorpointType()==null)
+	 * 		  | if (anchors[type.ordinal()].getAnchorpointType()==null)
 	 *        | 	result == null
 	 * @return null if there is no item at the given anchor point type 
 	 * 		  | if (anchors[type.ordinal()].getItem()==null)
@@ -638,32 +628,21 @@ public abstract class Mobile {
 	 * 		   | if (unit==null) 
 	 * 		   | 	then result == null   
 	 * @return The total weight of al the items the mobile holds.
-	 * 		   | let weight = Weight.kg_0
-	 * 	       | for anchors in anchor
-	 * 	       |	if (anchor.getAnchorpointType() != null && anchor.getItem() != null)
-	 * 		   |		then weight = weight.add(anchor.getItem().getWeight(Unit.kg))
-	 * 		   | result.equals(weight)
+	 * 		   | result.equals(totalWeight(anchors).toUnit(unit))
 	 */
 	public Weight getTotalWeight(Unit unit) {
 		if (unit==null){
 			return null;
 		}
-		
-		Weight weight = Weight.kg_0;
-		for (Anchorpoint anchor:anchors){
-			 if (anchor.getAnchorpointType() != null && anchor.getItem() != null){
-				 weight = weight.add(anchor.getItem().getWeight(Unit.kg));	 
-			 }
-		}
-		return weight.toUnit(unit);
+		return totalWeight(anchors).toUnit(unit);
 	}
 	
 	/**
-	 * Gets the total weight of a anchors.
+	 * Gets the total weight of an anchors.
 	 * 
 	 * @param anchors
 	 * 		  The anchors to get the total weight of. 
-	 * @return The total weight of al the items the mobile holds, in kg.
+	 * @return The total weight of al the items the anchors holds, in kg.
 	 * 		   | let weight = Weight.kg_0
 	 * 	       | for anchor in anchors
 	 * 	       |	if (anchor.getAnchorpointType() != null && anchor.getItem() != null)
@@ -697,12 +676,11 @@ public abstract class Mobile {
 				 sum = sum + anchor.getItem().getValue();
 			 }
 		}
-		
 		return sum;
 	}
 	
 	/**
-	 * Returns a list with fee anchor points types.
+	 * Returns a list with free anchor points types.
 	 * 
 	 * @return the free anchor point types of this mobile.
 	 * 		   | let free = new ArrayList<AnchorpointType>()
@@ -746,7 +724,7 @@ public abstract class Mobile {
 	}
 	
 	/**
-	 * Checks whether an item is valid to add.
+	 * Checks whether this mobile can have the given item.
 	 * 
 	 * @param item
 	 * 		  The item to check.
@@ -814,6 +792,7 @@ public abstract class Mobile {
 	 * @return  false if the total weight of the given anchors is more than the capacity.
 	 * 		   | if (totalWeight(anchors).compareTo(getCapacity(Unit.kg))>0)
 	 * 		   | 	then result == false
+	 * @return true otherwise
 	 */
 	public boolean isValidAnchorpointList(Anchorpoint[] anchors) {
 		if (anchors == null){
@@ -850,7 +829,7 @@ public abstract class Mobile {
 	 * 		   |		then result == false
 	 */
 	@Model
-	public boolean different(Anchorpoint[] anchors){
+	protected boolean different(Anchorpoint[] anchors){
 		if (anchors == null){
 			return false;
 		}
@@ -940,10 +919,10 @@ public abstract class Mobile {
 	 * 		   |			let subresult = current.ItemIn(item)
 	 * 		   |	if (result)
 	 * 		   |		then result == true
-	 * 		   |result == false
+	 * 		   | result == false
 	 * @return false if item is not effective.
-	 * 		  | (item == null)
-	 * 		  |	return false.
+	 * 		  | if (item == null)
+	 * 		  |		result false.
 	 */
 	public boolean checkItemInAnchors(Item item){
 		if (item == null)
@@ -1281,7 +1260,9 @@ public abstract class Mobile {
 		return anchors;
 	}
 	
-	
+	/**
+	 * Return the current anchors of the mobile.
+	 */
 	public Anchorpoint[] getAnchors(){
 		return anchors.clone();
 	}

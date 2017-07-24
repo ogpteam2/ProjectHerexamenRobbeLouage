@@ -1,5 +1,4 @@
 package rpg.utility;
-import be.kuleuven.cs.som.annotate.*;
 
 /**
  * An interface of generators
