@@ -314,6 +314,7 @@ public class Monster extends Mobile {
 	 * 		   | this.addItem(new Ducat())
 	 * 		   | this.addItem(new Purse(new Weight(500,Unit.g),new Weight(500,Unit.g)))
 	 */
+	@Model
 	private void addStandardWeapons(){
 		this.addItem(new Weapon(new Weight(1,Unit.kg),10));
 		this.addItem(new Ducat());
@@ -341,6 +342,7 @@ public class Monster extends Mobile {
 	 * 		  |		numbers.add(list.get(i))
 	 * 		  | result.equals(numbers)
 	 */
+	@Model
 	private static ArrayList<Integer> random(int min,int max,int number){
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (int i=min;i<max+1;i++){
@@ -366,6 +368,7 @@ public class Monster extends Mobile {
 	 * 		   |		then sum++
 	 * 		   | return sum
 	 */
+	@Model
 	private int decideNbOfAnchorpoint(Anchorpoint[] anchors){
 		int sum = 0;
 		for (Anchorpoint anchor:anchors){

@@ -984,7 +984,8 @@ public abstract class Mobile {
 	 * 		   |	if (current instanceof Backpack)
 	 * 	       |		then let current2 = (Backpack) current
 	 * 		   |			 setAllItemsOfBackpackToThis(current2)
-	 * 		   |	else current.setHolder(holder)
+	 * 		   |	else 
+	 * 		   |		current.setHolder(holder)
 	 */
 	@Model
 	private void setAllItemsOfBackpackToThis(Backpack backpack,Mobile holder){
@@ -1007,12 +1008,12 @@ public abstract class Mobile {
 	 * 
 	 * @param item
 	 * 		  The item to attach to the given type.
-	 * @effect Sets the item at a free anchor point.
+	 * @effect Sets the item at a random free anchor point.
 	 * 		   | if (item == null)
 	 * 		   | if (getFreeAnchorpoints().size()>0)
-	 * 		   | let random = ThreadLocalRandom.current().nextInt(0,getFreeAnchorpoints().size())
-	 * 		   | let addType = getFreeAnchorpoints().get(random)
-	 * 		   | addItemAt(addType, item)
+	 * 		   | 	then let random = ThreadLocalRandom.current().nextInt(0,getFreeAnchorpoints().size())
+	 * 		   | 	then let addType = getFreeAnchorpoints().get(random)
+	 * 		   | 	then addItemAt(addType, item)
 	 * 		   
 	 */
 	public void addItem(Item item) {
@@ -1153,12 +1154,12 @@ public abstract class Mobile {
 	 * 		  The item at this type will be removed.
 	 * @effect sets the item at the given type at null, and removes the reference the 
 	 * 		   item makes to this mobile, if the type is effective.
-	 * 		   | if type != null
-	 * 	       |	if (anchors[type.ordinal()].getAnchorpointType()!=null)
-	 * 		   |		then if (anchors[type.ordinal()].getItem() instanceof Backpack)
-	 * 		   |				then setAllItemsOfBackpackToThis((Backpack) anchors[type.ordinal()].getItem(),null)
-	 * 		   | 		    anchors[type.ordinal()].getItem().setHolder(null)
-	 * 		   | 		 	anchors[type.ordinal()].setItem(null)
+	 * 		   | if (type != null)
+	 * 	       |	then if (anchors[type.ordinal()].getAnchorpointType()!=null)
+	 * 		   |			 then if (anchors[type.ordinal()].getItem() instanceof Backpack)
+	 * 		   |					 then setAllItemsOfBackpackToThis((Backpack) anchors[type.ordinal()].getItem(),null)
+	 * 		   | 		    	anchors[type.ordinal()].getItem().setHolder(null)
+	 * 		   | 		 		anchors[type.ordinal()].setItem(null)
 	 *
 	 */
 	public void removeItemAt(AnchorpointType type) {
@@ -1188,9 +1189,9 @@ public abstract class Mobile {
 	 * 		   the item is removed from this mobile.
 	 * 		   |  if (type == null || reciever == null || type2==null)
 	 * 		   |  else if (reciever.getItemAt(type2)==null)
-	 * 	       |  	let  item = this.getItemAt(type)
-	 * 		   |		this.removeItemAt(type)
-	 * 		   |		reciever.addItemAt(type2,item)
+	 * 	       |  			then let item = this.getItemAt(type)
+	 * 		   |			this.removeItemAt(type)
+	 * 		   |			reciever.addItemAt(type2,item)
 	 * 		    
 	 */
 	public void transfersItemToAnchor(AnchorpointType type,Mobile reciever, AnchorpointType type2){
@@ -1237,9 +1238,7 @@ public abstract class Mobile {
 	 * @return a valid anchorpointslist for the mobile.
 	 * @note the implementation is given in each subclass.
 	 */
-	public Anchorpoint[] generateAnchorpoints(){
-		return null;
-	}
+	public abstract Anchorpoint[] generateAnchorpoints();
 	
 	/**
 	 * Generates an empty anchor points list.
@@ -1251,7 +1250,7 @@ public abstract class Mobile {
 	 * 		   |	 anchors[type.ordinal()] = point
 	 * 		   | result.equals(anchors)
 	 */
-	public Anchorpoint[] generateAllAnchorpoints(){
+	public static Anchorpoint[] generateAllAnchorpoints(){
 		Anchorpoint[] anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
 		for (AnchorpointType type:AnchorpointType.values()){
 			Anchorpoint point= new Anchorpoint(type,null);

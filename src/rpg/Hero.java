@@ -323,6 +323,7 @@ public class Hero extends Mobile {
 	 * 		   |		then result == false
 	 */
 	@Model
+	@Override
 	protected boolean different(Anchorpoint[] anchors){
 		if (anchors == null){
 			return false;

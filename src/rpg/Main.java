@@ -1,6 +1,9 @@
 package rpg;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+
+import rpg.inventory.Anchorpoint;
 import rpg.inventory.Backpack;
 import rpg.inventory.Ducat;
 import rpg.inventory.Purse;
@@ -15,7 +18,7 @@ public class Main {
 		Hero hero = new Hero("James",139,25);
 		initializeHeroWeapons(hero);
 		System.out.println("Total value of the hero is: " + ((Integer)hero.getTotalValue()).toString() + " Ducats");
-		Monster monster = new Monster("Jared",139,30,hero.generateAllAnchorpoints(),new Weapon(null,50));
+		Monster monster = new Monster("Jared",139,30,Mobile.generateAllAnchorpoints(),new Weapon(null,50));
 		initializeMonsterWeapons(monster);
 		System.out.println("Total value of the monster is: " + ((Integer)monster.getTotalValue()).toString() + " Ducats");
 		int random = ThreadLocalRandom.current().nextInt(0,1+1);
@@ -58,4 +61,5 @@ public class Main {
 		monster.addItem(new Purse(new Weight(200,Unit.g),new Weight(2,Unit.kg)));
 		monster.addItem(new Backpack(new Weight(500,Unit.g),5,new Weight(9,Unit.kg)));
 	}
+	
 }
