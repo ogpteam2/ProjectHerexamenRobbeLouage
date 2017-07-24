@@ -908,6 +908,9 @@ public abstract class Mobile {
 	 * 
 	 * @param item
 	 * 		  The item to search.
+	 * @return false if item is not effective.
+	 * 		  | if (item == null)
+	 * 		  |		result false.
 	 * @return true if the item is in the anchors.
 	 * 		   | let subresult = false
 	 * 		   | for (anchor in anchors)
@@ -920,9 +923,6 @@ public abstract class Mobile {
 	 * 		   |	if (result)
 	 * 		   |		then result == true
 	 * 		   | result == false
-	 * @return false if item is not effective.
-	 * 		  | if (item == null)
-	 * 		  |		result false.
 	 */
 	public boolean checkItemInAnchors(Item item){
 		if (item == null)
@@ -974,7 +974,7 @@ public abstract class Mobile {
 	 * Sets all items' holder of a backpack to this mobile.
 	 * 
 	 * @param backpack
-	 * 		  The backpack to set all items' holder to this moible.
+	 * 		  The backpack to set all items' holder to this mobile.
 	 * @param holder
 	 * 		  The new holder of all the items.
 	 * @effect set all items in the backpack holder to this mobile.
@@ -1262,6 +1262,12 @@ public abstract class Mobile {
 	
 	/**
 	 * Return the current anchors of the mobile.
+	 * 
+	 * @return the length of the anchors is equal to the number of anchorpointtypes.
+	 * 	       | result.length == NbOfAnchorpointTypes()
+	 * @return Each item in the anchorpoints in equal to the item at given type.
+	 * 		   | for each anchorpoint in result
+	 * 		   |	anchorpoint.getItem().equals(anchors[anchorpoint.getType()].getItem())
 	 */
 	public Anchorpoint[] getAnchors(){
 		return anchors.clone();
