@@ -227,7 +227,7 @@ public class Weapon extends Item {
 	 * 
 	 * @param amount
 	 * 		  The amount to check.
-	 * @return true if the amount lays betwenn zero and 200.
+	 * @return true if the amount lays between zero and 200.
 	 * 		   | result == amount>=0 && amount<200
 	 */
 	@Override

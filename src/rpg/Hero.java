@@ -54,7 +54,7 @@ public class Hero extends Mobile {
 	 * @param strength
 	 * 		  The raw strength of the Hero.
 	 * @effect the hero is initialized with given name, hitpoints, strength.
-	 * 		   | super(name,hitpoints,strength,null)
+	 * 		   | this(name,hitpoints,strength,null)
 	 */
 	@Raw
 	public Hero(String name, long hitpoints, double strength) 
@@ -321,6 +321,7 @@ public class Hero extends Mobile {
 	 * 		   | for (int i:diff)
 	 * 		   |	if (i!=1)
 	 * 		   |		then result == false
+	 * @return true otherwise
 	 */
 	@Model
 	@Override

@@ -104,6 +104,8 @@ public class Monster extends Mobile {
 	 * 		  The claws of the monster.
 	 * @effect the monster gets initialized as a monster with given name,hitpoints and claws.
 	 * 		  | this(name, hitpoints, 10,null,null)
+	 * @effect standard weapons are added to this monster.
+	 * 		   | this.addStandardWeapons()
 	 */
 	public Monster(String name, long hitpoints,Weapon claws) {
 		this(name,hitpoints, 10,null,claws);
