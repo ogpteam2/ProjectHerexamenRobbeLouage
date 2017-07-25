@@ -122,7 +122,7 @@ abstract public class Container extends Item {
 	 * 		   |		 if (!parent.canAdd(item))
 	 * 		   |			then result == false
 	 * 		   |		else
-	 * 		   |			result == parent.canAdd(item)
+	 * 		   |			parent.canAdd(item)
 	 * @return false if the item has already a holder.
 	 * 		   | if (item.getHolder() != null)
 	 * 		   | 	then result == false
