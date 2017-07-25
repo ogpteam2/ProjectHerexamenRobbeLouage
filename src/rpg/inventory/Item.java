@@ -17,6 +17,7 @@ import rpg.value.Weight;
  * 		  | canHaveAsValue(getValue())
  * @invar Each item must have a valid Holder
  * 		  | canHaveAsHolder(getHolder())
+ * 
  * @author Robbe
  * @version 1.0
  */
@@ -140,7 +141,7 @@ abstract public class Item {
 	 * 		   | if (unit == null)
 	 * 		   | result.equals(this.weight)
 	 */
-	@Raw @Basic
+	@Raw
 	public Weight getWeight(Unit unit){
 		return this.weight.toUnit(unit);
 	}
@@ -230,14 +231,14 @@ abstract public class Item {
 	 * @pre The given amount must be a valid value.
 	 * 		| canHaveAsValue(amount)
 	 * @effect the new value of this item is the given amount.
-	 * 		   | new.getValue == amount
+	 * 		   | new.getValue() == amount
 	 */
 	public void setValue(int amount){
 		this.value = amount;
 	}
 	
 	/**
-	 * A variable referencing the value of the item expressed in Ducats.
+	 * A variable referencing the value of the item expressed in amounts of Ducats.
 	 */
 	private int value;
 	
@@ -295,7 +296,7 @@ abstract public class Item {
 	 * @return false if the holder already has the item in his anchors.
 	 * 		   | if (holder.checkItemInAnchors(this))
 	 * 		   |	then result == false
-	 * @return false if the mobile doesnt have any free anchorpoints and
+	 * @return false if the mobile doesn't have any free anchorpoints and
 	 * 		   can't be added to one of his backpacks.
 	 * 		   | if (holder.getFreeAnchorpoints().size()<=0)
 	 * 		   |	then for (backpack in holder.findBackpacks())
@@ -336,8 +337,6 @@ abstract public class Item {
 	 * @effect If the holder is a valid holder then the holder is set to the given holder.
 	 * 		 | if (canHaveAsHolder(holder)
 	 * 		 |		then new.getHolder() = holder
-	 * @note The bidirectional relationship isn't guaranteed when you use this
-	 * 		 method, prefer the method AddItemAt from Mobile.
 	 */
 	public void setHolder(Mobile holder){
 		if (holder == null){

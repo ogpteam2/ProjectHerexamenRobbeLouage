@@ -12,6 +12,7 @@ import rpg.value.Weight;
  * 		  | canHaveAsContents(contents)
  * @invar Each container must have a valid capacity.
  * 		  | isValidCapacity(getCapacity())
+ * 
  * @author Robbe
  * @version 1.0
  */
@@ -127,41 +128,31 @@ abstract public class Container extends Item {
 	 * 		   | 	then result == false
 	 */
 	public boolean canAdd(Item item){
-		if (item == null){
+		if (item == null)
 			return false;
-		}
-		if (contents.contains(item)){
+		if (contents.contains(item))
 			return false;
-		}
 		if (item.getWeight(Unit.kg).add(getWeightOfContents(Unit.kg)).compareTo(getCapacity(Unit.kg))>0){
 			return false;
 		}
-		if (item.getHolder() != null){
+		if (item.getHolder() != null)
 			return false;
-		}
 		if (getHolder() != null){
-			if (!getHolder().canHaveAsItem(item)){
+			if (!getHolder().canHaveAsItem(item))
 				return false;
-			}
 		}
-		if (item.getInContainer()){
+		if (item.getInContainer())
 			return false;
-		}
 		if (getParent()!=null){
 			Backpack parent = getParent();
-			if (!parent.canAdd(item)){
+			if (!parent.canAdd(item))
 				return false;
-			}
-			else{
+			else
 				parent.canAdd(item);
-			}
 		}
 		return true;
 	}
-	
-	
-	
-	
+
 	/**
 	 * checks whether given content can be the contents of this container.
 	 * 
@@ -213,7 +204,7 @@ abstract public class Container extends Item {
 	 * 
 	 * @param item
 	 * 		  The item to check.
-	 * @return true if the item is in the backpack.
+	 * @return false if the item is not in the contents.
 	 * 		   | result == contents.contains(item)
 	 */
 	public boolean ItemIn(Item item){
@@ -287,7 +278,7 @@ abstract public class Container extends Item {
 	 * Returns the contents.
 	 */
 	public ArrayList<Item> getContents(){
-		return (ArrayList<Item>) this.contents.clone();
+		return ((ArrayList<Item>) this.contents.clone());
 	}
 	
 	/**
@@ -310,6 +301,17 @@ abstract public class Container extends Item {
 	@Raw
 	public abstract Weight getWeight();
 	
+	/**
+	 * Gets the total weight of the contents in a unit.
+	 * 
+	 * @param unit
+	 * 		  The unit in which the contents will be expressed.
+	 * @return the total weights of the contents in a given unit.
+	 * 		  | let sum = Weight.kg_0
+	 * 		  | for item in contents
+	 * 		  | 	let sum = sum.add(item.getWeight(Unit.kg))
+	 * 		  |	result.equals(sum.toUnit(unit))
+	 */
 	public Weight getWeightOfContents(Unit unit){
 		Weight sum = Weight.kg_0;
 		for (Item item:contents){
@@ -373,7 +375,7 @@ abstract public class Container extends Item {
 	/**
 	 * A variable referencing the capacity of the container.
 	 */
-	protected Weight capacity;
+	private Weight capacity;
 	
 	
 	/************************************************

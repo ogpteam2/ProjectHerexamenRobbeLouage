@@ -15,7 +15,7 @@ import rpg.value.Unit;
 import rpg.value.Weight;
 
 /**
- * A class of monsters.
+ * A class of monsters, with name, hitpoints, strength, anchors and claws.
  * 
  * @author Robbe
  * @version 1.0

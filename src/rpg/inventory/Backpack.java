@@ -50,10 +50,10 @@ public class Backpack extends Container {
 	 * 		  The capacity of the backpack.
 	 * @effect initializes the backpack as a container with given weight,value and
 	 * 		   capacity.
-	 * 		   | super(weight, value, null, capacity)
+	 * 		   | this(weight, value, null, capacity)
 	 */
 	public Backpack(Weight weight, int value, Weight capacity) {
-		super(weight, value, null, capacity);
+		this(weight, value, null, capacity);
 	}
 	
 	
@@ -168,6 +168,9 @@ public class Backpack extends Container {
 	 * 		   |		then result==equals(item)
 	 * @throws IllegalArgumentException
 	 * 		   If there is no item in the backpack with such an ID.
+	 * 		   | while (it.hasMoreElements())
+	 * 		   |	...
+	 * 		   | throw new IllegalArgumentException
 	 */
 	public Item getItemWithID(long id) throws IllegalArgumentException{
 		BackpackIterator it = getIterator();
@@ -186,7 +189,7 @@ public class Backpack extends Container {
 	 * @param item
 	 * 		  The item to check.
 	 * @return true if the item is in the backpack.
-	 * 		   | let subresult = fasle;
+	 * 		   | let subresult = false;
 	 * 		   | let it = getIterator()
 	 * 	       | while (it.hasMoreElements())
 	 * 		   | 	let current = it.nextElement()
@@ -207,9 +210,8 @@ public class Backpack extends Container {
 	 */
 	@Override
 	public boolean ItemIn(Item item){
-		if (item.equals(this)){
+		if (item.equals(this))
 			return true;
-		}
 		boolean result = false;
 		BackpackIterator it = getIterator();
 		while (it.hasMoreElements()){
@@ -223,13 +225,11 @@ public class Backpack extends Container {
 				result = purse.ItemIn(item);
 			}
 			else {
-				if (item.equals(current)){
+				if (item.equals(current))
 					result = true;
-				}
 			}
-			if (result == true){
+			if (result == true)
 				return result;
-			}
 		}
 		return false;
 	}
@@ -252,23 +252,12 @@ public class Backpack extends Container {
 	 * 
 	 * @param unit
 	 * 		  The unit of the weight.
-	 * @return the total weight.
-	 * 		   | let it = getIterator()
-	 * 		   | sum = Weight.kg_0
-	 * 		   |  while (it.hasMoreElements())
-	 * 		   |	let sum = sum.add(it.nextElement().getWeight(Unit.kg))
-	 * 		   | sum = getOwnWeight().add(sum)
-	 * 		   | result.equals(sum.toUnit(unit))
+	 * @return the total weight in a given unit.
+	 * 		   | result.equals(getWeight().toUnit(unit))
 	 */
 	@Override
 	public Weight getWeight(Unit unit) {
-		BackpackIterator it = getIterator();
-		Weight sum = Weight.kg_0;
-		while (it.hasMoreElements()){
-			sum = sum.add(it.nextElement().getWeight(Unit.kg));
-		}
-		sum = getOwnWeight().add(sum);
-		return sum.toUnit(unit);
+		return getWeight().toUnit(unit);
 	}
 
 

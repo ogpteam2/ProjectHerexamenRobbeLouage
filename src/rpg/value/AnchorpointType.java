@@ -1,6 +1,4 @@
 package rpg.value;
-
-
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -21,7 +19,7 @@ public enum AnchorpointType {
 	 * @param anchorpoint type
 	 * 		  The anchor point type for this new anchor point type.
 	 * @post  The anchor point type of this anchor point type is set to the given achor point type.
-	 * 		  | this.anchorpoint.equals(anchorpoint)
+	 * 		  | new.getAnchorpointType().equals(anchorpoint)
 	 */
 	@Raw
 	private AnchorpointType(String anchorpoint){
@@ -74,6 +72,4 @@ public enum AnchorpointType {
 	 * A variable referencing the type of this anchorpoint.
 	 */
 	private final String anchorpointType;
-	
-
 }

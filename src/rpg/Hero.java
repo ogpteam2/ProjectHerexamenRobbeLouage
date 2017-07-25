@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.*;
 
 /**
- * A class of heroes.
+ * A class of heroes with name, hitpoints, strength and anchors.
  * 
  * @author Robbe
  * @version 1.0

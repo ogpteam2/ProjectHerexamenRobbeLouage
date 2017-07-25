@@ -45,11 +45,11 @@ public class Purse extends Container {
 	 * 	      The weight of the purse.
 	 * @param capacity
 	 * 		  The capacity of the purse.
-	 * @effect Initializes a purse as a container with given weight and capacity.
-	 * 		   | super(weight, 0, null, capacity)
+	 * @effect Initializes a purse with given weight and capacity.
+	 * 		   | this(weight, 0, null, capacity)
 	 */
 	public Purse(Weight weight, Weight capacity){
-		super(weight, 0, null, capacity);
+		this(weight, null, capacity);
 	}
 
 	/************************************************
@@ -78,14 +78,13 @@ public class Purse extends Container {
 	 * 
 	 * @param item
 	 * 		  The item to add.
-	 * @effect add the item to this purse if the item can be added.
-	 * 		   | if (canAdd(item))
-	 * 		   |	then contents.add(item)
-	 * 		   |		 item.setInContainer(true)
-	 * @effect breaks the purse if item can't be added and is a ducat.
-	 * 		   | if (!canAdd(item))
-	 * 		   | 	then if (item instanceof Ducat)
-	 * 		   |		  	then brokenAction()
+	 * @effect add the item to the contents.
+	 * 		   | contents.add(item)
+	 * @effect sets the container to true of the item.
+	 * 		   | item.setInContainer(true)
+	 * @effect the broken action is triggered if item is instance of Ducat and can't be added.
+	 * 		   | if (!canAdd(item) && item instanceof Ducat)
+	 * 		   |	then brokenAction()
 	 * @throws IllegalArgumentException
 	 * 		   item is not a ducat or item can't be added to the parent.
 	 * 		   | !(item instanceof Ducat) || (!getParent().canAdd(item))
@@ -101,9 +100,8 @@ public class Purse extends Container {
 					throw new IllegalArgumentException("parent can't hold");
 				}
 			}
-			if (item instanceof Ducat){
+			if (item instanceof Ducat)
 				brokenAction();
-			}
 		}
 		else {
 			contents.add(item);
@@ -151,19 +149,40 @@ public class Purse extends Container {
 	 * 
 	 * @param item
 	 * 		  the item to check
-	 * @return false if purse is broken.
-	 * 		   | if (getBroken())
+	 * @return false if the item is not effective.
+	 * 		   | if (item == null)
+	 * 		   | 	then result == false
+	 * @return false if the item is already in the container.
+	 *		   | if (contents.contain(item))
+	 *		   |	then result == false
+	 * @return false if the item's weight plus the current weight of the contents is greater
+	 * 		   than the capacity.
+	 * 		   | if (item.getWeight(Unit.kg).add(getWeightOfContents(Unit.kg)).compareTo(getCapacity(Unit.kg)>0)
 	 * 		   |	then result == false
-	 * @return true if the item can be added to a container and if the item is an 
-	 * 		   instance of Ducat.
-	 * 		   | result == super.canAdd(item) && (item instanceof Ducat)
+	 * @return false if the holder can't add the item.
+	 * 		   | if (getHolder() != null)
+	 * 		   | 	then if (!getHolder().canHaveAsItem(item))
+	 * 		   |			then result == false;
+	 * @return false if the item is already in a container
+	 * 		   | if (item.getInContainer())
+	 * 		   |	then result == false
+	 * @return false if the parent can't add this item.
+	 * 		   | if (getParent()!=null)
+	 * 		   |	then let parent = getParent()
+	 * 		   |		 if (!parent.canAdd(item))
+	 * 		   |			then result == false
+	 * 		   |		else
+	 * 		   |			parent.canAdd(item)
+	 * @return false if the item has already a holder.
+	 * 		   | if (item.getHolder() != null)
+	 * 		   | 	then result == false
+	 * @return true if previous is true and if the item is an 
+	 * 		   instance of Ducat, and not broken.
+	 * 		   | result == super.canAdd(item) && (item instanceof Ducat) && (!getBroken())
 	 */
 	@Override
 	public boolean canAdd(Item item){
-		if (getBroken()){
-			return false;
-		}
-		return super.canAdd(item) && (item instanceof Ducat);
+		return super.canAdd(item) && (item instanceof Ducat) && (!getBroken());
 	}
 	
 	/**
@@ -171,13 +190,23 @@ public class Purse extends Container {
 	 * 
 	 * @param content
 	 * 		  The content to check.
-	 * @return true if the content is valid for a container and 
+	 * @return false if an item in the content is null.
+	 * 		  | for (item in content)
+	 * 		  |		if (item==null)
+	 * 		  |			then result == false.
+	 * @return false if the sum of the contens is greater than the capacity.
+	 * 		  | let sum = Weight.kg_0;
+	 * 		  | for (item in content)
+	 * 		  |		sum.add(item.getWeight(Unit.kg))
+	 * 		  |	if (sum.compareTo(getCapacity(Unit.kg))>0)
+	 * 		  |		then result == false
+	 * @return true if the previous is true and 
 	 * 		   if all the items in contents are ducats.
-	 * 		   | result == super.canHaveAsContents(content)&& allDucats(content)
+	 * 		   | result == super.canHaveAsContents(content) && allDucats(content)
 	 */
 	@Override
 	public boolean canHaveAsContents(ArrayList<Item> content){
-		return super.canHaveAsContents(content)&& allDucats(content);
+		return super.canHaveAsContents(content) && allDucats(content);
 		
 	}
 	

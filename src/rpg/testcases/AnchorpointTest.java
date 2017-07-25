@@ -72,18 +72,6 @@ public class AnchorpointTest {
 		
 	}
 	
-	@Test
-	public void setTypeTest(){
-		assertEquals(point1.getAnchorpointType(),back);
-		point1.setType(body);
-		assertEquals(point1.getAnchorpointType(),body);
-	}
 	
-	@Test
-	public void setTypeTest2(){
-		assertEquals(point1.getAnchorpointType(),back);
-		point1.setType(null);
-		assertEquals(point1.getAnchorpointType(),null);
-	}
 	
 }

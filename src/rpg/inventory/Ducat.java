@@ -68,6 +68,7 @@ public class Ducat extends Item{
 	 * A variable referencing the ducatValue.
 	 */
 	private static final int ducatValue = 1;
+	
 	/**
 	 * Does nothing
 	 */

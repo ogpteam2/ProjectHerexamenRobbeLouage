@@ -1,9 +1,6 @@
 package rpg;
 
-import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
-
-import rpg.inventory.Anchorpoint;
 import rpg.inventory.Backpack;
 import rpg.inventory.Ducat;
 import rpg.inventory.Purse;

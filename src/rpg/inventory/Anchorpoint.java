@@ -23,9 +23,9 @@ public class Anchorpoint {
 	 * @param item
 	 * 		  The item to set at this anchorpoint.
 	 * @post the anchorpoint type is set to the given type
-	 * 	     | this.anchorpointType = anchorpointType
+	 * 	     | new.getAnchorpointType().equals(anchorpointType)
 	 * @post the item is set to the given item
-	 * 	     | this.item = item
+	 * 	     | new.getItem().equals(item)
 	 */
 	public Anchorpoint(AnchorpointType anchorpointType,Item item){
 		this.anchorpointType = anchorpointType;
@@ -64,18 +64,6 @@ public class Anchorpoint {
 	@Basic
 	public AnchorpointType getAnchorpointType(){
 		return this.anchorpointType;
-	}
-	
-	/**
-	 * Sets the anchorpointtype to the given type.
-	 * 
-	 * @param type
-	 * 		  The new type.
-	 * @post the new anchorpoint type is the given type.
-	 * 		 | new.getAnchorpointType().equals(type)
-	 */
-	public void setType(AnchorpointType type){
-		this.anchorpointType = type;
 	}
 	
 	/**

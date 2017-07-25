@@ -37,9 +37,7 @@ public enum Unit {
 	public String getUnit(){
 		return this.unit;
 	}
-	
 
-	
 	/**
 	 * Return the value of 1 unit to the other unit.
 	 * 
@@ -103,10 +101,8 @@ public enum Unit {
 				1d;
 	}
 	
-	
 	/**
 	 * A variable storing the unit of this unit.
 	 */
 	private final String unit;
-	
 }

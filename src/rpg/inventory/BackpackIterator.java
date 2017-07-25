@@ -18,8 +18,6 @@ import be.kuleuven.cs.som.annotate.Raw;
  * You can also reset the iterator by using reset(),
  * then the position is again set to 0.
  * 
- * 
- * 
  * @author Robbe
  * @version 1.0
  */
@@ -29,6 +27,14 @@ public class BackpackIterator implements Enumeration<Item> {
 	 * Constructor
 	 ************************************************/
 	
+	/**
+	 * Initializes a BackpackIterator with given contents.
+	 * 
+	 * @param contents
+	 * 		  The contents to initialize the iterator with.
+	 * @post the remainingItems are set to the contents.
+	 * 		 | new.remainingItems.equals(contents)
+	 */
 	public BackpackIterator(ArrayList<Item> contents){
 		this.remainingItems = contents;
 	}

@@ -12,6 +12,7 @@ import rpg.value.Weight;
  * 
  * @invar Each weapon must have a valid damage.
  * 		  | isValidDamage(getDamage())
+ * 
  * @author Robbe
  * @version 1.0
  */
@@ -35,6 +36,7 @@ public class Weapon extends Item {
 	 * @effect the weapon is an item with given weigh,value and holder.
 	 * 		   | super(weight,value,holder)
 	 * @post the damage is set to the given damage.
+	 * 	       | new.getDamage().equals(damage)
 	 * 
 	 */
 	@Raw
@@ -53,16 +55,13 @@ public class Weapon extends Item {
 	 * 		  The value of the item.
 	 * @param damage
 	 * 		  The damage of the weapon.
-	 * @effect the weapon is an item with given weight,value,damage.
-	 * 		   | super(weight,value,holder,damage)
+	 * @effect the weapon is initialized with given weight,value,damage.
+	 * 		   | this(weight,value,holder,damage)
 	 */
 	@Raw
 	public Weapon(Weight weight,int value,int damage){
 		this(weight,value,null,damage);
 	}
-	
-	
-	
 	
 	/**
 	 * Initializes a weapon with a weight,damage,holder.
@@ -73,8 +72,8 @@ public class Weapon extends Item {
 	 * 		  The holder of the item.
 	 * @param damage
 	 * 		  The damage of the weapon.
-	 * @effect the weapon is an item with given weight,holder,damage.
-	 * 		   | super(weight,calculateValue(damage),holder,damage)
+	 * @effect the weapon is an initialized with given weight,holder,damage.
+	 * 		   | this(weight,calculateValue(damage),holder,damage)
 	 */
 	@Raw
 	public Weapon(Weight weight,Mobile holder,int damage){
@@ -216,12 +215,7 @@ public class Weapon extends Item {
 	private final static int upperboundDamage;
 	
 	static {
-		if (true){
 			upperboundDamage = 100;
-		}
-		else{
-			upperboundDamage = upperboundRandom();
-			}
 	}
 	
 	/************************************************
@@ -234,13 +228,11 @@ public class Weapon extends Item {
 	 * @param amount
 	 * 		  The amount to check.
 	 * @return true if the amount lays betwenn zero and 200.
-	 * 		   | result == super.canHaveAsValue(amount) && amount<200
+	 * 		   | result == amount>=0 && amount<200
 	 */
 	@Override
 	public boolean canHaveAsValue(int amount){
 		return super.canHaveAsValue(amount) && amount<200;
 	}
 
-	
-	
 }

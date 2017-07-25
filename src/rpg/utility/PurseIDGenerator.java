@@ -124,7 +124,7 @@ public class PurseIDGenerator implements IDGenerator {
 	 * @param amount
 	 * 		  The new current number.
 	 * @post Sets the current number to the given amount.
-	 * 		 | this.currentNumber = amount
+	 * 		 | new.getCurrentNumber() = amount
 	 */
 	private void setCurrentNumber(long amount){
 		 this.currentNumber = amount;
@@ -135,7 +135,7 @@ public class PurseIDGenerator implements IDGenerator {
 	 * @param amount
 	 * 		  The new previous number.
 	 * @post Sets the previous number to the given amount.
-	 * 		 | this.previousNumber = amount
+	 * 		 | new.getPreviousNumber() = amount
 	 */	
 	private void setPreviousNumber(long amount){
 		 this.previousNumber = amount;
