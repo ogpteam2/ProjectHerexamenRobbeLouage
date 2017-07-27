@@ -336,10 +336,10 @@ public class HeroTest {
 	
 	@Test
 	public void differentTest(){
-		assertTrue(link1.isValidAnchorpointList(valid));
-		assertFalse(link1.isValidAnchorpointList(invalid1));
-		assertFalse(link1.isValidAnchorpointList(invalid3));
-		assertFalse(link1.isValidAnchorpointList(invalid2));
+		assertTrue(link1.canHaveAsAnchorpointList(valid));
+		assertFalse(link1.canHaveAsAnchorpointList(invalid1));
+		assertFalse(link1.canHaveAsAnchorpointList(invalid3));
+		assertFalse(link1.canHaveAsAnchorpointList(invalid2));
 	}
 	
 	@Test

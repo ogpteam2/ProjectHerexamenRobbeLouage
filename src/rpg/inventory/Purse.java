@@ -97,7 +97,7 @@ public class Purse extends Container {
 			}
 			else if (getParent()!=null){
 				if (!getParent().canAdd(item)){
-					throw new IllegalArgumentException("parent can't hold");
+					throw new IllegalArgumentException("parent can't hold item");
 				}
 			}
 			if (item instanceof Ducat)

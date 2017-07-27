@@ -33,7 +33,7 @@ import rpg.value.Weight;
  * 		  | for each type, item in anchors:
  *        | 	canHaveItemAt(type ,getItemAt(type))
  * @invar Each mobile should have valid anchorpointsList 
- *        | isValidAnchorpointList(anchors)
+ *        | canHaveAsAnchorpointList(anchors)
  *        
  * @author Robbe
  * @version 1.0
@@ -65,13 +65,13 @@ public abstract class Mobile {
 	 * 		   | setRawStrength(strength)
 	 * @post the anchors is set to the given anchors if the given anchors is valid, and all
 	 * 		 the items will have as holder this mobile.
-	 * 	     | if (this.isValidAnchorpointList(anchors))
+	 * 	     | if (this.canHaveAsAnchorpointList(anchors))
 	 * 		 |		then new.anchors.equals(anchors)
 	 * 		 | 		for (anchor in anchors)
 	 * 		 |			if (anchor.getItem()!=null)
 	 * 		 |				then anchor.getItem().setHolder(this)
 	 * @post if the given anchors are not valid they are generated.
-	 * 		 | if (!this.isValidAnchorpointList(anchors))
+	 * 		 | if (!this.canHaveAsAnchorpointList(anchors))
 	 * 		 |		then new.anchors = generateAnchorpoints()
 	 */
 	@Raw
@@ -81,7 +81,7 @@ public abstract class Mobile {
 		setCurrentHitpoints(hitpoints);
 		setMaximumHitpoints(hitpoints);
 		setRawStrength(strength);
-		if (this.isValidAnchorpointList(anchors)){
+		if (this.canHaveAsAnchorpointList(anchors)){
 			this.anchors = generateAllAnchorpoints();
 			for (Anchorpoint anchor:anchors){
 				if (anchor.getItem()!=null){
@@ -792,9 +792,8 @@ public abstract class Mobile {
 	 * @return  false if the total weight of the given anchors is more than the capacity.
 	 * 		   | if (totalWeight(anchors).compareTo(getCapacity(Unit.kg))>0)
 	 * 		   | 	then result == false
-	 * @return true otherwise
 	 */
-	public boolean isValidAnchorpointList(Anchorpoint[] anchors) {
+	public boolean canHaveAsAnchorpointList(Anchorpoint[] anchors) {
 		if (anchors == null){
 			return false;
 		}

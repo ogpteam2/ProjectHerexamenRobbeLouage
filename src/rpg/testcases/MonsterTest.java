@@ -127,9 +127,9 @@ public class MonsterTest {
 	@Test
 	public void isValidListTest(){
 		monster1 = new Monster("Jared", 50L, 100);
-		assertTrue(monster1.isValidAnchorpointList(valid));
-		assertFalse(monster1.isValidAnchorpointList(invalid1));
-		assertFalse(monster1.isValidAnchorpointList(invalid2));
+		assertTrue(monster1.canHaveAsAnchorpointList(valid));
+		assertFalse(monster1.canHaveAsAnchorpointList(invalid1));
+		assertFalse(monster1.canHaveAsAnchorpointList(invalid2));
 	}
 	
 	@Test

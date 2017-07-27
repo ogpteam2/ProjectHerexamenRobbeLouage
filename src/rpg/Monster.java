@@ -267,8 +267,8 @@ public class Monster extends Mobile {
 	 * @return true otherwise.
 	 */
 	@Override
-	public boolean isValidAnchorpointList(Anchorpoint[] anchors) {
-		return super.isValidAnchorpointList(anchors);
+	public boolean canHaveAsAnchorpointList(Anchorpoint[] anchors) {
+		return super.canHaveAsAnchorpointList(anchors);
 	}
 
 	
