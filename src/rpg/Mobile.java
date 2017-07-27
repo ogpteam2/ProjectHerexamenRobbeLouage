@@ -17,7 +17,7 @@ import rpg.value.Weight;
 
 /**
  * An abstract class of movable objects in the rpg, with a name, hitpoints, 
- * strength and anchors.
+ *  strength and anchors.
  * 
  * @invar Each mobile must have a valid name. 
  *        | isValidName(getName())
