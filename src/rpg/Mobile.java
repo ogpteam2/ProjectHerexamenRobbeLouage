@@ -246,6 +246,7 @@ public abstract class Mobile {
 	 *         | for i in 6..sqrtN, i+=6 
 	 *         | 	if (n%(i-1) == 0 || n%(i+1) == 0 )
 	 *         | 		then result == false 
+	 * @return true otherwise.
 	 */
 	public static boolean isPrime(long n) {
 		if (n < 2)
@@ -875,7 +876,6 @@ public abstract class Mobile {
 	 * @return false if item is already in anchors.
 	 * 		   | if (checkItemInAnchors(item))
 	 * 		   |	then result == false
-	 * @return true otherwise.
 	 */
 	public boolean canAddItemAt(AnchorpointType type, Item item) {
 		if (type == null){
@@ -919,7 +919,7 @@ public abstract class Mobile {
 	 * 		   |	else if ( anchor.getItem() instanceof Backpack || anchor.getItem() instanceof Purse)
 	 * 		   |			then current = (Container) anchor.getItem()
 	 * 		   |			let subresult = current.ItemIn(item)
-	 * 		   |	if (result)
+	 * 		   |	if (subresult)
 	 * 		   |		then result == true
 	 * 		   | result == false
 	 */
