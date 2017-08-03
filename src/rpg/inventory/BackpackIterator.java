@@ -2,9 +2,7 @@ package rpg.inventory;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Model;
 import be.kuleuven.cs.som.annotate.Raw;
 
 /**
@@ -17,6 +15,10 @@ import be.kuleuven.cs.som.annotate.Raw;
  * 
  * You can also reset the iterator by using reset(),
  * then the position is again set to 0.
+ * 
+ * When this iterator is initialized with contents the first 
+ * item in the contents is given when the method nextElement()
+ * is invoked.
  * 
  * @author Robbe
  * @version 1.0

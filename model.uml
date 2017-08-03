@@ -129,6 +129,10 @@
       <packagedElement xmi:type="uml:Class" xmi:id="_wEg1MG1tEeedFrJfpC2PbQ" name="WeaponIDGenerator">
         <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_A9e9cG1uEeedFrJfpC2PbQ" client="_wEg1MG1tEeedFrJfpC2PbQ" supplier="_YlK14G1tEeedFrJfpC2PbQ" contract="_YlK14G1tEeedFrJfpC2PbQ"/>
       </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_e48_QHh9EeeWSb0OEcMK0w" name="Prime">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_jpv0wHh9EeeWSb0OEcMK0w" name="isPrime"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_kqoqAHh9EeeWSb0OEcMK0w" name="closestPrime"/>
+      </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_2vRu8G1rEeedFrJfpC2PbQ" name="Hero">
       <generalization xmi:type="uml:Generalization" xmi:id="_hlZjcG1xEeedFrJfpC2PbQ" general="_1XscgG1hEeedFrJfpC2PbQ"/>

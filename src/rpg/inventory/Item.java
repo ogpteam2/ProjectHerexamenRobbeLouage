@@ -87,6 +87,7 @@ abstract public class Item {
 	 * 		   the holder is set to null.
 	 * 		   | this(weight,value,null)
 	 */
+	@Raw
 	protected Item(Weight weight, int value){
 		this(weight,value,null);
 	}

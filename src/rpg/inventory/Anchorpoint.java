@@ -61,7 +61,7 @@ public class Anchorpoint {
 	/**
 	 * Returns the anchorpoint type of this anchorpoint.
 	 */
-	@Basic
+	@Basic @Immutable 
 	public AnchorpointType getAnchorpointType(){
 		return this.anchorpointType;
 	}
@@ -69,7 +69,7 @@ public class Anchorpoint {
 	/**
 	 * A variable referencing the anchorpoint type of this anchorpoint.
 	 */
-	private AnchorpointType anchorpointType;
+	private final AnchorpointType anchorpointType;
 	
 	/************************************************
 	 * item

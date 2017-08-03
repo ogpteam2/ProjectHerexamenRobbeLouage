@@ -5,7 +5,6 @@ import be.kuleuven.cs.som.annotate.*;
 import rpg.Mobile;
 import rpg.utility.IDGenerator;
 import rpg.utility.PurseIDGenerator;
-import rpg.utility.WeaponIDGenerator;
 import rpg.value.Unit;
 import rpg.value.Weight;
 

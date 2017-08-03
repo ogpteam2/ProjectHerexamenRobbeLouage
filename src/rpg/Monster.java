@@ -107,6 +107,7 @@ public class Monster extends Mobile {
 	 * @effect standard weapons are added to this monster.
 	 * 		   | this.addStandardWeapons()
 	 */
+	@Raw
 	public Monster(String name, long hitpoints,Weapon claws) {
 		this(name,hitpoints, 10,null,claws);
 		this.addStandardWeapons();

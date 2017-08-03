@@ -35,6 +35,7 @@ public class Backpack extends Container {
 	 * 		   capacity.
 	 * 		   | super(weight, value, holder, capacity)
 	 */
+	@Raw
 	public Backpack(Weight weight, int value, Mobile holder, Weight capacity) {
 		super(weight, value, holder, capacity);
 	}
@@ -52,6 +53,7 @@ public class Backpack extends Container {
 	 * 		   capacity.
 	 * 		   | this(weight, value, null, capacity)
 	 */
+	@Raw
 	public Backpack(Weight weight, int value, Weight capacity) {
 		this(weight, value, null, capacity);
 	}

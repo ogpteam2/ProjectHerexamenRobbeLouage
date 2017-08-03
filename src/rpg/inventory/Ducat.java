@@ -45,6 +45,7 @@ public class Ducat extends Item{
 	/**
 	 * Returns the weight of a ducat.
 	 */
+	@Raw @Basic @Immutable
 	public static Weight getDucatWeight(){
 		return ducatWeight;
 	}
@@ -52,6 +53,7 @@ public class Ducat extends Item{
 	/**
 	 * Returns the value of a ducat.
 	 */
+	@Raw @Basic @Immutable
 	public static int getDucatValue(){
 		return ducatValue;
 	}

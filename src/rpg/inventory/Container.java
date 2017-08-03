@@ -277,6 +277,7 @@ abstract public class Container extends Item {
 	/**
 	 * Returns the contents.
 	 */
+	@Raw @Basic
 	public ArrayList<Item> getContents(){
 		return ((ArrayList<Item>) this.contents.clone());
 	}
