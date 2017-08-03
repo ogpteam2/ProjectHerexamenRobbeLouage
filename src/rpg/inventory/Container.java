@@ -98,7 +98,7 @@ abstract public class Container extends Item {
 	 * Checks whether an item can be added to this container.
 	 * 
 	 * @param item
-	 * 		  the item to check.
+	 * 		  the item to check if it can be added to this container.
 	 * @return false if the item is not effective.
 	 * 		   | if (item == null)
 	 * 		   | 	then result == false

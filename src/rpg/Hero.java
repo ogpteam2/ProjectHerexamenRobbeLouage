@@ -348,25 +348,15 @@ public class Hero extends Mobile {
 		return true;
 	}
 	
-
 	/**
 	 * Generates an empty anchor points list.
 	 * 
 	 * @return an empty anchor points list with each anchor point once in the list.
-	 * 		   | let anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()]
-	 * 		   | for type in AnchorpointType.values()
-	 * 		   |	 point= new Anchorpoint(type,null)
-	 * 		   |	 anchors[type.ordinal()] = point
-	 * 		   | result.equals(anchors)
+	 * 		   | result.equals(Mobile.generateAllAnchorpoints())
 	 */
 	@Override
 	public Anchorpoint[] generateAnchorpoints(){
-		Anchorpoint[] anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
-		for (AnchorpointType type:AnchorpointType.values()){
-			Anchorpoint point= new Anchorpoint(type,null);
-			anchors[type.ordinal()] = point;
-		}
-		return anchors;
+		return Mobile.generateAllAnchorpoints();
 	}
 
 	/************************************************
