@@ -97,7 +97,7 @@ public abstract class Mobile {
 	}
 	
 	/**
-	 * Initializes a mobile with no items.
+	 * Initializes a mobile with no items, name hitpoints and strength.
 	 * 
 	 * @param name
 	 *            The name of the mobile.
