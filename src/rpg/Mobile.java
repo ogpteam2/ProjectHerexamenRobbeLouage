@@ -502,12 +502,11 @@ public abstract class Mobile {
 	 * 
 	 * @param number
 	 * 		  The number to check.
-	 * @return true if the number is less or equal to number of different anchorpointtypes,
-	 * 		   and greater than zero.
-	 * 		   | result == ( number>=0 && number<=AnchorpointType.NbOfAnchorpointTypes() )
+	 * @return true if the number is greater than or equal to zero.
+	 * 		   | result == number>=0 
 	 */
 	public boolean canHaveAsNbItems(int number){
-		return number>=0 && number<=AnchorpointType.NbOfAnchorpointTypes();
+		return number>=0;
 	}
 	
 	/**

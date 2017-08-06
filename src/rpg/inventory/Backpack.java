@@ -89,13 +89,8 @@ public class Backpack extends Container {
 	 *         | let it = new BackpackIterator(contents)
 	 *         | while (it.hasMoreElements())
 	 *         | 	let current = it.nextElement()
-	 *         |	if (current instanceof Backpack)
-	 *         |		then let backpack = (Backpack) current
-	 *         |			 let sum += backpack.getContents().size() + 1
-	 *         |			 backpack.getNbItems()
-	 *         |	else if (current instanceof Purse)
-	 *         |		let purse = (Purse) current
-	 *         |		let sum += purse.getNbItems() + 1
+	 *         |	if (current instanceof Container)
+	 *         |		then sum += (current).getNbItems()+1
 	 *         |	else
 	 *         |		sum++
 	 *         | result == sum
@@ -109,13 +104,8 @@ public class Backpack extends Container {
 		BackpackIterator it = new BackpackIterator(contents);
 		while (it.hasMoreElements()){
 			Item current = it.nextElement();
-			if (current instanceof Backpack){
-				Backpack backpack = (Backpack) current;
-				sum += backpack.getNbItems()+1;
-			}
-			else if (current instanceof Purse){
-				Purse purse = (Purse) current;
-				sum += purse.getNbItems() + 1;
+			if (current instanceof Container){
+				sum += ((Container) current).getNbItems()+1;
 			}
 			else {
 				sum++;

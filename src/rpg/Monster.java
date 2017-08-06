@@ -238,18 +238,6 @@ public class Monster extends Mobile {
 	}
 	
 	/**
-	 * Checks whether a monster can have the given nb items.
-	 * 
-	 * @return true if the nb is less or equal to the NbOfAnchorpoints and greater
-	 * 		   or equal to zero.
-	 * 		   | result == nb>=0 && nb<=getNbOfAnchorpoints()
-	 */
-	@Override
-	public boolean canHaveAsNbItems(int nb){
-		return nb>=0 && nb<=getNbOfAnchorpoints();
-	}
-	
-	/**
 	 * Checks whether a anchorpointlist is valid for a monster
 	 * 
 	 * @return false if the anchors is not effective.
