@@ -504,10 +504,10 @@ public abstract class Mobile {
 	 * 		  The number to check.
 	 * @return true if the number is less or equal to number of different anchorpointtypes,
 	 * 		   and greater than zero.
-	 * 		   | result == number>=0 &&number<=AnchorpointType.NbOfAnchorpointTypes() 
+	 * 		   | result == ( number>=0 && number<=AnchorpointType.NbOfAnchorpointTypes() )
 	 */
 	public boolean canHaveAsNbItems(int number){
-		return number>=0 &&number<=AnchorpointType.NbOfAnchorpointTypes();
+		return number>=0 && number<=AnchorpointType.NbOfAnchorpointTypes();
 	}
 	
 	/**
@@ -548,7 +548,7 @@ public abstract class Mobile {
 	 * @return null if the given unit is null. 
 	 * 		   | if (unit==null) 
 	 * 		   | 	then result == null   
-	 * @return The total weight of al the items the mobile holds.
+	 * @return The total weight of all the items the mobile holds.
 	 * 		   | result.equals(totalWeight(anchors).toUnit(unit))
 	 */
 	public Weight getTotalWeight(Unit unit) {
@@ -559,7 +559,7 @@ public abstract class Mobile {
 	}
 	
 	/**
-	 * Gets the total weight of an anchors.
+	 * Gets the total weight of an anchors in kg.
 	 * 
 	 * @param anchors
 	 * 		  The anchors to get the total weight of. 
@@ -608,6 +608,7 @@ public abstract class Mobile {
 	 *		   | for anchor in anchors
 	 *		   | 	if (anchor.getAnchorpointType() != null && anchor.getItem() == null)
 	 *		   |		then free.add(anchor.getAnchorpointType())
+	 *		   | result.equals(free)
 	 */
 	public ArrayList<AnchorpointType> getFreeAnchorpoints(){
 		ArrayList<AnchorpointType> free = new ArrayList<AnchorpointType>();
@@ -632,7 +633,6 @@ public abstract class Mobile {
 	 * @return false if the item is not null but the item weighs more than the capacity.
 	 * 		  | if (item != null && (item.getWeight(Unit.kg)).compareTo(getCapacity(Unit.kg))>0)
 	 * 		  | 	then result == false
-	 * @return true otherwise.
 	 */
 	public boolean canHaveAsItemAt(AnchorpointType type, Item item){
 		if (type == null)
@@ -1104,14 +1104,14 @@ public abstract class Mobile {
 	 * 		  The new holder.
 	 * @param type2
 	 * 		  The type of the new holder to which the item will be attached.
-	 * @effect The item is added to the other mobile if all param are effective,
-	 * 		   the item is removed from this mobile.
+	 * @effect The item is added to the other mobile if all param are effective
+	 * 		   and he can add the item at the given anchorpointtype,
+	 * 		   the item is then removed from this mobile.
 	 * 		   |  if (type == null || reciever == null || type2==null)
 	 * 		   |  else if (reciever.getItemAt(type2)==null)
 	 * 	       |  			then let item = this.getItemAt(type)
 	 * 		   |			this.removeItemAt(type)
-	 * 		   |			reciever.addItemAt(type2,item)
-	 * 		    
+	 * 		   |			reciever.addItemAt(type2,item)	    
 	 */
 	public void transfersItemToAnchor(AnchorpointType type,Mobile reciever, AnchorpointType type2){
 		if (type == null || reciever == null || type2==null){}
