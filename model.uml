@@ -209,7 +209,7 @@
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YsybIHiBEeeP1oZfysYqQw" value="1"/>
     </ownedEnd>
     <ownedEnd xmi:type="uml:Property" xmi:id="_BYPWkHiBEeeP1oZfysYqQw" name="unit" type="_tPbtMG1nEeedFrJfpC2PbQ" association="_BYFlkHiBEeeP1oZfysYqQw">
-      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XGzUwHiBEeeP1oZfysYqQw" value="1"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XGzUwHiBEeeP1oZfysYqQw"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_XJFMsHiBEeeP1oZfysYqQw" value="1"/>
     </ownedEnd>
   </packagedElement>
