@@ -226,7 +226,7 @@ abstract public class Container extends Item {
 	 * 		   | if (item instanceof Container)
 	 * 		   |	then ((Container)item).setParent(null)
 	 * @throws IllegalArgumentException
-	 * 		   The index is greater than the Nb items.
+	 * 		   The index is greater than the Nb of items.
 	 * 		   | (index>getNbItems())
 	 */
 	public void removeItem(int index) throws IllegalArgumentException{
