@@ -51,7 +51,19 @@ public class HeroContainerTest {
 		hero1.addItemAt(AnchorpointType.BODY, weapon5);
 		assertEquals(hero1.getNbItems(),11);
 	}
-
+	
+	@Test
+	public void nbTest2() {
+		backpack1.addItem(backpack2);
+		backpack2.addItem(backpack3);
+		backpack3.addItem(weapon1);
+		backpack3.addItem(weapon2);
+		backpack3.addItem(weapon3);
+		backpack3.addItem(weapon4);
+		hero1.addItemAt(AnchorpointType.BACK, backpack1);
+		assertEquals(hero1.getNbItems(),7);
+	}
+	
 	@Test
 	public void checkTest(){
 		backpack1.addItem(weapon1);

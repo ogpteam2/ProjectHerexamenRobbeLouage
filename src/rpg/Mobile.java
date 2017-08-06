@@ -472,11 +472,8 @@ public abstract class Mobile {
 	 * 		   | for anchor in anchors 
 	 *         | if (anchor.getAnchorpointType() != null) 
 	 *         | 	 then if (anchor.getItem() != null)
-	 *         | 		then if (anchor.getItem() instanceof Backpack)
-	 *         |			then let current = (Backpack) anchor.getItem()
-	 *         |				 let sum += current.getNbItems()+1
-	 *         |	else if (anchor.getItem() instanceof Purse)
-	 *         |			then let current = (Purse) anchor.getItem()
+	 *         | 		then if (anchor.getItem() instanceof Container)
+	 *         |			then let current = (Container) anchor.getItem()
 	 *         |				 let sum += current.getNbItems()+1
 	 *         |	else
 	 *         |		sum++
@@ -487,12 +484,8 @@ public abstract class Mobile {
 		for (Anchorpoint anchor : anchors) {
 			if (anchor.getAnchorpointType() != null) {
 				if (anchor.getItem() != null) {
-					if (anchor.getItem() instanceof Backpack){
-						Backpack current = (Backpack) anchor.getItem();
-						sum += current.getNbItems()+1;
-					}
-					else if (anchor.getItem() instanceof Purse){
-						Purse current = (Purse) anchor.getItem();
+					if (anchor.getItem() instanceof Container){
+						Container current = (Container) anchor.getItem();
 						sum += current.getNbItems()+1;
 					}
 					else{
