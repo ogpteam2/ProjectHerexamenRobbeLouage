@@ -260,8 +260,6 @@ public class HeroContainerTest {
 		assertEquals(hero1.getTotalValue(),20);
 	}
 	
-	
-	
 	@Test
 	public void getterTest(){
 		hero1.addItemAt(AnchorpointType.BACK, backpack1);

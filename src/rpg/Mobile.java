@@ -89,7 +89,7 @@ public abstract class Mobile {
 					anchor.getItem().setHolder(this);
 				}
 			}
-			this.anchors = anchors;
+			this.anchors = anchors.clone();
 		}
 		else{
 			this.anchors = generateAnchorpoints();
@@ -1199,7 +1199,7 @@ public abstract class Mobile {
 	 * A variable referencing the anchors of this mobile. Each mobile has a certain number
 	 * of anchorpoints, these are stored in this variable.
 	 */
-	public Anchorpoint[] anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
+	private Anchorpoint[] anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
 	
 	/************************************************
 	 * Hit
