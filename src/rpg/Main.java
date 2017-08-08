@@ -51,12 +51,10 @@ public class Main {
 		hero.addItem(backpack1);
 		hero.addItem(new Ducat());
 	}
-	
 	private static void initializeMonsterWeapons(Mobile monster){
 		monster.addItem(new Weapon(new Weight(1,Unit.kg),20));
 		monster.addItem(new Weapon(new Weight(2,Unit.kg),40));
 		monster.addItem(new Purse(new Weight(200,Unit.g),new Weight(2,Unit.kg)));
 		monster.addItem(new Backpack(new Weight(500,Unit.g),5,new Weight(9,Unit.kg)));
-	}
-	
+	}	
 }

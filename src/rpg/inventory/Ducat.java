@@ -27,7 +27,19 @@ public class Ducat extends Item{
 	public Ducat() {
 		super(ducatWeight,ducatValue);
 	}
-
+	
+	/**
+	 * Initializes a deep copy of a given ducat.
+	 * 
+	 * @param other
+	 * 		  the other ducat to deep copy.
+	 * @effect the ducat gets deep copied as an Item.
+	 * 		   | super(other)
+	 */
+	public Ducat(Ducat other){
+		super(other);
+	}
+	
 	/************************************************
 	 * getter and static variables
 	 ************************************************/
@@ -71,11 +83,24 @@ public class Ducat extends Item{
 	 */
 	private static final int ducatValue = 1;
 	
+	
+	/************************************************
+	 * setters
+	 ************************************************/
+	
 	/**
-	 * Does nothing
+	 * Does nothing, makes sure that a ducat never has a holder.
 	 */
 	@Override
 	public void setHolder(Mobile holder){}
-	
+	/**
+	 * Makes sure that the value of a Ducat never changes.
+	 * 
+	 * @effect sets the value of the Ducat to the ducat value.
+	 * 		   | new.getValue()==Ducat.getDucatValue()
+	 */
+	@Override
+	public void setValue(int value){
+		super.setValue(Ducat.getDucatValue());
+	}
 }
-

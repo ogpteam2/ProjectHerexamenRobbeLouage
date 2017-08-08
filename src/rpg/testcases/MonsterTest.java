@@ -1,11 +1,8 @@
 package rpg.testcases;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
 import rpg.Hero;
 import rpg.Monster;
 import rpg.inventory.Anchorpoint;
@@ -21,8 +18,8 @@ public class MonsterTest {
 	private static final double DELTA = 10E-5;
 	private Monster invalidName1,invalidName2,invalidName3,validName1,validName2,validName3;
 	private Monster capacity1,capacity2,capacity3,capacity4;
-	private Monster monster1,monster2,monster3,monster4;
-	private Anchorpoint[] valid,invalid1,invalid2,invalid3;
+	private Monster monster1;
+	private Anchorpoint[] valid,invalid1,invalid2;
 	private Weapon weapon1,weapon2,weapon3,weapon4,weapon5;
 	
 	
@@ -69,14 +66,17 @@ public class MonsterTest {
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName1() {
 		invalidName1 = new Monster(null,0,0);
+		invalidName1.getName();
 	}
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName2() {
 		invalidName2 = new Monster("bob",0,0);
+		invalidName2.getName();
 	}
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName3() {
 		invalidName3 = new Monster("b*b",0,0);
+		invalidName3.getName();
 	}
 	@Test 
 	public void isValidName4() {

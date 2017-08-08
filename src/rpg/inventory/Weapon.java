@@ -1,5 +1,4 @@
 package rpg.inventory;
-import java.util.concurrent.ThreadLocalRandom;
 
 import be.kuleuven.cs.som.annotate.*;
 import rpg.Mobile;
@@ -92,6 +91,22 @@ public class Weapon extends Item {
 	 */
 	public Weapon(Weight weight,int damage){
 		this(weight,calculateValue(damage),null,damage);
+	}
+	
+	/**
+	 * Initializes a deep copy of the given Weapon
+	 * 
+	 * @param other
+	 * 		  The other Weapon to clone.
+	 * @effect the Weapon gets deep copied as an Item
+	 * 		   | super(other)
+	 * @post the damage gets set to the other's damage.
+	 * 		   | new.getDamage() == other.getDamage()
+	 */
+	@Raw
+	public Weapon(Weapon other){
+		super(other);
+		this.damage = other.damage;
 	}
 	
 	/************************************************
@@ -192,16 +207,6 @@ public class Weapon extends Item {
 	}
 	
 	/**
-	 * generates a random number for the upperbound.
-	 * 
-	 * @return a random number between 0 and int.MAX_VALUE
-	 * 		   | result == ThreadLocalRandom.current().nextInt(0,Integer.MAX_VALUE)
-	 */
-	private static int upperboundRandom(){
-		return ThreadLocalRandom.current().nextInt(0,Integer.MAX_VALUE);
-	}
-	
-	/**
 	 * A variable referencing the damage of the weapon
 	 */
 	private int damage;
@@ -213,7 +218,9 @@ public class Weapon extends Item {
 	 * A variable referencing the upper bound for the damage.
 	 */
 	private final static int upperboundDamage;
-	
+	/**
+	 * Initializes the upper bound damage.
+	 */
 	static {
 			upperboundDamage = 100;
 	}

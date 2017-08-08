@@ -1,12 +1,9 @@
 package rpg.testcases;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import rpg.inventory.Anchorpoint;
-import rpg.inventory.Item;
 import rpg.inventory.Weapon;
 import rpg.value.AnchorpointType;
 import rpg.value.Unit;
@@ -17,7 +14,6 @@ public class AnchorpointTest {
 	private Weapon item1,item2;
 	private static AnchorpointType back,belt,right,left,body;
 	private Anchorpoint point1,point2,point3,point4,point5,point6,point7,point8;
-	
 	
 	@Before
 	public void setup(){
@@ -36,7 +32,6 @@ public class AnchorpointTest {
 		point6 = new Anchorpoint(back);
 		point7 = new Anchorpoint(belt);
 		point8 = new Anchorpoint();
-		
 	}
 	
 	@Test
@@ -52,11 +47,13 @@ public class AnchorpointTest {
 		assertEquals(point5.getAnchorpointType(),body);
 		assertEquals(point5.getItem(),item1);
 	}	
+	
 	@Test
 	public void contructor2Test() {
 		assertEquals(point6.getItem(),null);
 		assertEquals(point7.getItem(),null);
 	}
+	
 	@Test
 	public void contructor3Test() throws InterruptedException {
 		System.gc();
@@ -64,14 +61,32 @@ public class AnchorpointTest {
 		assertEquals(point8.getItem(),null);
 		assertEquals(point8.getAnchorpointType(),null);
 	}
+	
 	@Test
 	public void setItemTest() {
 		assertEquals(point1.getItem(),item1);
 		point1.setItem(item2);
-		assertEquals(point1.getItem(),item2);
-		
+		assertEquals(point1.getItem(),item2);	
 	}
 	
+	@Test
+	public void cloneTest(){
+		Anchorpoint clone = new Anchorpoint(point1);
+		assertEquals(clone.getAnchorpointType(),point1.getAnchorpointType());
+		assertFalse(clone.getItem()==point1.getItem());
+	}
 	
+	@Test
+	public void cloneTest2(){
+		Anchorpoint clone = new Anchorpoint(point8);
+		assertEquals(clone.getAnchorpointType(),point8.getAnchorpointType());
+		assertEquals(clone.getItem(),null);
+	}
 	
+	@Test
+	public void cloneTest3(){
+		Anchorpoint clone = new Anchorpoint(point7);
+		assertEquals(clone.getAnchorpointType(),point7.getAnchorpointType());
+		assertEquals(clone.getItem(),null);
+	}
 }

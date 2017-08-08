@@ -1,11 +1,11 @@
 package rpg.testcases;
+
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import rpg.Hero;
 import rpg.Mobile;
 import rpg.Monster;
-import rpg.inventory.Anchorpoint;
 import rpg.inventory.Backpack;
 import rpg.inventory.Ducat;
 import rpg.inventory.Purse;
@@ -20,7 +20,7 @@ public class HeroHitTest {
 	private Weapon weapon1,weapon2,weapon3,weapon4,weapon5;
 	private Purse purse1;
 	private double DELTA = 10E-5;
-	private Backpack backpack1,backpack2,backpack3;
+	private Backpack backpack1,backpack2;
 	private Monster monster0;
 	
 	@Before
@@ -33,7 +33,7 @@ public class HeroHitTest {
 		weapon5 = new Weapon(new Weight(1,Unit.kg),5,35);
 		purse1 = new Purse(new Weight(1,Unit.kg),new Weight(1,Unit.kg));
 		purse1.addItem(new Ducat());
-		monster0 = new Monster("Jared",26L,25,hero1.generateAllAnchorpoints(),new Weapon(null,0,10));
+		monster0 = new Monster("Jared",26L,25,Mobile.generateAllAnchorpoints(),new Weapon(null,0,10));
 	}
 	
 	
@@ -92,7 +92,7 @@ public class HeroHitTest {
 	@Test
 	public void collectTreasuresTest1(){
 		Hero hero0 = new Hero("Fighter",50L,25);
-		Monster monster0 = new Monster("Jared",50L,25,hero0.generateAllAnchorpoints(),new Weapon(null,0,10));
+		Monster monster0 = new Monster("Jared",50L,25,Mobile.generateAllAnchorpoints(),new Weapon(null,0,10));
 		monster0.addItemAt(AnchorpointType.BACK,weapon1);
 		monster0.addItemAt(AnchorpointType.BODY,weapon2);
 		monster0.addItemAt(AnchorpointType.BELT,weapon3);
@@ -116,7 +116,7 @@ public class HeroHitTest {
 		Hero hero0 = new Hero("Fighter",50L,25);
 		Ducat ducat1 = new Ducat();
 		hero0.addItemAt(AnchorpointType.BACK, ducat1);
-		Monster monster0 = new Monster("Jared",50L,25,hero0.generateAllAnchorpoints(),new Weapon(null,0,10));
+		Monster monster0 = new Monster("Jared",50L,25,Mobile.generateAllAnchorpoints(),new Weapon(null,0,10));
 		monster0.addItemAt(AnchorpointType.BACK,weapon1);
 		monster0.addItemAt(AnchorpointType.BODY,weapon2);
 		monster0.addItemAt(AnchorpointType.BELT,weapon3);
@@ -141,7 +141,7 @@ public class HeroHitTest {
 		Hero hero0 = new Hero("Fighter",50L,10);
 		Weapon weapon = new Weapon(new Weight(100,Unit.kg),50);
 		hero0.addItemAt(AnchorpointType.LEFT, weapon);
-		Monster monster0 = new Monster("Jared",26L,25,hero0.generateAllAnchorpoints(),new Weapon(null,0,10));
+		Monster monster0 = new Monster("Jared",26L,25,Mobile.generateAllAnchorpoints(),new Weapon(null,0,10));
 		monster0.addItemAt(AnchorpointType.BACK,weapon1);
 		monster0.addItemAt(AnchorpointType.BODY,weapon2);
 		monster0.addItemAt(AnchorpointType.BELT,weapon3);

@@ -58,6 +58,18 @@ public class Backpack extends Container {
 		this(weight, value, null, capacity);
 	}
 	
+	/**
+	 * Initializes a deep copy of the given backpack.
+	 * 
+	 * @param other
+	 * 		  The backpack to copy.
+	 * @effect the backpack gets initialized as a container.
+	 * 		  | super(other)
+	 */
+	@Raw
+	public Backpack(Backpack other){
+		super(other);
+	}
 	
 	/************************************************
 	 * ID

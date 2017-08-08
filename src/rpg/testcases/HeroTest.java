@@ -99,22 +99,27 @@ public class HeroTest {
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName1() {
 		invalidName1 = new Hero("bob",0,0);
+		invalidName1.getName();
 	}
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName2() {
 		invalidName2 = new Hero("James:",0,0);
+		invalidName2.getName();
 	}
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName3() {
 		invalidName3 = new Hero("James 'O' H'ara",0,0);
+		invalidName3.getName();
 	}
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName4() {
 		invalidName4 = new Hero("Erik:O",0,0);
+		invalidName4.getName();
 	}
 	@Test (expected = IllegalArgumentException.class)
 	public void isValidName5() {
 		invalidName5 = new Hero("B*b",0,0);
+		invalidName5.getName();
 	}
 	@Test
 	public void isValidName6() {
@@ -321,9 +326,9 @@ public class HeroTest {
 	
 	@Test
 	public void nbItemsCheck(){
-		assertTrue(link1.canHaveAsNbItems(5));
-		assertFalse(link1.canHaveAsNbItems(-1));
-		assertTrue(link1.canHaveAsNbItems(0));
+		assertTrue(link1.isValidNbItems(5));
+		assertFalse(link1.isValidNbItems(-1));
+		assertTrue(link1.isValidNbItems(0));
 	}
 	
 	@Test

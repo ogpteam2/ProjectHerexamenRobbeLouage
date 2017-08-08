@@ -2,8 +2,8 @@ package rpg.testcases;
 
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import rpg.Hero;
 import rpg.inventory.Ducat;
 import rpg.value.Unit;
 import rpg.value.Weight;
@@ -11,7 +11,6 @@ import rpg.value.Weight;
 public class DucatTest {
 	
 	private Ducat ducat;
-	
 	
 	@Before
 	public void setup(){
@@ -36,4 +35,28 @@ public class DucatTest {
 			assertEquals(ducat.getHolder(),null);
 		}
 	}
+	
+	@Test
+	public void changeHolderTest(){
+		Ducat ducat = new Ducat();
+		Hero hero = new Hero("James", 100, 30);
+		ducat.setHolder(hero);
+		assertFalse(ducat.getHolder()==hero);
+		assertTrue(ducat.getHolder()==null);
+	}
+	
+	@Test
+	public void changeValue(){
+		Ducat ducat = new Ducat();
+		ducat.setValue(1000);
+		assertEquals(ducat.getValue(),1);
+	}
+	
+	@Test
+	public void cloneTest(){
+		Ducat ducat = new Ducat();
+		Ducat clone = new Ducat(ducat);
+		assertFalse(ducat==clone);
+	}
+	
 }

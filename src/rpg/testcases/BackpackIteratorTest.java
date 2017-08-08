@@ -18,7 +18,7 @@ import rpg.value.Weight;
 public class BackpackIteratorTest {
 
 	private BackpackIterator it;
-	private ArrayList<Item> contents1,contents2,contents3;
+	private ArrayList<Item> contents1;
 	private Weapon weapon1,weapon2,weapon3,weapon4;
 	private Purse purse1;
 	
@@ -40,9 +40,6 @@ public class BackpackIteratorTest {
 		contents1.add(purse1);
 		
 	}
-	
-	
-	
 	@Test
 	public void iterationTest() {
 		it = new BackpackIterator(contents1);

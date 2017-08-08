@@ -29,12 +29,12 @@ import rpg.utility.Prime;
  * @invar Each Mobile must have a valid protection. 
  *        | isValidProtection(getProtection())
  * @invar The number of items must be valid for each mobile. 
- *        | canHaveAsNbItems(getNbItems())
+ *        | isValidNbItems(getNbItems())
  * @invar Each mobile can have each of its items at its anchorpoints. 
  * 		  | for each type, item in anchors:
- *        | 	canHaveItemAt(type ,getItemAt(type))
+ *        | 	canHaveAsItemAt(type ,getItemAt(type))
  * @invar Each mobile should have valid anchorpointsList 
- *        | canHaveAsAnchorpointList(anchors)
+ *        | canHaveAsAnchorpointList(getAnchors())
  *        
  * @author Robbe
  * @version 1.0
@@ -505,7 +505,7 @@ public abstract class Mobile {
 	 * @return true if the number is greater than or equal to zero.
 	 * 		   | result == number>=0 
 	 */
-	public boolean canHaveAsNbItems(int number){
+	public boolean isValidNbItems(int number){
 		return number>=0;
 	}
 	
@@ -1106,19 +1106,20 @@ public abstract class Mobile {
 	 * @effect The item is added to the other mobile if all param are effective
 	 * 		   and he can add the item at the given anchorpointtype,
 	 * 		   the item is then removed from this mobile.
-	 * 		   |  if (type == null || reciever == null || type2==null)
+	 * 		   |  if (type == null || receiver == null || type2==null)
 	 * 		   |  else if (reciever.getItemAt(type2)==null)
 	 * 	       |  			then let item = this.getItemAt(type)
 	 * 		   |			this.removeItemAt(type)
 	 * 		   |			reciever.addItemAt(type2,item)	    
 	 */
-	public void transfersItemToAnchor(AnchorpointType type,Mobile reciever, AnchorpointType type2){
-		if (type == null || reciever == null || type2==null){}
-		else if (reciever.getItemAt(type2)==null && (reciever.getAnchors()[type2.ordinal()]!=null)){
+	public void transfersItemToAnchor(AnchorpointType type,Mobile receiver, AnchorpointType type2){
+		if (type == null || receiver == null || type2==null){}
+		else if (receiver.getItemAt(type2)==null &&
+				(receiver.getAnchors()[type2.ordinal()].getAnchorpointType()!=null)){
 			Item item = this.getItemAt(type);
 			this.removeItemAt(type);
-			if (reciever.canAddItemAt(type2,item)){
-				reciever.addItemAt(type2,item);
+			if (receiver.canAddItemAt(type2,item)){
+				receiver.addItemAt(type2,item);
 			}
 			else{
 				this.addItemAt(type, item);
@@ -1187,14 +1188,18 @@ public abstract class Mobile {
 	 * 		   |	anchorpoint.getItem().equals(anchors[anchorpoint.getType()].getItem())
 	 */
 	public Anchorpoint[] getAnchors(){
-		return anchors.clone();
+		Anchorpoint[] clone = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];		
+		for (AnchorpointType type:AnchorpointType.values()){
+			clone[type.ordinal()] = new Anchorpoint(anchors[type.ordinal()]);
+		}
+		return clone;
 	}
 	
 	/**
 	 * A variable referencing the anchors of this mobile. Each mobile has a certain number
 	 * of anchorpoints, these are stored in this variable.
 	 */
-	private Anchorpoint[] anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
+	public Anchorpoint[] anchors = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];
 	
 	/************************************************
 	 * Hit

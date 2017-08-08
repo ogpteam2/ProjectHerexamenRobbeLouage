@@ -51,6 +51,21 @@ public class Purse extends Container {
 		this(weight, null, capacity);
 	}
 
+	/**
+	 * Initializes a deep copy of a given purse.
+	 * 
+	 * @param other
+	 * 		  The other purse to deep copy.
+	 * @effect the purse gets intialized as a container.
+	 * 		   | super(other)
+	 * @post the broken status gets set to the others' broken status.
+	 * 		   | new.getBroken() == other.getBroken()
+	 */
+	public Purse(Purse other){
+		super(other);
+		this.broken = other.broken;
+	}
+	
 	/************************************************
 	 * ID
 	 ************************************************/
@@ -307,6 +322,17 @@ public class Purse extends Container {
 			return 0;
 		}
 		return Ducat.getDucatValue()*getNbItems();
+	}
+	
+	/**
+	 * Makes sure that the value of a purse is can't be illegally changed.
+	 * 
+	 * @effect the value is set to zero, a purse should'nt have an own value.
+	 * 		   | super.setValue(0)
+	 */
+	@Override
+	public void setValue(int amount){
+		super.setValue(0);
 	}
 	
 	/************************************************

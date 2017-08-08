@@ -3,9 +3,7 @@ package rpg.testcases;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-
 import rpg.Hero;
-import rpg.inventory.Anchorpoint;
 import rpg.inventory.Backpack;
 import rpg.inventory.Ducat;
 import rpg.inventory.Purse;
@@ -262,5 +260,12 @@ public class HeroContainerTest {
 		assertEquals(hero1.getTotalValue(),20);
 	}
 	
+	
+	
+	@Test
+	public void getterTest(){
+		hero1.addItemAt(AnchorpointType.BACK, backpack1);
+		assertFalse(backpack1.equals(hero1.getAnchors()[1].getItem()));
+	}
 	
 }

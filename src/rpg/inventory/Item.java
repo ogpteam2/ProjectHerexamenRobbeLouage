@@ -1,5 +1,4 @@
 package rpg.inventory;
-import java.util.concurrent.ThreadLocalRandom;
 
 import be.kuleuven.cs.som.annotate.*;
 import rpg.Mobile;
@@ -28,7 +27,7 @@ abstract public class Item {
 	 ************************************************/
 	
 	/**
-	 * Initializes an item with given weight and value.
+	 * Initializes an item with given weight,value and holder.
 	 * 
 	 * @param weight
 	 * 		  The weight of the item.
@@ -51,8 +50,7 @@ abstract public class Item {
 	 * @effect if the holder is a valid one than add the item to a random free 
 	 * 		   anchorpoint of the mobile, else the holder is set to null.
 	 * 		  | if (holder!=null && canHaveAsHolder(holder))
-	 * 		  | then let random = ThreadLocalRandom.current().nextInt(0,holder.getFreeAnchorpoints().size())
-	 * 	      |	holder.addItemAt(holder.getFreeAnchorpoints().get(random), this);
+	 * 	      |	holder.addItem(this);
 	 * 		  | else 
 	 * 		  |		setHolder(null)
 	 */
@@ -67,8 +65,7 @@ abstract public class Item {
 		}
 		setValue(value);
 		if (holder!=null && canHaveAsHolder(holder)){
-			int random = ThreadLocalRandom.current().nextInt(0,holder.getFreeAnchorpoints().size());
-			holder.addItemAt(holder.getFreeAnchorpoints().get(random), this);	
+			holder.addItem(this);	
 		}
 		else{
 			setHolder(null);
@@ -91,6 +88,26 @@ abstract public class Item {
 	protected Item(Weight weight, int value){
 		this(weight,value,null);
 	}
+	
+	/**
+	 * Deep copies another given item.
+	 * 
+	 * @param other
+	 * 		  The other item to clone.
+	 * @post the new item has the same instance variables as the given item.
+	 * 		 | new.getID() == other.getID()
+	 *       | new.getWeight().equals(other.getWeight())
+	 *       | new.getValue().equals(other.getValue())
+	 *       | new.getHolder().equals(other.getHolder())
+	 */
+	@Raw
+	protected Item(Item other){
+		this.ID = other.ID;
+		this.weight = other.weight;
+		this.value = other.value;
+		this.holder = other.holder;
+	}
+	
 	
 	/************************************************
 	 * ID
@@ -299,6 +316,7 @@ abstract public class Item {
 	 * 		   |	then result == false
 	 * @return false if the mobile doesn't have any free anchorpoints and
 	 * 		   can't be added to one of his backpacks.
+	 * 		   true if the holder has a backpack where this item can be added.
 	 * 		   | if (holder.getFreeAnchorpoints().size()<=0)
 	 * 		   |	then for (backpack in holder.findBackpacks())
 	 * 		   | 		 	 if (backpack.canAdd(this))

@@ -1,9 +1,6 @@
 package rpg.testcases;
 
 import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,15 +11,12 @@ public class BackpackIDGeneratorTest {
 	private static final double DELTA = 10E3;
 	private BackpackIDGenerator generator1,generator2,generator3,generator4;
 	
-	
 	@Before
 	public void setup(){
 		generator1 = new BackpackIDGenerator();
 		generator2 = new BackpackIDGenerator(70);
 		generator3 = new BackpackIDGenerator(5);
 		generator4 = new BackpackIDGenerator(62);
-		
-		
 	}
 	
 	@Test
@@ -53,7 +47,4 @@ public class BackpackIDGeneratorTest {
 		assertEquals(generator4.generateID(),1);
 		
 	}
-	
-	
-	
 }

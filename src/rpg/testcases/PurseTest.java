@@ -1,29 +1,22 @@
 package rpg.testcases;
 
 import static org.junit.Assert.*;
-
 import java.util.ArrayList;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
 import rpg.Hero;
 import rpg.inventory.Backpack;
 import rpg.inventory.Ducat;
 import rpg.inventory.Item;
 import rpg.inventory.Purse;
 import rpg.inventory.Weapon;
-import rpg.value.AnchorpointType;
 import rpg.value.Unit;
 import rpg.value.Weight;
 
 public class PurseTest {
 	
 	private Purse purse1,purse2,purse3;
-	private Ducat ducat1,ducat2,ducat3,ducat4,ducat5,ducat6,ducat7;
-	private Weapon weapon1,weapon3,weapon4,weapon5;
-	private Hero hero1,hero2,hero3,hero4;
+	private Hero hero1;
 	
 	@Before
 	public void setup(){
@@ -44,7 +37,6 @@ public class PurseTest {
 	@Test
 	public void constructor1Test() {
 		assertEquals(purse2.getCapacity(),new Weight(1000,Unit.g));
-		assertEquals(purse2.getContents(),new ArrayList<Item>());
 		assertEquals(purse2.getHolder(),hero1);
 		assertTrue(hero1.checkItemInAnchors(purse2));
 		assertTrue(hero1.hasProperItems());
@@ -145,4 +137,26 @@ public class PurseTest {
 		purse.addItem(new Ducat());
 	}
 	
+	@Test
+	public void valueChangeTest(){
+		Purse purse = new Purse(new Weight(100,Unit.g),new Weight(300,Unit.g));
+		purse.addItem(new Ducat());
+		purse.setValue(100);
+		assertEquals(purse.getValue(),1);
+	}
+	
+	@Test
+	public void cloneTest(){
+		Purse purse = new Purse(new Weight(100,Unit.g),new Weight(3,Unit.kg));
+		Ducat ducat = new Ducat();
+		Ducat ducat2 = new Ducat();
+		purse.addItem(ducat);
+		purse.addItem(ducat2);
+		Purse clone = new Purse(purse);
+		assertTrue(clone.getValue()==2);
+		assertTrue(clone.getNbItems()==2);
+		assertFalse(clone.ItemIn(ducat));
+		assertFalse(clone.ItemIn(ducat2));
+		
+	}
 }

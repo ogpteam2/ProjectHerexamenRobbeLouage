@@ -10,7 +10,6 @@ public class DucatIDGeneratorTest {
 	
 	private DucatIDGenerator generator = new DucatIDGenerator();
 	
-	
 	@Test
 	public void correctnessTest() {
 		assertEquals(generator.generateID(),-1L);

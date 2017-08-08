@@ -2,9 +2,7 @@ package rpg.testcases;
 
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
 import rpg.utility.WeaponIDGenerator;
 
 public class WeaponIDGeneratorTest {

@@ -1,12 +1,9 @@
 package rpg.testcases;
 
 import static org.junit.Assert.*;
-
 import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import rpg.Hero;
 import rpg.inventory.Anchorpoint;
 import rpg.inventory.Weapon;
@@ -18,7 +15,7 @@ public class WeaponTest {
 	
 	private Weapon weapon1,weapon2,weapon3,weapon4;
 	private Weight weight1,weight2, weight3;
-	private Weapon weapon5,weapon6,weapon7,weapon8,weapon9,weapon10,weapon11,weapon12;
+	private Weapon weapon5,weapon6,weapon7;
 	private Hero hero1,hero2,hero3,hero4,strong;
 	private Weapon heavy1,heavy2,heavy3,heavy4;
 	private Weapon damage1,damage2,damage3,damage4;
@@ -86,9 +83,9 @@ public class WeaponTest {
 		Weapon holder = new Weapon(new Weight(100,Unit.kg),0,hero1,5);
 		assertEquals(holder.getHolder(),hero1); // first part of bidirectional link OK
 		assertEquals(hero1.getNbItems(),1);
-		for (Anchorpoint anchor:hero1.getAnchors()){
-			if (anchor.getItem()!=null){
-				assertEquals(anchor.getItem(),holder); // second part of bidirectional link OK
+		for (AnchorpointType type:hero1.getFreeAnchorpoints()){
+			if (!hero1.getFreeAnchorpoints().contains(type)){
+				assertEquals(hero1.getItemAt(type),holder);// second part OK
 			}
 		}
 		assertTrue(holder.hasProperHolder()); // double check OK
@@ -97,8 +94,8 @@ public class WeaponTest {
 	@Test 
 	public void constructor2HolderTest(){
 		Weapon weapon = new Weapon(null,50);
-		assertEquals(weapon1.getHolder(),null);
-		assertTrue(weapon1.hasProperHolder());
+		assertEquals(weapon.getHolder(),null);
+		assertTrue(weapon.hasProperHolder());
 	}
 	
 	@Test 
@@ -221,6 +218,16 @@ public class WeaponTest {
 		assertEquals(damage1.getValue(),160);
 	}
 	
-	
+	@Test
+	public void cloneTest(){
+		damage1 = new Weapon(new Weight(5,Unit.kg),50,strong,77);
+		Weapon clone = new Weapon(damage1);
+		assertEquals(damage1.getId(),clone.getId());
+		assertEquals(damage1.getWeight(),clone.getWeight());
+		assertEquals(damage1.getValue(),clone.getValue());
+		assertEquals(damage1.getHolder(),clone.getHolder());
+		assertEquals(damage1.getDamage(),clone.getDamage());
+		assertFalse(damage1==clone);
+	}
 	
 }
