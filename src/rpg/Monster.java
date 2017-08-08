@@ -300,7 +300,7 @@ public class Monster extends Mobile {
 	/**
 	 * Adds tree standard weapons to the mobile.
 	 * 
-	 * @effect tree weapons are added.
+	 * @effect tree Items are added.
 	 * 		   | this.addItem(new Weapon(new Weight(1,Unit.kg),10))
 	 * 		   | this.addItem(new Ducat())
 	 * 		   | this.addItem(new Purse(new Weight(500,Unit.g),new Weight(500,Unit.g)))
