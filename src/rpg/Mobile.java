@@ -25,7 +25,7 @@ import rpg.utility.Prime;
  * @invar Each mobile must have a valid maximumHitpoints. 
  *        | isValidMaximumHitpoints(getMaximumHitpoints())      
  * @invar Each mobile must have a valid currentHitpoints. 
- *        | canHaveAsValid(getCurrentHitpoints())   
+ *        | canHaveAsCurrentHitpoints(getCurrentHitpoints())   
  * @invar Each Mobile must have a valid protection. 
  *        | isValidProtection(getProtection())
  * @invar The number of items must be valid for each mobile. 

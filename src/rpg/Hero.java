@@ -95,7 +95,7 @@ public class Hero extends Mobile {
 	 *          
 	 */
 	@Model
-	private boolean isValidHeroName(String name){
+	private static boolean isValidHeroName(String name){
 		boolean nameIsValid = firstPattern.matcher(name).matches();
 		int numberOfApos = getNumberOfMatches(patternApo,name);
 		int colonNotSpace = getNumberOfMatches(patternColonSpace,name);
@@ -119,7 +119,7 @@ public class Hero extends Mobile {
 	 *
 	 */
 	@Model
-	private int getNumberOfMatches(Pattern pattern, String string){
+	private static int getNumberOfMatches(Pattern pattern, String string){
 		int count = 0;
 		Matcher matcher = pattern.matcher(string);
 		while (matcher.find())

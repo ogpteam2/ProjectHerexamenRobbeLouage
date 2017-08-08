@@ -140,7 +140,7 @@ public class Monster extends Mobile {
 	 * @return true if the name matches with the pattern.
 	 * 		   | result == name.matches("[A-Z]['A-Za-z\\s]+")
 	 */
-	private boolean isValidMonsterName(String name){
+	private static boolean isValidMonsterName(String name){
 		return firstPattern.matcher(name).matches();
 	}
 	
