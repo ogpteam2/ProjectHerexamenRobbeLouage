@@ -4,7 +4,7 @@ import be.kuleuven.cs.som.annotate.*;
 import rpg.value.AnchorpointType;
 
 /**
- * A class of anchorpoints with a given item and a anchorpoint type.
+ * A class of anchorpoints with a given item and an anchorpoint type.
  * 
  * @author Robbe
  * @version 1.0
@@ -99,6 +99,4 @@ public class Anchorpoint {
 	 * A variable referencing the item in the anchorpoint.
 	 */
 	private Item item; 
-	
-
 }
