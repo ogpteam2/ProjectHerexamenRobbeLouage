@@ -67,7 +67,7 @@ public abstract class Mobile {
 	 * @post the anchors is set to the given anchors if the given anchors is valid, and all
 	 * 		 the items will have as holder this mobile.
 	 * 	     | if (this.canHaveAsAnchorpointList(anchors))
-	 * 		 |		then new.anchors.equals(anchors)
+	 * 		 |		then new.anchors.equals(anchors.clone())
 	 * 		 | 		for (anchor in anchors)
 	 * 		 |			if (anchor.getItem()!=null)
 	 * 		 |				then anchor.getItem().setHolder(this)
@@ -1188,11 +1188,7 @@ public abstract class Mobile {
 	 * 		   |	anchorpoint.getItem().equals(anchors[anchorpoint.getType()].getItem())
 	 */
 	public Anchorpoint[] getAnchors(){
-		Anchorpoint[] clone = new Anchorpoint[AnchorpointType.NbOfAnchorpointTypes()];		
-		for (AnchorpointType type:AnchorpointType.values()){
-			clone[type.ordinal()] = new Anchorpoint(anchors[type.ordinal()]);
-		}
-		return clone;
+		return anchors.clone();
 	}
 	
 	/**

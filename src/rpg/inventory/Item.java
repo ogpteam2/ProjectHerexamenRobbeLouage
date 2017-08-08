@@ -13,7 +13,7 @@ import rpg.value.Weight;
  * @invar Each item must have a valid weight.
  * 		  | isValidWeight(getWeight())
  * @invar Each item must have a valid value.
- * 		  | canHaveAsValue(getValue())
+ * 		  | isValidValue(getValue())
  * @invar Each item must have a valid Holder
  * 		  | canHaveAsHolder(getHolder())
  * 
@@ -36,7 +36,7 @@ abstract public class Item {
 	 * @param holder
 	 * 		  The holder of the item.
 	 * @pre The given value must be valid.
-	 * 		| canHaveAsValue(value)
+	 * 		| isValidValue(value)
 	 * @effect the ID is generated and set.
 	 * 		   | this.ID = generateID()
 	 * @post if the weight is valid then the weight of the item
@@ -88,27 +88,7 @@ abstract public class Item {
 	protected Item(Weight weight, int value){
 		this(weight,value,null);
 	}
-	
-	/**
-	 * Deep copies another given item.
-	 * 
-	 * @param other
-	 * 		  The other item to clone.
-	 * @post the new item has the same instance variables as the given item.
-	 * 		 | new.getID() == other.getID()
-	 *       | new.getWeight().equals(other.getWeight())
-	 *       | new.getValue().equals(other.getValue())
-	 *       | new.getHolder().equals(other.getHolder())
-	 */
-	@Raw
-	protected Item(Item other){
-		this.ID = other.ID;
-		this.weight = other.weight;
-		this.value = other.value;
-		this.holder = other.holder;
-	}
-	
-	
+
 	/************************************************
 	 * ID
 	 ************************************************/
@@ -226,7 +206,7 @@ abstract public class Item {
 	}
 	
 	/**
-	 * Checks whether a amount is a valid valueamount.
+	 * Checks whether a amount is a valid value amount.
 	 * 
 	 * @param amount
 	 * 		  The amount to check.
@@ -235,7 +215,7 @@ abstract public class Item {
 	 *		   |	then result == false
 	 *		   | result == true
 	 */
-	public boolean canHaveAsValue(int amount){
+	public static boolean isValidValue(int amount){
 		if (amount<0)
 			return false;
 		return true;
@@ -247,7 +227,7 @@ abstract public class Item {
 	 * @param amount
 	 * 		  the new amount of this item.
 	 * @pre The given amount must be a valid value.
-	 * 		| canHaveAsValue(amount)
+	 * 		| isValidValue(amount)
 	 * @effect the new value of this item is the given amount.
 	 * 		   | new.getValue() == amount
 	 */

@@ -72,9 +72,9 @@ public class WeaponTest {
 		assertEquals(weapon5.getDamage(),10);
 		assertEquals(weapon6.getDamage(),-10);
 		assertEquals(weapon7.getDamage(),weapon7.getDamage()*2);
-		assertTrue(weapon5.canHaveAsValue(0));
-		assertFalse(weapon5.canHaveAsValue(-1));
-		assertTrue(weapon5.canHaveAsValue(1));
+		assertTrue(Weapon.isValidValue(0));
+		assertFalse(Weapon.isValidValue(-1));
+		assertTrue(Weapon.isValidValue(1));
 	}
 	
 	@Test 
@@ -217,17 +217,4 @@ public class WeaponTest {
 		damage1.setDamage(80);
 		assertEquals(damage1.getValue(),160);
 	}
-	
-	@Test
-	public void cloneTest(){
-		damage1 = new Weapon(new Weight(5,Unit.kg),50,strong,77);
-		Weapon clone = new Weapon(damage1);
-		assertEquals(damage1.getId(),clone.getId());
-		assertEquals(damage1.getWeight(),clone.getWeight());
-		assertEquals(damage1.getValue(),clone.getValue());
-		assertEquals(damage1.getHolder(),clone.getHolder());
-		assertEquals(damage1.getDamage(),clone.getDamage());
-		assertFalse(damage1==clone);
-	}
-	
 }

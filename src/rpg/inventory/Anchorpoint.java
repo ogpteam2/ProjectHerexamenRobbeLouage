@@ -1,8 +1,5 @@
 package rpg.inventory;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import be.kuleuven.cs.som.annotate.*;
 import rpg.value.AnchorpointType;
 
@@ -55,47 +52,6 @@ public class Anchorpoint {
 	 */
 	public Anchorpoint(){
 		this(null,null);
-	}
-	
-	/**
-	 * Initializes a deep copy of the anchorpoint.
-	 * 
-	 * @param other
-	 * 	      The other anchorpoint to copy.
-	 * @post the anchorpointType gets set to the others' anchorpointtype.
-	 * 		 | new.getAnchorpointType().equals(other.getAnchorpointType())
-	 * @post the item gets set to the other's item.
-	 * 		 | new.getItem().equals(other.getItem())
-	 */
-	public Anchorpoint(Anchorpoint other){
-		if (other.getAnchorpointType() == null){
-			this.anchorpointType = null;
-			this.item = null;
-		}
-		else if (other.getItem()==null){
-			this.anchorpointType = other.anchorpointType;
-			this.item = null;
-		}
-		else{
-			this.anchorpointType = other.anchorpointType;
-			try {
-				Class<?> subclass = Class.forName(other.getItem().getClass().getName());
-				try {
-					Constructor<?> ctor = subclass.getConstructor(subclass);
-					try {
-						Object object = ctor.newInstance(new Object[] { other.getItem() });
-						this.item = (Item)object;
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-							| InvocationTargetException e) {
-						e.printStackTrace();
-					}
-				} catch (NoSuchMethodException | SecurityException e) {
-					e.printStackTrace();
-				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	/************************************************

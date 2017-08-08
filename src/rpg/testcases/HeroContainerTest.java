@@ -263,7 +263,8 @@ public class HeroContainerTest {
 	@Test
 	public void getterTest(){
 		hero1.addItemAt(AnchorpointType.BACK, backpack1);
-		assertFalse(backpack1.equals(hero1.getAnchors()[1].getItem()));
+		hero1.getAnchors()[1] = null;
+		assertFalse(hero1.getAnchors()[1]==null);
 	}
 	
 }

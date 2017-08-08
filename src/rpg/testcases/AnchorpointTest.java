@@ -69,24 +69,4 @@ public class AnchorpointTest {
 		assertEquals(point1.getItem(),item2);	
 	}
 	
-	@Test
-	public void cloneTest(){
-		Anchorpoint clone = new Anchorpoint(point1);
-		assertEquals(clone.getAnchorpointType(),point1.getAnchorpointType());
-		assertFalse(clone.getItem()==point1.getItem());
-	}
-	
-	@Test
-	public void cloneTest2(){
-		Anchorpoint clone = new Anchorpoint(point8);
-		assertEquals(clone.getAnchorpointType(),point8.getAnchorpointType());
-		assertEquals(clone.getItem(),null);
-	}
-	
-	@Test
-	public void cloneTest3(){
-		Anchorpoint clone = new Anchorpoint(point7);
-		assertEquals(clone.getAnchorpointType(),point7.getAnchorpointType());
-		assertEquals(clone.getItem(),null);
-	}
 }

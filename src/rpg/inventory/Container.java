@@ -1,6 +1,4 @@
 package rpg.inventory;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.Mobile;
@@ -63,48 +61,6 @@ abstract public class Container extends Item {
 	@Raw
 	protected Container(Weight weight, int value,Weight capacity) {
 		this(weight, value,null,capacity);
-	}
-	
-	/**
-	 * Initializes a deep copy of the given container
-	 * 
-	 * @param other
-	 * 		  The container to copy.
-	 * @effect the container is intialized as an item.
-	 * 		   | super(other)
-	 * @post the contents get initialized as the other's contents.
-	 * 		 | new.getContents().equals(other.getContents())
-	 * @post the capacity gets initialized as the other's capacity.
-	 * 		 | new.getCapacity().equals(other.getCapacity())
-	 * @post the parent is set to the other's parent.
-	 * 		 | new.getParent().equals(other.getParent())
-	 */
-	@Raw
-	protected Container(Container other){
-		super(other);
-		ArrayList<Item> contents = new ArrayList<Item>();
-		for (Item item:other.contents){
-			try {
-				Class<?> subclass = Class.forName(item.getClass().getName());
-				try {
-					Constructor<?> ctor = subclass.getConstructor(subclass);
-					try {
-						Object object = ctor.newInstance(new Object[] { item });
-						contents.add((Item)object);
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-							| InvocationTargetException e) {
-						e.printStackTrace();
-					}
-				} catch (NoSuchMethodException | SecurityException e) {
-					e.printStackTrace();
-				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		this.contents = contents;
-		this.capacity = other.capacity;
-		this.parent = other.parent;
 	}
 	
 	/************************************************

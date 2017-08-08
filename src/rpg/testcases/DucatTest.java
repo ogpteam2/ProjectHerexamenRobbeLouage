@@ -51,12 +51,4 @@ public class DucatTest {
 		ducat.setValue(1000);
 		assertEquals(ducat.getValue(),1);
 	}
-	
-	@Test
-	public void cloneTest(){
-		Ducat ducat = new Ducat();
-		Ducat clone = new Ducat(ducat);
-		assertFalse(ducat==clone);
-	}
-	
 }

@@ -28,18 +28,6 @@ public class Ducat extends Item{
 		super(ducatWeight,ducatValue);
 	}
 	
-	/**
-	 * Initializes a deep copy of a given ducat.
-	 * 
-	 * @param other
-	 * 		  the other ducat to deep copy.
-	 * @effect the ducat gets deep copied as an Item.
-	 * 		   | super(other)
-	 */
-	public Ducat(Ducat other){
-		super(other);
-	}
-	
 	/************************************************
 	 * getter and static variables
 	 ************************************************/

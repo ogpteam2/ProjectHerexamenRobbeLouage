@@ -93,22 +93,6 @@ public class Weapon extends Item {
 		this(weight,calculateValue(damage),null,damage);
 	}
 	
-	/**
-	 * Initializes a deep copy of the given Weapon
-	 * 
-	 * @param other
-	 * 		  The other Weapon to clone.
-	 * @effect the Weapon gets deep copied as an Item
-	 * 		   | super(other)
-	 * @post the damage gets set to the other's damage.
-	 * 		   | new.getDamage() == other.getDamage()
-	 */
-	@Raw
-	public Weapon(Weapon other){
-		super(other);
-		this.damage = other.damage;
-	}
-	
 	/************************************************
 	 * ID
 	 ************************************************/
@@ -142,7 +126,7 @@ public class Weapon extends Item {
 	 * Returns the lower boundary for the damage.
 	 */
 	@Raw @Basic
-	public int getLowerboundary(){
+	public static int getLowerboundary(){
 		return lowerboundDamage;
 	}
 	
@@ -150,7 +134,7 @@ public class Weapon extends Item {
 	 * Returns the lower boundary for the damage.
 	 */
 	@Raw @Basic
-	public int getUpperboundary(){
+	public static int getUpperboundary(){
 		return upperboundDamage;
 	}
 	
@@ -164,7 +148,7 @@ public class Weapon extends Item {
 	 * 		   | result == amount>=getLowerboundary() && amount<=getUpperboundary() 
 	 *		   |	&& amount%7==0
 	 */
-	public boolean isValidDamage(int amount){
+	public static boolean isValidDamage(int amount){
 		return amount>=getLowerboundary() && amount<=getUpperboundary() 
 				&& amount%7==0;
 	}
@@ -230,16 +214,15 @@ public class Weapon extends Item {
 	 ************************************************/
 	
 	/**
-	 * Checks whether a amount is a valid valueamount.
+	 * Checks whether a amount is a valid value amount.
 	 * 
 	 * @param amount
 	 * 		  The amount to check.
 	 * @return true if the amount lays between zero and 200.
 	 * 		   | result == amount>=0 && amount<200
 	 */
-	@Override
-	public boolean canHaveAsValue(int amount){
-		return super.canHaveAsValue(amount) && amount<200;
+	public static boolean isValidValue(int amount){
+		return Item.isValidValue(amount) && amount<200;
 	}
 
 }

@@ -261,44 +261,4 @@ public class BackpackTest {
 		backpack3.addItem(new Weapon(new Weight(6,Unit.kg),0,50));
 	}
 	
-	@Test
-	public void cloneTest1(){
-		Ducat ducat = new Ducat();
-		backpack1.addItem(ducat);
-		Backpack clone = new Backpack(backpack1);
-		assertFalse(clone==backpack1);
-		assertFalse(clone.ItemIn(ducat));
-		assertEquals(clone.getNbItems(),1);
-	}
-	
-	@Test
-	public void cloneTest2(){
-		backpack3.addItem(backpack2);
-		backpack2.addItem(backpack1);
-		backpack1.addItem(weapon1);
-		backpack1.addItem(weapon2);
-		backpack1.addItem(weapon3);
-		backpack1.addItem(weapon4);
-		Backpack clone = new Backpack(backpack3);
-		assertEquals(backpack3.getNbItems(),clone.getNbItems());
-		assertEquals(backpack3.getId(),clone.getId());
-		assertEquals(backpack3.getCapacity(),clone.getCapacity());
-		assertEquals(backpack3.getHolder(),clone.getHolder());
-		assertEquals(backpack3.getInContainer(),clone.getInContainer());
-		assertEquals(backpack3.getValue(),clone.getValue());
-		assertEquals(backpack3.getParent(),clone.getParent());
-		assertEquals(backpack3.getOwnValue(),clone.getOwnValue());
-		assertFalse(clone.ItemIn(weapon1));
-		assertFalse(clone.ItemIn(weapon2));
-		assertFalse(clone.ItemIn(weapon3));
-		assertFalse(clone.ItemIn(weapon4));
-		assertFalse(clone.ItemIn(backpack1));
-		assertFalse(clone.ItemIn(backpack2));
-		assertTrue(backpack3.ItemIn(weapon1));
-		assertTrue(backpack3.ItemIn(weapon2));
-		assertTrue(backpack3.ItemIn(weapon3));
-		assertTrue(backpack3.ItemIn(weapon4));
-		assertTrue(backpack3.ItemIn(backpack2));
-		assertTrue(backpack3.ItemIn(backpack1));
-	}
 }

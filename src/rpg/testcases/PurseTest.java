@@ -144,19 +144,4 @@ public class PurseTest {
 		purse.setValue(100);
 		assertEquals(purse.getValue(),1);
 	}
-	
-	@Test
-	public void cloneTest(){
-		Purse purse = new Purse(new Weight(100,Unit.g),new Weight(3,Unit.kg));
-		Ducat ducat = new Ducat();
-		Ducat ducat2 = new Ducat();
-		purse.addItem(ducat);
-		purse.addItem(ducat2);
-		Purse clone = new Purse(purse);
-		assertTrue(clone.getValue()==2);
-		assertTrue(clone.getNbItems()==2);
-		assertFalse(clone.ItemIn(ducat));
-		assertFalse(clone.ItemIn(ducat2));
-		
-	}
 }

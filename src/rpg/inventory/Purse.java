@@ -50,21 +50,6 @@ public class Purse extends Container {
 	public Purse(Weight weight, Weight capacity){
 		this(weight, null, capacity);
 	}
-
-	/**
-	 * Initializes a deep copy of a given purse.
-	 * 
-	 * @param other
-	 * 		  The other purse to deep copy.
-	 * @effect the purse gets intialized as a container.
-	 * 		   | super(other)
-	 * @post the broken status gets set to the others' broken status.
-	 * 		   | new.getBroken() == other.getBroken()
-	 */
-	public Purse(Purse other){
-		super(other);
-		this.broken = other.broken;
-	}
 	
 	/************************************************
 	 * ID
