@@ -325,6 +325,12 @@ public class HeroTest {
 	}
 	
 	@Test
+	public void constructor1CopyAnchorsTest(){
+		Hero test = new Hero("James",10L,45,valid);
+		assertFalse(test.getAnchors()==valid);
+	}
+	
+	@Test
 	public void nbItemsCheck(){
 		assertTrue(link1.isValidNbItems(5));
 		assertFalse(link1.isValidNbItems(-1));
