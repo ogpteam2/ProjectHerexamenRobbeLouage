@@ -134,9 +134,8 @@ abstract public class Container extends Item {
 			return false;
 		if (contents.contains(item))
 			return false;
-		if (item.getWeight(Unit.kg).add(getWeightOfContents(Unit.kg)).compareTo(getCapacity(Unit.kg))>0){
+		if (item.getWeight(Unit.kg).add(getWeightOfContents(Unit.kg)).compareTo(getCapacity(Unit.kg))>0)
 			return false;
-		}
 		if (item.getHolder() != null)
 			return false;
 		if (getHolder() != null){

@@ -151,7 +151,7 @@ public class Purse extends Container {
 	 * @return true if item has no holder, is in no container, item is effective,
 	 * 		   item doesn't exceed the capacity, holder can add the item,
 	 * 		   if the parent can add the item and if the item is an 
-	 * 		   instance of Ducat, and not broken.
+	 * 		   instance of Ducat, and this purse is not broken.
 	 * 		   | result == 
 	 *         | (parent.canAdd(item)) && 
 	 *         | (!item == null) && (getHolder().canHaveAsItem(item)) &&
