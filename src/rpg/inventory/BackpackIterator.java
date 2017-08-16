@@ -50,7 +50,7 @@ public class BackpackIterator implements Enumeration<Item> {
 	 * 
 	 * @return false if the conents are not effective
 	 * 		   | if (remainingItems ==null)
-	 * 		   | result == false
+	 * 		   | 	then result == false
 	 * @return false if the position is greater than the remaining items' size.
 	 * 		  | if (position>remainingItems.size())
 	 * 		  |		then result == false

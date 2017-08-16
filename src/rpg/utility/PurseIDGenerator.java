@@ -3,7 +3,7 @@ import be.kuleuven.cs.som.annotate.Basic;
 
 /**
  * A generator that generates IDs for purses.
- * 		The generated ID are number of the Fibonnaci sequence.
+ * 		The generated ID are numbers of the Fibonnaci sequence.
  * 
  * @author Robbe
  * @version 1.0

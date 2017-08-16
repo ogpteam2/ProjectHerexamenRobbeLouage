@@ -112,7 +112,7 @@ public class Weight implements Comparable<Weight> {
 	 * 
 	 * @param numeral
 	 * 		  The numeral to check.
-	 * @return True iff the given numeral is effective and if it has a scale of 2.
+	 * @return True iff the given numeral is effective and greater than zero.
 	 * 		   | result ==
 	 * 		   | 	( (numeral >= 0.0)
 	 */
