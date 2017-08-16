@@ -318,7 +318,6 @@ public class HeroTest {
 	public void constructor1Test(){
 		Hero okay = new Hero("Jamevhs",10L,45,valid);
 		for (Anchorpoint anchor:okay.getAnchors()){
-			assertEquals(anchor.getAnchorpointType(),anchor.getAnchorpointType());
 			assertEquals(anchor.getItem().getHolder().getName(),"Jamevhs");
 		}
 		assertTrue(okay.hasProperItems());
