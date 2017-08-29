@@ -234,19 +234,6 @@ public class Purse extends Container {
 			}
 		}	
 	}
-
-	/**
-	 * Checks whether an item is in a container.
-	 * 
-	 * @param item
-	 * 		  The item to check.
-	 * @return true if the item is in the backpack.
-	 * 		   | result == contents.contains(item)
-	 */
-	@Override
-	public boolean ItemIn(Item item){
-		return contents.contains(item);
-	}
 	
 	/************************************************
 	 * Weight
