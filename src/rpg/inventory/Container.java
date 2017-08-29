@@ -276,6 +276,16 @@ abstract public class Container extends Item {
 	}
 	
 	/**
+	 * Return the contents of this backpack.
+	 * 
+	 * @return an arraylist with the contents of the backpack.
+	 * 		   | result.equals(new ArrayList<Item>(contents))
+	 */
+	public ArrayList<Item> getContents(){
+		return new ArrayList<Item>(contents);
+	}
+	
+	/**
 	 * A variable keeping track of all items stored in the backpack.
 	 */
 	protected ArrayList<Item> contents = new ArrayList<Item>();

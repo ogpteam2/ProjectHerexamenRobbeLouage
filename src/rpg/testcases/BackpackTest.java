@@ -260,5 +260,5 @@ public class BackpackTest {
 		backpack2.addItem(backpack3);
 		backpack3.addItem(new Weapon(new Weight(6,Unit.kg),0,50));
 	}
-	
+
 }
